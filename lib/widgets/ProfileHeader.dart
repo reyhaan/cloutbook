@@ -40,7 +40,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
+            padding: EdgeInsets.only(left: 40, right: 40),
             margin: EdgeInsets.only(bottom: 25.0),
             child: Text(
               'Developer with an alter ego of a designer. Does that make me a generalist?',
