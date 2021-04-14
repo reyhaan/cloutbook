@@ -1,3 +1,4 @@
+import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: ListView(
         children: [
-          Text('user profile header'),
+          ProfileHeader(),
           Text('Coin price info'),
           Text('posts'),
         ],
