@@ -1,5 +1,6 @@
 import 'package:cloutbook/config/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfileMetadata extends StatefulWidget {
   ProfileMetadata({Key key}) : super(key: key);
@@ -41,7 +42,10 @@ class _ProfileMetadataState extends State<ProfileMetadata> {
                       Text(
                         'Coins in Circulation',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontFamily: GoogleFonts.robotoMono().fontFamily,
+                            color: Colors.grey),
                       ),
                     ],
                   ),
@@ -55,7 +59,10 @@ class _ProfileMetadataState extends State<ProfileMetadata> {
                       Text(
                         'Total USD Locked',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontFamily: GoogleFonts.robotoMono().fontFamily,
+                            color: Colors.grey),
                       ),
                     ],
                   ),
@@ -69,7 +76,10 @@ class _ProfileMetadataState extends State<ProfileMetadata> {
                       Text(
                         'USD Market Cap',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(
+                            fontSize: 10,
+                            fontFamily: GoogleFonts.robotoMono().fontFamily,
+                            color: Colors.grey),
                       ),
                     ],
                   ),
