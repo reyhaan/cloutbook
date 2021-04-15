@@ -78,7 +78,9 @@ class ListItem extends StatelessWidget {
                       Container(
                         child: Text(
                           'mohammadrehaan',
-                          style: TextStyle(color: Palette.primary4),
+                          style: TextStyle(
+                              color: Palette.primary4,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                       SizedBox(height: 5.0),
@@ -99,7 +101,7 @@ class ListItem extends StatelessWidget {
               Text('~\$3.50'),
               SizedBox(width: 20),
               Icon(
-                CupertinoIcons.xmark,
+                Icons.delete_outline,
                 size: 18.0,
                 color: Palette.hintColor,
               ),

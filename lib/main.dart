@@ -16,21 +16,24 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Cloutbook',
         debugShowCheckedModeBanner: false,
+        routes: {
+          '/': (context) => NavScreen(),
+          '/search': (context) => SearchScreen(),
+        },
         theme: ThemeData(
           appBarTheme: const AppBarTheme(backgroundColor: Palette.foreground),
           scaffoldBackgroundColor: Palette.background,
           primaryColor: Palette.primary,
           accentColor: Palette.primary,
           iconTheme: const IconThemeData(color: Colors.white),
-          fontFamily: GoogleFonts.poppins().fontFamily,
-          textTheme: GoogleFonts.poppinsTextTheme(
+          fontFamily: GoogleFonts.rubik().fontFamily,
+          textTheme: GoogleFonts.rubikTextTheme(
             TextTheme(
               bodyText1: TextStyle(color: Colors.white),
               bodyText2: TextStyle(color: Colors.white),
             ),
           ),
         ),
-        home: NavScreen(),
       ),
     );
   }

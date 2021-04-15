@@ -1,3 +1,4 @@
+import 'package:cloutbook/screens/screens.dart';
 import 'package:cloutbook/widgets/Posts.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
@@ -24,7 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.search),
         onPressed: () {
-          print('something');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchScreen(),
+            ),
+          );
         },
       ),
     );

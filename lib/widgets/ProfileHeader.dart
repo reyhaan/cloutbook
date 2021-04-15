@@ -33,7 +33,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 4.0, bottom: 4.0),
+            margin: EdgeInsets.only(top: 4.0, bottom: 8.0),
             child: Text(
               '@mohammadrehaan',
               style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
@@ -45,7 +45,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             child: Text(
               'Developer with an alter ego of a designer. Does that make me a generalist?',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ),
         ],

@@ -69,13 +69,17 @@ class PostItem extends StatelessWidget {
                 Container(
                   child: Text(
                     'mohammadrehaan',
-                    style: TextStyle(color: Palette.primary4),
+                    style: TextStyle(
+                        color: Palette.primary4, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(height: 5.0),
-                Text(
-                  'Skepticism for bitclout? Yeah right, just like bitcoin will never touch \$100 :)',
-                  textAlign: TextAlign.left,
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Text(
+                    'Skepticism for bitclout? Yeah right, just like bitcoin will never touch \$100 :)',
+                    textAlign: TextAlign.left,
+                  ),
                 ),
                 SizedBox(height: 16),
                 Padding(
