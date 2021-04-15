@@ -1,3 +1,4 @@
+import 'package:cloutbook/widgets/Posts.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           ProfileHeader(),
           ProfileMetadata(),
-          Text('posts'),
+          Posts(),
         ],
       ),
       floatingActionButton: FloatingActionButton(

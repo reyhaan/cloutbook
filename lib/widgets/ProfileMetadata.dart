@@ -25,8 +25,8 @@ class _ProfileMetadataState extends State<ProfileMetadata> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.only(top: 25, bottom: 30),
+            margin: EdgeInsets.only(bottom: 20),
+            padding: EdgeInsets.only(top: 20, bottom: 20),
             color: Palette.foreground,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
