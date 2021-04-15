@@ -8,4 +8,5 @@ class Palette {
   static const Color foreground = Color(0xFF202020);
   static const Color secondaryForeground = Color(0xFF2E2E2E);
   static const Color hintColor = Color(0xFF6C6B6B);
+  static const Color textSecondary = Color(0xFFCCCCCC);
 }

@@ -1,3 +1,4 @@
+import 'package:cloutbook/widgets/FavoriteList.dart';
 import 'package:cloutbook/widgets/SearchBar.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +25,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
+          SizedBox(
+            height: 14,
+          ),
           SearchBar(),
-          Text('user status'),
-          Text('favorites list')
+          FavoriteList(),
+          SizedBox(height: 32)
         ],
       ),
     );
