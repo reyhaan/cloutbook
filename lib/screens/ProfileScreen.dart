@@ -1,3 +1,4 @@
+import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/widgets/Posts.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
@@ -14,12 +15,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
-          ProfileHeader(),
-          ProfileMetadata(),
-          Posts(),
-        ],
+      body: Posts(
+        isProfile: true,
       ),
     );
   }

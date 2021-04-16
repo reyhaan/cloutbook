@@ -1,10 +1,17 @@
 import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/widgets/ProfileHeader.dart';
+import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Posts extends StatefulWidget {
-  Posts({Key? key}) : super(key: key);
+  final bool? isProfile;
+
+  Posts({
+    Key? key,
+    this.isProfile,
+  }) : super(key: key);
 
   @override
   _PostsState createState() => _PostsState();
@@ -14,17 +21,19 @@ class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          PostItem(),
-          PostItem(),
-          PostItem(),
-          PostItem(),
-          PostItem(),
-          PostItem(),
-          PostItem(),
-          PostItem(),
-        ],
+      child: ListView.builder(
+        itemCount: 50,
+        itemBuilder: (context, index) {
+          if (widget.isProfile == true) {
+            if (index == 0) {
+              return ProfileHeader();
+            }
+            if (index == 1) {
+              return ProfileMetadata();
+            }
+          }
+          return PostItem();
+        },
       ),
     );
   }
