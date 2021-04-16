@@ -1,7 +1,4 @@
-import 'package:cloutbook/config/palette.dart';
-import 'package:cloutbook/widgets/Posts.dart';
-import 'package:cloutbook/widgets/ProfileHeader.dart';
-import 'package:cloutbook/widgets/ProfileMetadata.dart';
+import 'package:cloutbook/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {

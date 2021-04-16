@@ -1,6 +1,5 @@
 import 'package:cloutbook/config/palette.dart';
-import 'package:cloutbook/widgets/FavoriteList.dart';
-import 'package:cloutbook/widgets/SearchBar.dart';
+import 'package:cloutbook/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
