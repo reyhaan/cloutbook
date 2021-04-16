@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -18,20 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            Positioned(
-              bottom: 70,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 35.0, left: 30.0, right: 30.0),
-                child: Text(
-                  'Copyright © 2021 • Cloutbook',
-                  style: TextStyle(color: Palette.hintColor),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
             Column(
               children: [
                 Container(
@@ -48,15 +34,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(top: 20),
-                //   child: Text(
-                //     'Start by adding your profile',
-                //     style: TextStyle(color: Palette.hintColor),
-                //   ),
-                // ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(30, 10, 30, 40),
+                  margin: EdgeInsets.fromLTRB(30, 10, 30, 20),
                   padding: EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: Palette.secondaryForeground,
@@ -119,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.only(top: 25.0, left: 30.0, right: 30.0),
+                      const EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
                   child: Text(
                     'Start by adding your profile by username or public key, please do not enter your pass phrase!',
                     style: TextStyle(color: Palette.hintColor),

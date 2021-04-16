@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatefulWidget {
-  SearchBar({Key key}) : super(key: key);
+  SearchBar({Key? key}) : super(key: key);
 
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -22,14 +22,14 @@ class _SearchBarState extends State<SearchBar> {
       child: Row(
         children: [
           Icon(
-            CupertinoIcons.at,
+            CupertinoIcons.search,
             size: 18.0,
           ),
-          SizedBox(width: 8.0),
+          SizedBox(width: 16.0),
           Expanded(
             child: TextField(
               decoration: InputDecoration.collapsed(
-                  hintText: 'username or public key',
+                  hintText: 'Seach',
                   hintStyle:
                       TextStyle(color: Palette.hintColor, fontSize: 14.0)),
             ),

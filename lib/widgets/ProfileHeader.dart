@@ -2,7 +2,7 @@ import 'package:cloutbook/assets.dart';
 import 'package:flutter/material.dart';
 
 class ProfileHeader extends StatefulWidget {
-  ProfileHeader({Key key}) : super(key: key);
+  ProfileHeader({Key? key}) : super(key: key);
 
   @override
   _ProfileHeaderState createState() => _ProfileHeaderState();
@@ -17,12 +17,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           Container(
             height: 100,
             width: 100,
-            margin: EdgeInsets.fromLTRB(
-              8.0,
-              32.0,
-              8.0,
-              20.0,
-            ),
+            margin: EdgeInsets.fromLTRB(8.0, 32.0, 8.0, 20.0),
             decoration: BoxDecoration(
               color: Colors.grey,
               image: DecorationImage(

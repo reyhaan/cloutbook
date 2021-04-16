@@ -3,14 +3,18 @@ import 'package:cloutbook/screens/screens.dart';
 import 'package:flutter/material.dart';
 
 class NavScreen extends StatefulWidget {
-  NavScreen({Key key}) : super(key: key);
+  NavScreen({Key? key}) : super(key: key);
 
   @override
   _NavScreenState createState() => _NavScreenState();
 }
 
 class _NavScreenState extends State<NavScreen> {
-  final List<Widget> _screens = [HomeScreen(), ExploreScreen()];
+  final List<Widget> _screens = [
+    HomeScreen(),
+    ProfileScreen(),
+    ExploreScreen()
+  ];
   int _currentIndex = 0;
 
   @override
@@ -33,6 +37,10 @@ class _NavScreenState extends State<NavScreen> {
               BottomNavigationBarItem(
                 icon: new Icon(Icons.home),
                 label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: new Icon(Icons.person),
+                label: 'Profile',
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.trending_up),

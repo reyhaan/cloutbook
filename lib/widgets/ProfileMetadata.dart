@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfileMetadata extends StatefulWidget {
-  ProfileMetadata({Key key}) : super(key: key);
+  ProfileMetadata({Key? key}) : super(key: key);
 
   @override
   _ProfileMetadataState createState() => _ProfileMetadataState();
