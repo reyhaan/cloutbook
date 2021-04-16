@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Posts extends StatefulWidget {
-  Posts({Key key}) : super(key: key);
+  Posts({Key? key}) : super(key: key);
 
   @override
   _PostsState createState() => _PostsState();
@@ -31,7 +31,7 @@ class _PostsState extends State<Posts> {
 }
 
 class PostItem extends StatelessWidget {
-  const PostItem({Key key}) : super(key: key);
+  const PostItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

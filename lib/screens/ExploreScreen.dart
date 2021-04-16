@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ExploreScreen extends StatefulWidget {
-  ExploreScreen({Key key}) : super(key: key);
+  ExploreScreen({Key? key}) : super(key: key);
 
   @override
   _ExploreScreenState createState() => _ExploreScreenState();
@@ -56,7 +56,7 @@ SliverAppBar createSilverAppBar1() {
               'Explore',
               style: Theme.of(context)
                   .textTheme
-                  .headline6
+                  .headline6!
                   .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
