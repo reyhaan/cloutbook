@@ -22,17 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Posts(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SearchScreen(),
-            ),
-          );
-        },
-      ),
     );
   }
 }
