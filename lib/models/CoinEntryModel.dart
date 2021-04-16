@@ -1,4 +1,6 @@
-class CoinEntry {
+import 'package:equatable/equatable.dart';
+
+class CoinEntry extends Equatable {
   final int? bitCloutLockedNanos;
   final int? coinWatermarkNanos;
   final int? coinsInCirculationNanos;

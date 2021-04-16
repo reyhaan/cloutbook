@@ -1,18 +1,19 @@
 import 'package:cloutbook/models/CoinEntryModel.dart';
 import 'package:cloutbook/models/PostModel.dart';
+import 'package:equatable/equatable.dart';
 
-class ProfileEntryResponse {
+class ProfileEntryResponse extends Equatable {
   final CoinEntry? coinEntry;
   final int? coinPriceBitCloutNanos;
-  List<Post>? comments;
+  final List<Post>? comments;
   final String? description;
   final bool? isHidden;
   final bool? isReserved;
   final bool? isVerified;
-  List<Post>? posts;
+  final List<Post>? posts;
   final String? profilePic;
   final String? publicKeyBase58Check;
-  Map<String, dynamic>? stakeEntryStats;
+  final Map<String, dynamic>? stakeEntryStats;
   final int? stakeMultipleBasisPoints;
   final String? username;
   final dynamic? usersThatHODL;
