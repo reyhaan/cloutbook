@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => NavScreen(),
-          '/search': (context) => SearchScreen(),
+          '/home': (context) => NavScreen(),
         },
         theme: ThemeData(
           appBarTheme: const AppBarTheme(backgroundColor: Palette.foreground),

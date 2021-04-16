@@ -14,27 +14,22 @@ class _FavoriteListState extends State<FavoriteList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        children: [
-          Row(
+        child: ListView.builder(
+      itemCount: 50,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Row(
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 14, 10, 10),
                 child: Text('Favorites'),
               ),
             ],
-          ),
-          ListItem(),
-          ListItem(),
-          ListItem(),
-          ListItem(),
-          ListItem(),
-          ListItem(),
-          ListItem(),
-          ListItem()
-        ],
-      ),
-    );
+          );
+        }
+        return ListItem();
+      },
+    ));
   }
 }
 

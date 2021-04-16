@@ -79,6 +79,7 @@ class PostItem extends StatelessWidget {
                   child: Text(
                     'Skepticism for bitclout? Yeah right, just like bitcoin will never touch \$100 :)',
                     textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.white70),
                   ),
                 ),
                 SizedBox(height: 16),
