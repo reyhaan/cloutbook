@@ -1,18 +1,20 @@
 import 'package:cloutbook/config/palette.dart';
-import 'package:cloutbook/widgets/FavoriteList.dart';
+import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/Posts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends HookWidget {
+  final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
 
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+      _globalFeedStore.getGlobalFeed();
+    }, []);
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
@@ -20,7 +22,34 @@ class _HomeScreenState extends State<HomeScreen> {
             createHomeSilverAppBar(),
           ];
         },
-        body: Posts(),
+        body: Observer(
+          builder: (context) {
+            return Stack(
+              children: [
+                Visibility(
+                  visible: !_globalFeedStore.isLoading,
+                  child: Positioned.fill(
+                    child: Posts(
+                      posts: _globalFeedStore.globalFeed,
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: _globalFeedStore.isLoading,
+                  child: Positioned.fill(
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.refresh),
+        onPressed: () {
+          _globalFeedStore.getGlobalFeed();
+        },
       ),
     );
   }
