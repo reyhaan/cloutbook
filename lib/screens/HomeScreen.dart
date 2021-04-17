@@ -27,7 +27,7 @@ class HomeScreen extends HookWidget {
             return Stack(
               children: [
                 Visibility(
-                  visible: !_globalFeedStore.isLoading,
+                  visible: true,
                   child: Positioned.fill(
                     child: Posts(
                       posts: _globalFeedStore.globalFeed,
@@ -36,7 +36,10 @@ class HomeScreen extends HookWidget {
                 ),
                 Visibility(
                   visible: _globalFeedStore.isLoading,
-                  child: Positioned.fill(
+                  child: Positioned(
+                    top: 50,
+                    left: 0,
+                    right: 0,
                     child: Center(child: CircularProgressIndicator()),
                   ),
                 ),

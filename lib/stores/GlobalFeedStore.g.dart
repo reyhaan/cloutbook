@@ -12,13 +12,13 @@ mixin _$GlobalFeedStore on _GlobalFeedStore, Store {
   final _$globalFeedAtom = Atom(name: '_GlobalFeedStore.globalFeed');
 
   @override
-  List<Post>? get globalFeed {
+  List<Post> get globalFeed {
     _$globalFeedAtom.reportRead();
     return super.globalFeed;
   }
 
   @override
-  set globalFeed(List<Post>? value) {
+  set globalFeed(List<Post> value) {
     _$globalFeedAtom.reportWrite(value, super.globalFeed, () {
       super.globalFeed = value;
     });
@@ -45,6 +45,20 @@ mixin _$GlobalFeedStore on _GlobalFeedStore, Store {
   @override
   Future<void> getGlobalFeed() {
     return _$getGlobalFeedAsyncAction.run(() => super.getGlobalFeed());
+  }
+
+  final _$_GlobalFeedStoreActionController =
+      ActionController(name: '_GlobalFeedStore');
+
+  @override
+  void setGlobalFeed(dynamic posts) {
+    final _$actionInfo = _$_GlobalFeedStoreActionController.startAction(
+        name: '_GlobalFeedStore.setGlobalFeed');
+    try {
+      return super.setGlobalFeed(posts);
+    } finally {
+      _$_GlobalFeedStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

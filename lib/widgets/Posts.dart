@@ -5,37 +5,32 @@ import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:jiffy/jiffy.dart';
 import 'dart:convert';
 
-class Posts extends StatefulWidget {
-  final bool? isProfile;
-  final List<Post>? posts;
+class Posts extends HookWidget {
+  final List<Post> posts;
+  final bool isProfile;
 
   Posts({
     Key? key,
-    this.isProfile,
-    this.posts,
+    this.posts = const [],
+    this.isProfile = false,
   }) : super(key: key);
 
   @override
-  _PostsState createState() => _PostsState();
-}
-
-class _PostsState extends State<Posts> {
-  @override
-  void initState() {
-    super.initState();
-    print(widget.posts);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    int postsLength = posts.length;
+    if (posts.length == 0) {
+      postsLength = 3;
+    }
+
     return Container(
       child: ListView.builder(
-        itemCount: widget.posts?.length ?? 3,
+        itemCount: postsLength,
         itemBuilder: (context, index) {
-          if (widget.isProfile == true) {
+          if (isProfile == true) {
             if (index == 0) {
               return ProfileHeader();
             }
@@ -43,15 +38,18 @@ class _PostsState extends State<Posts> {
               return ProfileMetadata();
             }
           }
-          if (widget.posts == null) {
-            return Center(
-              child: Text(
-                'Nothing to show here',
-                style: TextStyle(color: Palette.hintColor),
-              ),
-            );
+          if (posts.length == 0) {
+            if (index < 3) {
+              return Center(
+                child: Text(
+                  'Nothing to show here',
+                  style: TextStyle(color: Palette.hintColor),
+                ),
+              );
+            }
+            return Text('');
           }
-          return PostItem(post: widget.posts?[index]);
+          return PostItem(post: posts[index]);
         },
       ),
     );

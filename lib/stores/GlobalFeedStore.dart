@@ -1,5 +1,6 @@
 import 'package:cloutbook/models/PostModel.dart';
 import 'package:cloutbook/repository/HomeRepository.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 part 'GlobalFeedStore.g.dart';
@@ -14,17 +15,39 @@ abstract class _GlobalFeedStore with Store {
   _GlobalFeedStore(this._homeRepository);
 
   @observable
-  List<Post>? globalFeed;
+  List<Post> globalFeed = [];
 
   @observable
   bool isLoading = true;
 
   @action
+  void setGlobalFeed(posts) {
+    if (globalFeed.isNotEmpty) {
+      if (globalFeed.isNotEmpty) {
+        globalFeed.insertAll(globalFeed.length, posts);
+      }
+    } else {
+      globalFeed = posts;
+    }
+  }
+
+  @action
   Future<void> getGlobalFeed() async {
     try {
       isLoading = true;
+
+      String? postHashHex;
+
+      if (globalFeed.isNotEmpty) {
+        if (globalFeed.isNotEmpty) {
+          postHashHex = globalFeed.last.postHashHex;
+        }
+      }
+
+      debugPrint('----------------- $postHashHex');
+
       final response = await _homeRepository.getGlobalFeed(payload: {
-        "PostHashHex": "",
+        "PostHashHex": postHashHex ?? "",
         "ReaderPublicKeyBase58Check":
             "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
         "OrderBy": "",
@@ -39,7 +62,7 @@ abstract class _GlobalFeedStore with Store {
         "AddGlobalFeedBool": false
       });
       isLoading = false;
-      globalFeed = response;
+      setGlobalFeed(response);
     } catch (e) {}
   }
 }
