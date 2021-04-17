@@ -1,5 +1,6 @@
 import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/models/PostModel.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,10 +8,12 @@ import 'package:flutter/material.dart';
 
 class Posts extends StatefulWidget {
   final bool? isProfile;
+  final List<Post>? posts;
 
   Posts({
     Key? key,
     this.isProfile,
+    this.posts,
   }) : super(key: key);
 
   @override
@@ -19,10 +22,16 @@ class Posts extends StatefulWidget {
 
 class _PostsState extends State<Posts> {
   @override
+  void initState() {
+    super.initState();
+    print(widget.posts);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
-        itemCount: 50,
+        itemCount: widget.posts?.length,
         itemBuilder: (context, index) {
           if (widget.isProfile == true) {
             if (index == 0) {
@@ -32,7 +41,7 @@ class _PostsState extends State<Posts> {
               return ProfileMetadata();
             }
           }
-          return PostItem();
+          return PostItem(post: widget.posts?[index]);
         },
       ),
     );
@@ -40,7 +49,12 @@ class _PostsState extends State<Posts> {
 }
 
 class PostItem extends StatelessWidget {
-  const PostItem({Key? key}) : super(key: key);
+  final Post? post;
+
+  const PostItem({
+    Key? key,
+    this.post,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +100,8 @@ class PostItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Text(
-                    'Skepticism for bitclout? Yeah right, just like bitcoin will never touch \$100 :)',
+                    post?.body ??
+                        'Skepticism for bitclout? Yeah right, just like bitcoin will never touch \$100 :)',
                     textAlign: TextAlign.left,
                     style: TextStyle(color: Colors.white70),
                   ),
