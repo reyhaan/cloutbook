@@ -162,7 +162,7 @@ class PostItem extends StatelessWidget {
                     style: TextStyle(
                       color: Palette.primary4,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14,
+                      fontSize: 15,
                     ),
                   ),
                 ),
@@ -184,7 +184,8 @@ class PostItem extends StatelessWidget {
                   child: Text(
                     post?.body ?? '',
                     textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.white, height: 1.2),
+                    style: TextStyle(
+                        color: Colors.white, fontSize: 15, height: 1.2),
                   ),
                 ),
                 Visibility(
