@@ -1,10 +1,21 @@
+import 'package:cloutbook/common/api_client/api_client.dart';
+import 'package:cloutbook/repository/HomeRepository.dart';
+import 'package:cloutbook/stores/GlobalFeedStore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/screens/screens.dart';
 
 void main() {
+  GetIt.I.registerSingleton<ApiClient>(ApiClient(Dio()));
+  GetIt.I.registerSingleton<HomeRepository>(HomeRepository());
+
+  final homeRepository = GetIt.I<HomeRepository>();
+
+  GetIt.I.registerSingleton<GlobalFeedStore>(GlobalFeedStore(homeRepository));
   runApp(MyApp());
 }
 

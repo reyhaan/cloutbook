@@ -1,15 +1,13 @@
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/Posts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
 
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +17,19 @@ class _HomeScreenState extends State<HomeScreen> {
             createHomeSilverAppBar(),
           ];
         },
-        body: Posts(),
+        body: Observer(
+          builder: (context) {
+            return Posts(
+              posts: _globalFeedStore.globalFeed,
+            );
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.search),
+        onPressed: () {
+          _globalFeedStore.getGlobalFeed();
+        },
       ),
     );
   }
