@@ -51,12 +51,6 @@ class HomeScreen extends HookWidget {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.refresh),
-        onPressed: () {
-          _globalFeedStore.getGlobalFeed();
-        },
-      ),
     );
   }
 }

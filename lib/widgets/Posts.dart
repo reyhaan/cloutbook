@@ -29,59 +29,65 @@ class Posts extends HookWidget {
     }
 
     return Container(
-      child: ListView.builder(
-        itemCount: postsLength,
-        itemBuilder: (context, index) {
-          // Profile section
-          if (isProfile == true) {
-            if (index == 0) {
-              return ProfileHeader();
+      child: RefreshIndicator(
+        onRefresh: () {
+          _globalFeedStore.getGlobalFeed();
+          return Future.delayed(Duration(seconds: 0));
+        },
+        child: ListView.builder(
+          itemCount: postsLength,
+          itemBuilder: (context, index) {
+            // Profile section
+            if (isProfile == true) {
+              if (index == 0) {
+                return ProfileHeader();
+              }
+              if (index == 1) {
+                return ProfileMetadata();
+              }
             }
-            if (index == 1) {
-              return ProfileMetadata();
+            if (posts.length == 0) {
+              if (index == 2) {
+                return Center(
+                  child: Text(
+                    'Nothing to show here',
+                    style: TextStyle(color: Palette.hintColor),
+                  ),
+                );
+              }
+              return Text('');
             }
-          }
-          if (posts.length == 0) {
-            if (index == 2) {
-              return Center(
-                child: Text(
-                  'Nothing to show here',
-                  style: TextStyle(color: Palette.hintColor),
-                ),
+            // Profile section ends
+
+            // Add load more button here
+            if (index == posts.length - 1) {
+              return Column(
+                children: [
+                  PostItem(post: posts[index]),
+                  GestureDetector(
+                    onTap: Feedback.wrapForTap(() {
+                      // call global feed again
+                      _globalFeedStore.getGlobalFeed();
+                    }, context),
+                    child: Container(
+                      height: 50,
+                      width: 200,
+                      margin: EdgeInsets.only(bottom: 20),
+                      color: Palette.background,
+                      child: Center(
+                          child: Text(
+                        'Load more',
+                        style: TextStyle(color: Palette.primary4, fontSize: 14),
+                      )),
+                    ),
+                  ),
+                ],
               );
             }
-            return Text('');
-          }
-          // Profile section ends
 
-          // Add load more button here
-          if (index == posts.length - 1) {
-            return Column(
-              children: [
-                PostItem(post: posts[index]),
-                GestureDetector(
-                  onTap: Feedback.wrapForTap(() {
-                    // call global feed again
-                    _globalFeedStore.getGlobalFeed();
-                  }, context),
-                  child: Container(
-                    height: 50,
-                    width: 200,
-                    margin: EdgeInsets.only(bottom: 20),
-                    color: Palette.background,
-                    child: Center(
-                        child: Text(
-                      'Load more',
-                      style: TextStyle(color: Palette.primary4, fontSize: 14),
-                    )),
-                  ),
-                ),
-              ],
-            );
-          }
-
-          return PostItem(post: posts[index]);
-        },
+            return PostItem(post: posts[index]);
+          },
+        ),
       ),
     );
   }
