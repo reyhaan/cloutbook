@@ -16,25 +16,29 @@ abstract class _GlobalFeedStore with Store {
   @observable
   List<Post>? globalFeed;
 
+  @observable
+  bool isLoading = true;
+
   @action
   Future<void> getGlobalFeed() async {
     try {
+      isLoading = true;
       final response = await _homeRepository.getGlobalFeed(payload: {
         "PostHashHex": "",
         "ReaderPublicKeyBase58Check":
             "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
-        "OrderBy": "newest",
-        "StartTstampSecs": null,
+        "OrderBy": "",
+        "StartTstampSecs": 0,
         "PostContent": "",
         "NumToFetch": 50,
         "FetchSubcomments": false,
-        "GetPostsForFollowFeed": true,
-        "GetPostsForGlobalWhitelist": false,
+        "GetPostsForFollowFeed": false,
+        "GetPostsForGlobalWhitelist": true,
         "GetPostsByClout": false,
         "PostsByCloutMinutesLookback": 0,
         "AddGlobalFeedBool": false
       });
-
+      isLoading = false;
       globalFeed = response;
     } catch (e) {}
   }

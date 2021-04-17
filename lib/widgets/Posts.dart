@@ -5,6 +5,8 @@ import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
+import 'dart:convert';
 
 class Posts extends StatefulWidget {
   final bool? isProfile;
@@ -58,6 +60,19 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final postTime = Jiffy(post?.timestampNanos.toString()).format();
+    // final timeElapsed = Jiffy(postTime).hour;
+
+    var imageUrl = '';
+
+    if (post?.imageUrls != null) {
+      var l = post?.imageUrls?.length;
+
+      if (l! > 0) {
+        imageUrl = post?.imageUrls?[0];
+      }
+    }
+
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.only(bottom: 22, top: 10),
@@ -91,7 +106,7 @@ class PostItem extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    'mohammadrehaan',
+                    'some name',
                     style: TextStyle(
                         color: Palette.primary4, fontWeight: FontWeight.bold),
                   ),
@@ -100,13 +115,41 @@ class PostItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Text(
-                    post?.body ??
-                        'Skepticism for bitclout? Yeah right, just like bitcoin will never touch \$100 :)',
+                    post?.body ?? '',
                     textAlign: TextAlign.left,
                     style: TextStyle(color: Colors.white70),
                   ),
                 ),
-                SizedBox(height: 16),
+                Visibility(
+                  visible: post?.body != '',
+                  child: SizedBox(height: 16),
+                ),
+                Visibility(
+                  visible: imageUrl != '',
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 200),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                imageUrl,
+                              ),
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: imageUrl != '',
+                  child: SizedBox(height: 20),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 0, right: 16),
                   child: Row(
@@ -121,7 +164,7 @@ class PostItem extends StatelessWidget {
                                 size: 18.0,
                               ),
                             ),
-                            TextSpan(text: '  12'),
+                            TextSpan(text: '  ${post?.commentCount}'),
                           ],
                         ),
                       ),
@@ -134,7 +177,7 @@ class PostItem extends StatelessWidget {
                                 size: 18.0,
                               ),
                             ),
-                            TextSpan(text: '  8'),
+                            TextSpan(text: '  ${post?.recloutCount}'),
                           ],
                         ),
                       ),
@@ -147,7 +190,7 @@ class PostItem extends StatelessWidget {
                                 size: 18.0,
                               ),
                             ),
-                            TextSpan(text: '  25'),
+                            TextSpan(text: '  ${post?.likeCount}'),
                           ],
                         ),
                       ),
@@ -160,7 +203,7 @@ class PostItem extends StatelessWidget {
                                 size: 18.0,
                               ),
                             ),
-                            TextSpan(text: '  1h'),
+                            TextSpan(text: '  ${1}h'),
                           ],
                         ),
                       ),

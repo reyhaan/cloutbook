@@ -1,3 +1,3 @@
 class Env {
-  static const data = {'debugApiClient': true};
+  static const data = {'debugApiClient': false};
 }
