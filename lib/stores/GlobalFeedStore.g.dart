@@ -24,6 +24,21 @@ mixin _$GlobalFeedStore on _GlobalFeedStore, Store {
     });
   }
 
+  final _$isLoadingAtom = Atom(name: '_GlobalFeedStore.isLoading');
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   final _$getGlobalFeedAsyncAction =
       AsyncAction('_GlobalFeedStore.getGlobalFeed');
 
@@ -35,7 +50,8 @@ mixin _$GlobalFeedStore on _GlobalFeedStore, Store {
   @override
   String toString() {
     return '''
-globalFeed: ${globalFeed}
+globalFeed: ${globalFeed},
+isLoading: ${isLoading}
     ''';
   }
 }

@@ -33,7 +33,7 @@ class _PostsState extends State<Posts> {
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
-        itemCount: widget.posts?.length,
+        itemCount: widget.posts?.length ?? 3,
         itemBuilder: (context, index) {
           if (widget.isProfile == true) {
             if (index == 0) {
@@ -42,6 +42,14 @@ class _PostsState extends State<Posts> {
             if (index == 1) {
               return ProfileMetadata();
             }
+          }
+          if (widget.posts == null) {
+            return Center(
+              child: Text(
+                'Nothing to show here',
+                style: TextStyle(color: Palette.hintColor),
+              ),
+            );
           }
           return PostItem(post: widget.posts?[index]);
         },
