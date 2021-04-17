@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/PostModel.dart';
@@ -39,7 +41,7 @@ class Posts extends HookWidget {
             }
           }
           if (posts.length == 0) {
-            if (index < 3) {
+            if (index == 2) {
               return Center(
                 child: Text(
                   'Nothing to show here',
@@ -66,8 +68,10 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final postTime = Jiffy(post?.timestampNanos.toString()).format();
-    // final timeElapsed = Jiffy(postTime).hour;
+    final stripped = post?.profileEntryResponse?.profilePic
+        ?.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '') as String;
+
+    final avatar = base64.decode(stripped);
 
     var imageUrl = '';
 
@@ -78,6 +82,12 @@ class PostItem extends StatelessWidget {
         imageUrl = post?.imageUrls?[0];
       }
     }
+
+    final int given = post?.timestampNanos as int;
+    final diff = (given / 1000000000).floor();
+    final utc = Jiffy.unix(diff).utc();
+    final fromNow = Jiffy(utc).fromNow();
+    final timeElapsed = fromNow;
 
     return Container(
       margin: EdgeInsets.only(bottom: 10),
@@ -94,16 +104,17 @@ class PostItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 42,
-            width: 42,
-            margin: EdgeInsets.fromLTRB(16.0, 10.0, 20.0, 8.0),
+            height: 48,
+            width: 48,
+            margin: EdgeInsets.fromLTRB(12.0, 0.0, 14.0, 8.0),
             decoration: BoxDecoration(
               color: Colors.grey,
-              image: DecorationImage(
-                image: AssetImage(Assets.avatar),
-              ),
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(21),
+              child: Image.memory(avatar),
             ),
           ),
           Flexible(
@@ -112,9 +123,25 @@ class PostItem extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    'some name',
+                    '@${post?.profileEntryResponse?.username}',
                     style: TextStyle(
-                        color: Palette.primary4, fontWeight: FontWeight.bold),
+                      color: Palette.primary4,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 4, bottom: 6),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                            text: '$timeElapsed',
+                            style: TextStyle(
+                                color: Palette.hintColor, fontSize: 12)),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 5.0),
@@ -123,7 +150,7 @@ class PostItem extends StatelessWidget {
                   child: Text(
                     post?.body ?? '',
                     textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(color: Colors.white, height: 1.2),
                   ),
                 ),
                 Visibility(
@@ -197,19 +224,6 @@ class PostItem extends StatelessWidget {
                               ),
                             ),
                             TextSpan(text: '  ${post?.likeCount}'),
-                          ],
-                        ),
-                      ),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            WidgetSpan(
-                              child: Icon(
-                                CupertinoIcons.link,
-                                size: 18.0,
-                              ),
-                            ),
-                            TextSpan(text: '  ${1}h'),
                           ],
                         ),
                       ),

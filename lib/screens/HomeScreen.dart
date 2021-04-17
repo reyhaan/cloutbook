@@ -37,7 +37,7 @@ class HomeScreen extends HookWidget {
                 Visibility(
                   visible: _globalFeedStore.isLoading,
                   child: Positioned(
-                    top: 50,
+                    top: 100,
                     left: 0,
                     right: 0,
                     child: Center(child: CircularProgressIndicator()),
