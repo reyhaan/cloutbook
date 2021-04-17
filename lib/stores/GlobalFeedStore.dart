@@ -21,6 +21,12 @@ abstract class _GlobalFeedStore with Store {
   bool isLoading = true;
 
   @action
+  void reset() {
+    globalFeed = [];
+    isLoading = false;
+  }
+
+  @action
   void setGlobalFeed(posts) {
     if (globalFeed.isNotEmpty) {
       if (globalFeed.isNotEmpty) {

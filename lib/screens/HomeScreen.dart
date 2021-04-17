@@ -13,6 +13,9 @@ class HomeScreen extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() {
       _globalFeedStore.getGlobalFeed();
+
+      // reset store when unmounted
+      return _globalFeedStore.reset;
     }, []);
 
     return Scaffold(

@@ -1,17 +1,17 @@
-import 'dart:typed_data';
-
-import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/PostModel.dart';
+import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 import 'package:jiffy/jiffy.dart';
 import 'dart:convert';
 
 class Posts extends HookWidget {
+  final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
   final List<Post> posts;
   final bool isProfile;
 
@@ -32,6 +32,7 @@ class Posts extends HookWidget {
       child: ListView.builder(
         itemCount: postsLength,
         itemBuilder: (context, index) {
+          // Profile section
           if (isProfile == true) {
             if (index == 0) {
               return ProfileHeader();
@@ -51,6 +52,34 @@ class Posts extends HookWidget {
             }
             return Text('');
           }
+          // Profile section ends
+
+          // Add load more button here
+          if (index == posts.length - 1) {
+            return Column(
+              children: [
+                PostItem(post: posts[index]),
+                GestureDetector(
+                  onTap: Feedback.wrapForTap(() {
+                    // call global feed again
+                    _globalFeedStore.getGlobalFeed();
+                  }, context),
+                  child: Container(
+                    height: 50,
+                    width: 200,
+                    margin: EdgeInsets.only(bottom: 20),
+                    color: Palette.background,
+                    child: Center(
+                        child: Text(
+                      'Load more',
+                      style: TextStyle(color: Palette.primary4, fontSize: 14),
+                    )),
+                  ),
+                ),
+              ],
+            );
+          }
+
           return PostItem(post: posts[index]);
         },
       ),
@@ -138,8 +167,7 @@ class PostItem extends StatelessWidget {
                       children: [
                         TextSpan(
                             text: '$timeElapsed',
-                            style: TextStyle(
-                                color: Palette.hintColor, fontSize: 12)),
+                            style: TextStyle(color: Colors.grey, fontSize: 12)),
                       ],
                     ),
                   ),
@@ -184,7 +212,7 @@ class PostItem extends StatelessWidget {
                   child: SizedBox(height: 20),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 0, right: 16),
+                  padding: const EdgeInsets.only(left: 14, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

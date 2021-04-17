@@ -51,6 +51,17 @@ mixin _$GlobalFeedStore on _GlobalFeedStore, Store {
       ActionController(name: '_GlobalFeedStore');
 
   @override
+  void reset() {
+    final _$actionInfo = _$_GlobalFeedStoreActionController.startAction(
+        name: '_GlobalFeedStore.reset');
+    try {
+      return super.reset();
+    } finally {
+      _$_GlobalFeedStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setGlobalFeed(dynamic posts) {
     final _$actionInfo = _$_GlobalFeedStoreActionController.startAction(
         name: '_GlobalFeedStore.setGlobalFeed');
