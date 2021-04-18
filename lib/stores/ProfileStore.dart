@@ -1,6 +1,7 @@
-import 'package:cloutbook/models/PostModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/repository/ProfileRepository.dart';
+import 'package:cloutbook/stores/ExchangeStore.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 part 'ProfileStore.g.dart';
@@ -11,6 +12,7 @@ class ProfileStore extends _ProfileStore with _$ProfileStore {
 
 abstract class _ProfileStore with Store {
   final ProfileRepository _profileRepository;
+  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
 
   _ProfileStore(this._profileRepository);
 
@@ -27,7 +29,7 @@ abstract class _ProfileStore with Store {
   String inCirculation = '-';
 
   @observable
-  String totalUSDLoacked = '-';
+  String totalUSDLocked = '-';
 
   @observable
   String totalUSDMarketCap = '-';
@@ -94,13 +96,6 @@ abstract class _ProfileStore with Store {
         "NumToFetch": 50
       });
       setUserFollowers(response.toString());
-    } catch (e) {}
-  }
-
-  @action
-  Future<void> getExchangeRate() async {
-    try {
-      final response = await _profileRepository.getExchangeRate();
     } catch (e) {}
   }
 }

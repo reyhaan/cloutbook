@@ -69,18 +69,18 @@ mixin _$ProfileStore on _ProfileStore, Store {
     });
   }
 
-  final _$totalUSDLoackedAtom = Atom(name: '_ProfileStore.totalUSDLoacked');
+  final _$totalUSDLockedAtom = Atom(name: '_ProfileStore.totalUSDLocked');
 
   @override
-  String get totalUSDLoacked {
-    _$totalUSDLoackedAtom.reportRead();
-    return super.totalUSDLoacked;
+  String get totalUSDLocked {
+    _$totalUSDLockedAtom.reportRead();
+    return super.totalUSDLocked;
   }
 
   @override
-  set totalUSDLoacked(String value) {
-    _$totalUSDLoackedAtom.reportWrite(value, super.totalUSDLoacked, () {
-      super.totalUSDLoacked = value;
+  set totalUSDLocked(String value) {
+    _$totalUSDLockedAtom.reportWrite(value, super.totalUSDLocked, () {
+      super.totalUSDLocked = value;
     });
   }
 
@@ -129,14 +129,6 @@ mixin _$ProfileStore on _ProfileStore, Store {
     return _$getFollowersAsyncAction.run(() => super.getFollowers());
   }
 
-  final _$getExchangeRateAsyncAction =
-      AsyncAction('_ProfileStore.getExchangeRate');
-
-  @override
-  Future<void> getExchangeRate() {
-    return _$getExchangeRateAsyncAction.run(() => super.getExchangeRate());
-  }
-
   final _$_ProfileStoreActionController =
       ActionController(name: '_ProfileStore');
 
@@ -180,7 +172,7 @@ userProfile: ${userProfile},
 userFollowers: ${userFollowers},
 coinPrice: ${coinPrice},
 inCirculation: ${inCirculation},
-totalUSDLoacked: ${totalUSDLoacked},
+totalUSDLocked: ${totalUSDLocked},
 totalUSDMarketCap: ${totalUSDMarketCap},
 isLoading: ${isLoading}
     ''';

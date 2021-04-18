@@ -13,12 +13,22 @@ class ProfileMetadata extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    void updateExchange() async {
+      await _exchangeStore.getExchangeRate();
+      await _exchangeStore.getTicker();
+    }
+
     useEffect(() {
-      // _exchangeStore.getExchangeRate();
-      // _exchangeStore.getTicker();
+      // get latest exchange rates first
+      updateExchange();
 
       // reset store when unmounted
       return _profileStore.reset;
+    }, []);
+
+    useEffect(() {
+      // reset store when unmounted
+      return _exchangeStore.disposeWebViews;
     }, []);
 
     return Container(

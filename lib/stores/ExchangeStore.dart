@@ -20,18 +20,6 @@ abstract class _ExchangeStore with Store {
   Map<String, dynamic> ticker = {};
 
   @observable
-  String coinPrice = '-';
-
-  @observable
-  String inCirculation = '-';
-
-  @observable
-  String totalUSDLoacked = '-';
-
-  @observable
-  String totalUSDMarketCap = '-';
-
-  @observable
   bool isLoading = true;
 
   @action
@@ -40,18 +28,38 @@ abstract class _ExchangeStore with Store {
   }
 
   @action
-  Future<void> getExchangeRate() async {
-    try {
-      final response = await _exchangeRepository.getExchangeRate();
-      exchangeRate = response;
-    } catch (e) {}
+  void setExchangeRate(rate) {
+    exchangeRate = rate;
   }
 
   @action
-  Future<void> getTicker() async {
+  void setTicker(newTicker) {
+    ticker = newTicker;
+  }
+
+  @action
+  Future<bool> disposeWebViews() async {
+    await _exchangeRepository.dispose();
+    return true;
+  }
+
+  @action
+  Future<bool> getExchangeRate() async {
     try {
-      final response = await _exchangeRepository.getTicker();
-      ticker = response;
-    } catch (e) {}
+      await _exchangeRepository.getExchangeRate();
+      return true;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Future<bool> getTicker() async {
+    try {
+      await _exchangeRepository.getTicker();
+      return true;
+    } catch (e) {
+      throw e;
+    }
   }
 }

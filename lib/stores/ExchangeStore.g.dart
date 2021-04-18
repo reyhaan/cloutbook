@@ -39,67 +39,6 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
     });
   }
 
-  final _$coinPriceAtom = Atom(name: '_ExchangeStore.coinPrice');
-
-  @override
-  String get coinPrice {
-    _$coinPriceAtom.reportRead();
-    return super.coinPrice;
-  }
-
-  @override
-  set coinPrice(String value) {
-    _$coinPriceAtom.reportWrite(value, super.coinPrice, () {
-      super.coinPrice = value;
-    });
-  }
-
-  final _$inCirculationAtom = Atom(name: '_ExchangeStore.inCirculation');
-
-  @override
-  String get inCirculation {
-    _$inCirculationAtom.reportRead();
-    return super.inCirculation;
-  }
-
-  @override
-  set inCirculation(String value) {
-    _$inCirculationAtom.reportWrite(value, super.inCirculation, () {
-      super.inCirculation = value;
-    });
-  }
-
-  final _$totalUSDLoackedAtom = Atom(name: '_ExchangeStore.totalUSDLoacked');
-
-  @override
-  String get totalUSDLoacked {
-    _$totalUSDLoackedAtom.reportRead();
-    return super.totalUSDLoacked;
-  }
-
-  @override
-  set totalUSDLoacked(String value) {
-    _$totalUSDLoackedAtom.reportWrite(value, super.totalUSDLoacked, () {
-      super.totalUSDLoacked = value;
-    });
-  }
-
-  final _$totalUSDMarketCapAtom =
-      Atom(name: '_ExchangeStore.totalUSDMarketCap');
-
-  @override
-  String get totalUSDMarketCap {
-    _$totalUSDMarketCapAtom.reportRead();
-    return super.totalUSDMarketCap;
-  }
-
-  @override
-  set totalUSDMarketCap(String value) {
-    _$totalUSDMarketCapAtom.reportWrite(value, super.totalUSDMarketCap, () {
-      super.totalUSDMarketCap = value;
-    });
-  }
-
   final _$isLoadingAtom = Atom(name: '_ExchangeStore.isLoading');
 
   @override
@@ -115,18 +54,26 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
     });
   }
 
+  final _$disposeWebViewsAsyncAction =
+      AsyncAction('_ExchangeStore.disposeWebViews');
+
+  @override
+  Future<bool> disposeWebViews() {
+    return _$disposeWebViewsAsyncAction.run(() => super.disposeWebViews());
+  }
+
   final _$getExchangeRateAsyncAction =
       AsyncAction('_ExchangeStore.getExchangeRate');
 
   @override
-  Future<void> getExchangeRate() {
+  Future<bool> getExchangeRate() {
     return _$getExchangeRateAsyncAction.run(() => super.getExchangeRate());
   }
 
   final _$getTickerAsyncAction = AsyncAction('_ExchangeStore.getTicker');
 
   @override
-  Future<void> getTicker() {
+  Future<bool> getTicker() {
     return _$getTickerAsyncAction.run(() => super.getTicker());
   }
 
@@ -145,14 +92,32 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
   }
 
   @override
+  void setExchangeRate(dynamic rate) {
+    final _$actionInfo = _$_ExchangeStoreActionController.startAction(
+        name: '_ExchangeStore.setExchangeRate');
+    try {
+      return super.setExchangeRate(rate);
+    } finally {
+      _$_ExchangeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTicker(dynamic newTicker) {
+    final _$actionInfo = _$_ExchangeStoreActionController.startAction(
+        name: '_ExchangeStore.setTicker');
+    try {
+      return super.setTicker(newTicker);
+    } finally {
+      _$_ExchangeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 exchangeRate: ${exchangeRate},
 ticker: ${ticker},
-coinPrice: ${coinPrice},
-inCirculation: ${inCirculation},
-totalUSDLoacked: ${totalUSDLoacked},
-totalUSDMarketCap: ${totalUSDMarketCap},
 isLoading: ${isLoading}
     ''';
   }
