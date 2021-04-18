@@ -12,7 +12,6 @@ class ProfileStore extends _ProfileStore with _$ProfileStore {
 
 abstract class _ProfileStore with Store {
   final ProfileRepository _profileRepository;
-  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
 
   _ProfileStore(this._profileRepository);
 

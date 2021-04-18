@@ -1,3 +1,5 @@
+import 'package:cloutbook/models/ExchangeRateModel.dart';
+import 'package:cloutbook/models/TickerModel.dart';
 import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:mobx/mobx.dart';
 
@@ -14,10 +16,10 @@ abstract class _ExchangeStore with Store {
   _ExchangeStore(this._exchangeRepository);
 
   @observable
-  Map<String, dynamic> exchangeRate = {};
+  ExchangeRate exchangeRate = ExchangeRate();
 
   @observable
-  Map<String, dynamic> ticker = {};
+  Ticker ticker = Ticker();
 
   @observable
   bool isLoading = true;

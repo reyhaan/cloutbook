@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:cloutbook/common/api_client/api_client.dart';
+import 'package:cloutbook/models/ExchangeRateModel.dart';
 import 'package:cloutbook/models/FailureModel.dart';
+import 'package:cloutbook/models/TickerModel.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -28,10 +30,11 @@ final HeadlessInAppWebView? bitCloutWebView = new HeadlessInAppWebView(
         var x = await exchangeRate.json();
         return x;
         """;
-    var exchangeRate = await controller.callAsyncJavaScript(
+    var _exchangeRate = await controller.callAsyncJavaScript(
         functionBody: getExchangeRateFunction, arguments: {});
 
-    _exchangeStore.setExchangeRate(exchangeRate?.value);
+    ExchangeRate exchangeRate = ExchangeRate.fromMap(_exchangeRate?.value);
+    _exchangeStore.setExchangeRate(exchangeRate);
   },
 );
 
@@ -47,10 +50,11 @@ final HeadlessInAppWebView? tickerWebView = new HeadlessInAppWebView(
         var y = await ticker.json();
         return y;
         """;
-    var ticker = await controller
+    var _ticker = await controller
         .callAsyncJavaScript(functionBody: getTickerFunction, arguments: {});
 
-    _exchangeStore.setTicker(ticker?.value);
+    Ticker ticker = Ticker.fromMap(_ticker?.value);
+    _exchangeStore.setTicker(ticker);
   },
 );
 

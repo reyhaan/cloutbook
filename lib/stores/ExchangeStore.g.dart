@@ -12,13 +12,13 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
   final _$exchangeRateAtom = Atom(name: '_ExchangeStore.exchangeRate');
 
   @override
-  Map<String, dynamic> get exchangeRate {
+  ExchangeRate get exchangeRate {
     _$exchangeRateAtom.reportRead();
     return super.exchangeRate;
   }
 
   @override
-  set exchangeRate(Map<String, dynamic> value) {
+  set exchangeRate(ExchangeRate value) {
     _$exchangeRateAtom.reportWrite(value, super.exchangeRate, () {
       super.exchangeRate = value;
     });
@@ -27,13 +27,13 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
   final _$tickerAtom = Atom(name: '_ExchangeStore.ticker');
 
   @override
-  Map<String, dynamic> get ticker {
+  Ticker get ticker {
     _$tickerAtom.reportRead();
     return super.ticker;
   }
 
   @override
-  set ticker(Map<String, dynamic> value) {
+  set ticker(Ticker value) {
     _$tickerAtom.reportWrite(value, super.ticker, () {
       super.ticker = value;
     });
