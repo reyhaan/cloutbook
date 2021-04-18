@@ -1,22 +1,47 @@
-import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:cloutbook/widgets/Posts.dart';
-import 'package:cloutbook/widgets/ProfileHeader.dart';
-import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
-class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends HookWidget {
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
 
-  @override
-  _ProfileScreenState createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+      _profileStore.getUserProfile();
+
+      // reset store when unmounted
+      return _profileStore.reset;
+    }, []);
+
     return Scaffold(
-      body: Posts(
-        isProfile: true,
+      body: Observer(
+        builder: (context) {
+          return Stack(
+            children: [
+              Positioned(
+                child: Center(
+                  child: Visibility(
+                    visible: _profileStore.isLoading,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: Visibility(
+                  visible: !_profileStore.isLoading,
+                  child: Posts(
+                    posts: _profileStore.userProfile.posts,
+                    isProfile: true,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:equatable/equatable.dart';
 
 class Post extends Equatable {
@@ -13,10 +14,10 @@ class Post extends Equatable {
   final Map<String, dynamic>? postEntryReaderState;
   final String? postHashHex;
   final String? posterPublicKeyBase58Check;
-  final Map<String, dynamic>? profileEntryResponse;
+  final ProfileEntryResponse? profileEntryResponse;
   final int? recloutCount;
   final int? stakeMultipleBasisPoints;
-  final int? timestampNanos;
+  final int timestampNanos;
 
   Post({
     this.body,
@@ -34,7 +35,7 @@ class Post extends Equatable {
     this.profileEntryResponse,
     this.recloutCount,
     this.stakeMultipleBasisPoints,
-    this.timestampNanos,
+    required this.timestampNanos,
   });
 
   List<dynamic> get props => [
@@ -57,6 +58,12 @@ class Post extends Equatable {
       ];
 
   factory Post.fromMap(Map<String, dynamic> map) {
+    ProfileEntryResponse profileEntryResponse;
+
+    if (map['ProfileEntryResponse'] != null) {}
+    profileEntryResponse =
+        ProfileEntryResponse.fromMap(map['ProfileEntryResponse']);
+
     return Post(
       body: map['Body'] ?? '',
       commentCount: map['CommentCount'] ?? 0,
@@ -70,10 +77,10 @@ class Post extends Equatable {
       postEntryReaderState: map['PostEntryReaderState'] ?? {},
       postHashHex: map['PostHashHex'] ?? '',
       posterPublicKeyBase58Check: map['PosterPublicKeyBase58Check'] ?? '',
-      profileEntryResponse: map['ProfileEntryResponse'] ?? {},
+      profileEntryResponse: profileEntryResponse,
       recloutCount: map['RecloutCount'] ?? 0,
       stakeMultipleBasisPoints: map['StakeMultipleBasisPoints'] ?? 0,
-      timestampNanos: map['TimestampNanos'] ?? 0,
+      timestampNanos: map['TimestampNanos'],
     );
   }
 }

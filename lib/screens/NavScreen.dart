@@ -13,7 +13,8 @@ class _NavScreenState extends State<NavScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
     ProfileScreen(),
-    ExploreScreen()
+    ExploreScreen(),
+    SettingsScreen()
   ];
   int _currentIndex = 0;
 
@@ -25,6 +26,7 @@ class _NavScreenState extends State<NavScreen> {
         child: Scaffold(
           body: _screens[_currentIndex],
           bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             backgroundColor: Palette.foreground,
             currentIndex: _currentIndex,
             selectedItemColor: Palette.primary3,
@@ -45,6 +47,10 @@ class _NavScreenState extends State<NavScreen> {
               BottomNavigationBarItem(
                 icon: new Icon(Icons.trending_up),
                 label: 'Explore',
+              ),
+              BottomNavigationBarItem(
+                icon: new Icon(Icons.settings),
+                label: 'Settings',
               ),
             ],
           ),

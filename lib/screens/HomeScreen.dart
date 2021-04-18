@@ -13,6 +13,9 @@ class HomeScreen extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() {
       _globalFeedStore.getGlobalFeed();
+
+      // reset store when unmounted
+      return _globalFeedStore.reset;
     }, []);
 
     return Scaffold(
@@ -27,7 +30,7 @@ class HomeScreen extends HookWidget {
             return Stack(
               children: [
                 Visibility(
-                  visible: !_globalFeedStore.isLoading,
+                  visible: true,
                   child: Positioned.fill(
                     child: Posts(
                       posts: _globalFeedStore.globalFeed,
@@ -36,7 +39,10 @@ class HomeScreen extends HookWidget {
                 ),
                 Visibility(
                   visible: _globalFeedStore.isLoading,
-                  child: Positioned.fill(
+                  child: Positioned(
+                    top: 100,
+                    left: 0,
+                    right: 0,
                     child: Center(child: CircularProgressIndicator()),
                   ),
                 ),
@@ -44,12 +50,6 @@ class HomeScreen extends HookWidget {
             );
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.refresh),
-        onPressed: () {
-          _globalFeedStore.getGlobalFeed();
-        },
       ),
     );
   }

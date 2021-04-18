@@ -1,58 +1,107 @@
-import 'package:cloutbook/assets.dart';
+import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/PostModel.dart';
+import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
+import 'package:get_it/get_it.dart';
 import 'package:jiffy/jiffy.dart';
-import 'dart:convert';
 
-class Posts extends StatefulWidget {
-  final bool? isProfile;
-  final List<Post>? posts;
+class Posts extends HookWidget {
+  final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
+  final List<Post> posts;
+  final bool isProfile;
 
   Posts({
     Key? key,
-    this.isProfile,
-    this.posts,
+    this.posts = const [],
+    this.isProfile = false,
   }) : super(key: key);
 
   @override
-  _PostsState createState() => _PostsState();
-}
-
-class _PostsState extends State<Posts> {
-  @override
-  void initState() {
-    super.initState();
-    print(widget.posts);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    int postsLength = posts.length;
+    if (posts.length == 0) {
+      postsLength = 3;
+    }
+
     return Container(
-      child: ListView.builder(
-        itemCount: widget.posts?.length ?? 3,
-        itemBuilder: (context, index) {
-          if (widget.isProfile == true) {
-            if (index == 0) {
-              return ProfileHeader();
-            }
-            if (index == 1) {
-              return ProfileMetadata();
-            }
-          }
-          if (widget.posts == null) {
-            return Center(
-              child: Text(
-                'Nothing to show here',
-                style: TextStyle(color: Palette.hintColor),
-              ),
-            );
-          }
-          return PostItem(post: widget.posts?[index]);
+      child: RefreshIndicator(
+        onRefresh: () {
+          _globalFeedStore.getGlobalFeed();
+          return Future.delayed(Duration(seconds: 0));
         },
+        child: ListView.builder(
+          itemCount: postsLength,
+          itemBuilder: (context, index) {
+            // Profile section
+            if (isProfile == true) {
+              if (index == 0 && posts.length > 0) {
+                return Column(
+                  children: [
+                    ProfileHeader(),
+                    ProfileMetadata(),
+                    Visibility(
+                      visible: posts.length > 0,
+                      child: PostItem(post: posts[index]),
+                    ),
+                  ],
+                );
+              } else if (index == 0) {
+                return Column(
+                  children: [
+                    ProfileHeader(),
+                    ProfileMetadata(),
+                  ],
+                );
+              }
+            }
+            if (posts.length == 0) {
+              if (index == 2) {
+                return Center(
+                  child: Text(
+                    'Nothing to show here',
+                    style: TextStyle(color: Palette.hintColor),
+                  ),
+                );
+              }
+              return Text('');
+            }
+            // Profile section ends
+
+            // Add load more button here
+            if (posts.length - 1 > 0 && index == posts.length - 1) {
+              return Column(
+                children: [
+                  PostItem(post: posts[index]),
+                  GestureDetector(
+                    onTap: Feedback.wrapForTap(() {
+                      // call global feed again
+                      _globalFeedStore.getGlobalFeed();
+                    }, context),
+                    child: Container(
+                      height: 50,
+                      width: 200,
+                      margin: EdgeInsets.only(bottom: 20),
+                      color: Palette.background,
+                      child: Center(
+                          child: Text(
+                        'Load more',
+                        style: TextStyle(color: Palette.primary4, fontSize: 14),
+                      )),
+                    ),
+                  ),
+                ],
+              );
+            }
+
+            return PostItem(post: posts[index]);
+          },
+        ),
       ),
     );
   }
@@ -68,8 +117,7 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final postTime = Jiffy(post?.timestampNanos.toString()).format();
-    // final timeElapsed = Jiffy(postTime).hour;
+    final avatar = processDataImage(post?.profileEntryResponse?.profilePic);
 
     var imageUrl = '';
 
@@ -80,6 +128,12 @@ class PostItem extends StatelessWidget {
         imageUrl = post?.imageUrls?[0];
       }
     }
+
+    final int given = post?.timestampNanos as int;
+    final diff = (given / 1000000000).floor();
+    final utc = Jiffy.unix(diff).utc();
+    final fromNow = Jiffy(utc).fromNow();
+    final timeElapsed = fromNow;
 
     return Container(
       margin: EdgeInsets.only(bottom: 10),
@@ -96,16 +150,17 @@ class PostItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 42,
-            width: 42,
-            margin: EdgeInsets.fromLTRB(16.0, 10.0, 20.0, 8.0),
+            height: 48,
+            width: 48,
+            margin: EdgeInsets.fromLTRB(12.0, 0.0, 14.0, 8.0),
             decoration: BoxDecoration(
               color: Colors.grey,
-              image: DecorationImage(
-                image: AssetImage(Assets.avatar),
-              ),
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 2),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(21),
+              child: Image.memory(avatar),
             ),
           ),
           Flexible(
@@ -114,18 +169,55 @@ class PostItem extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    'some name',
+                    '@${post?.profileEntryResponse?.username}',
                     style: TextStyle(
-                        color: Palette.primary4, fontWeight: FontWeight.bold),
+                      color: Palette.primary4,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 4, bottom: 6),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                            text: '$timeElapsed',
+                            style: TextStyle(color: Colors.grey, fontSize: 12)),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 5.0),
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
-                  child: Text(
-                    post?.body ?? '',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.white70),
+                  child: ParsedText(
+                    text: post?.body ?? '',
+                    style: TextStyle(
+                        color: Colors.white, fontSize: 15, height: 1.3),
+                    parse: <MatchText>[
+                      MatchText(
+                        pattern: r"\@[A-Za-z]\w+",
+                        style: TextStyle(
+                          color: Palette.primary3,
+                          fontSize: 15,
+                        ),
+                        onTap: (name) {
+                          print(name);
+                        },
+                      ),
+                      MatchText(
+                        type: ParsedType.URL,
+                        style: TextStyle(
+                          color: Palette.primary3,
+                          fontSize: 15,
+                        ),
+                        onTap: (url) {
+                          print(url);
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 Visibility(
@@ -159,17 +251,19 @@ class PostItem extends StatelessWidget {
                   child: SizedBox(height: 20),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 0, right: 16),
+                  padding: const EdgeInsets.only(left: 14, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text.rich(
                         TextSpan(
+                          style: TextStyle(color: Colors.white60),
                           children: [
                             WidgetSpan(
                               child: Icon(
                                 CupertinoIcons.bubble_left,
                                 size: 18.0,
+                                color: Colors.white60,
                               ),
                             ),
                             TextSpan(text: '  ${post?.commentCount}'),
@@ -178,11 +272,13 @@ class PostItem extends StatelessWidget {
                       ),
                       Text.rich(
                         TextSpan(
+                          style: TextStyle(color: Colors.white60),
                           children: [
                             WidgetSpan(
                               child: Icon(
                                 CupertinoIcons.arrow_2_squarepath,
                                 size: 18.0,
+                                color: Colors.white60,
                               ),
                             ),
                             TextSpan(text: '  ${post?.recloutCount}'),
@@ -191,27 +287,16 @@ class PostItem extends StatelessWidget {
                       ),
                       Text.rich(
                         TextSpan(
+                          style: TextStyle(color: Colors.white60),
                           children: [
                             WidgetSpan(
                               child: Icon(
                                 CupertinoIcons.heart,
                                 size: 18.0,
+                                color: Colors.white60,
                               ),
                             ),
                             TextSpan(text: '  ${post?.likeCount}'),
-                          ],
-                        ),
-                      ),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            WidgetSpan(
-                              child: Icon(
-                                CupertinoIcons.link,
-                                size: 18.0,
-                              ),
-                            ),
-                            TextSpan(text: '  ${1}h'),
                           ],
                         ),
                       ),

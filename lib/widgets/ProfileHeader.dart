@@ -1,46 +1,87 @@
 import 'package:cloutbook/assets.dart';
+import 'package:cloutbook/common/utils.dart';
+import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
+import 'package:get_it/get_it.dart';
 
-class ProfileHeader extends StatefulWidget {
-  ProfileHeader({Key? key}) : super(key: key);
+class ProfileHeader extends HookWidget {
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
 
-  @override
-  _ProfileHeaderState createState() => _ProfileHeaderState();
-}
-
-class _ProfileHeaderState extends State<ProfileHeader> {
   @override
   Widget build(BuildContext context) {
+    final avatar = processDataImage(_profileStore.userProfile.profilePic ?? '');
+
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 100,
             width: 100,
-            margin: EdgeInsets.fromLTRB(8.0, 32.0, 8.0, 20.0),
+            margin: EdgeInsets.fromLTRB(14.0, 32.0, 8.0, 20.0),
             decoration: BoxDecoration(
               color: Colors.grey,
-              image: DecorationImage(
-                image: AssetImage(Assets.avatar),
-              ),
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 4),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 4.0, bottom: 8.0),
-            child: Text(
-              '@mohammadrehaan',
-              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Visibility(
+                visible: _profileStore.userProfile.profilePic != null,
+                child: Image.memory(avatar),
+              ),
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 40, right: 40),
-            margin: EdgeInsets.only(bottom: 25.0),
+            margin: EdgeInsets.only(left: 14, top: 4.0, bottom: 16.0),
             child: Text(
-              'Developer with an alter ego of a designer. Does that make me a generalist?',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              '@${_profileStore.userProfile.username}',
+              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 14, right: 40),
+            margin: EdgeInsets.only(bottom: 5.0),
+            child: ParsedText(
+              text: '${_profileStore.userProfile.description}',
+              alignment: TextAlign.start,
+              style:
+                  TextStyle(fontSize: 14, color: Colors.white70, height: 1.3),
+              parse: <MatchText>[
+                MatchText(
+                  type: ParsedType.URL,
+                  style: TextStyle(
+                    color: Palette.primary4,
+                    fontSize: 15,
+                  ),
+                  onTap: (url) {
+                    print(url);
+                  },
+                ),
+                MatchText(
+                  type: ParsedType.EMAIL,
+                  style: TextStyle(
+                    color: Palette.primary4,
+                    fontSize: 15,
+                  ),
+                  onTap: (url) {
+                    print(url);
+                  },
+                ),
+                MatchText(
+                  pattern: r"\@[A-Za-z]\w+",
+                  style: TextStyle(
+                    color: Palette.primary4,
+                    fontSize: 15,
+                  ),
+                  onTap: (name) {
+                    print(name);
+                  },
+                ),
+              ],
             ),
           ),
         ],
