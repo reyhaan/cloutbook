@@ -24,6 +24,21 @@ mixin _$ProfileStore on _ProfileStore, Store {
     });
   }
 
+  final _$userFollowersAtom = Atom(name: '_ProfileStore.userFollowers');
+
+  @override
+  String get userFollowers {
+    _$userFollowersAtom.reportRead();
+    return super.userFollowers;
+  }
+
+  @override
+  set userFollowers(String value) {
+    _$userFollowersAtom.reportWrite(value, super.userFollowers, () {
+      super.userFollowers = value;
+    });
+  }
+
   final _$isLoadingAtom = Atom(name: '_ProfileStore.isLoading');
 
   @override
@@ -47,6 +62,13 @@ mixin _$ProfileStore on _ProfileStore, Store {
     return _$getUserProfileAsyncAction.run(() => super.getUserProfile());
   }
 
+  final _$getFollowersAsyncAction = AsyncAction('_ProfileStore.getFollowers');
+
+  @override
+  Future<void> getFollowers() {
+    return _$getFollowersAsyncAction.run(() => super.getFollowers());
+  }
+
   final _$_ProfileStoreActionController =
       ActionController(name: '_ProfileStore');
 
@@ -56,6 +78,17 @@ mixin _$ProfileStore on _ProfileStore, Store {
         name: '_ProfileStore.reset');
     try {
       return super.reset();
+    } finally {
+      _$_ProfileStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setUserFollowers(dynamic followers) {
+    final _$actionInfo = _$_ProfileStoreActionController.startAction(
+        name: '_ProfileStore.setUserFollowers');
+    try {
+      return super.setUserFollowers(followers);
     } finally {
       _$_ProfileStoreActionController.endAction(_$actionInfo);
     }
@@ -76,6 +109,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
   String toString() {
     return '''
 userProfile: ${userProfile},
+userFollowers: ${userFollowers},
 isLoading: ${isLoading}
     ''';
   }

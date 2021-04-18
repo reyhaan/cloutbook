@@ -18,11 +18,20 @@ abstract class _ProfileStore with Store {
   ProfileEntryResponse userProfile = ProfileEntryResponse(posts: []);
 
   @observable
+  String userFollowers = '0';
+
+  @observable
   bool isLoading = true;
 
   @action
   void reset() {
     isLoading = false;
+  }
+
+  @action
+  void setUserFollowers(followers) {
+    userFollowers = '';
+    userFollowers = followers;
   }
 
   @action
@@ -49,6 +58,30 @@ abstract class _ProfileStore with Store {
       });
       isLoading = false;
       setUserProfile(response);
+
+      final followers = await _profileRepository.getFollowers(payload: {
+        "username": "mohammadrehaan",
+        "PublicKeyBase58Check": "",
+        "GetEntriesFollowingUsername": true,
+        "LastPublicKeyBase58Check": "",
+        "NumToFetch": 50
+      });
+
+      setUserFollowers(followers);
+    } catch (e) {}
+  }
+
+  @action
+  Future<void> getFollowers() async {
+    try {
+      final response = await _profileRepository.getFollowers(payload: {
+        "username": "mohammadrehaan",
+        "PublicKeyBase58Check": "",
+        "GetEntriesFollowingUsername": true,
+        "LastPublicKeyBase58Check": "",
+        "NumToFetch": 50
+      });
+      setUserFollowers(response.toString());
     } catch (e) {}
   }
 }

@@ -12,6 +12,9 @@ abstract class BaseProfileRepository {
   Future<ProfileEntryResponse> getUserProfile({
     Map<String, dynamic>? payload,
   });
+  Future<int> getFollowers({
+    Map<String, dynamic>? payload,
+  });
 }
 
 @lazySingleton
@@ -35,6 +38,32 @@ class ProfileRepository extends BaseProfileRepository {
         return ProfileEntryResponse.fromMap(data['ProfilesFound'][0]);
       }
       return ProfileEntryResponse(posts: []);
+    } on DioError catch (err) {
+      print(err);
+      throw Failure(message: err.response?.statusMessage);
+    } on SocketException catch (err) {
+      print(err);
+      throw Failure(message: 'Please check your connection.');
+    }
+  }
+
+  @override
+  Future<int> getFollowers({
+    @required Map<String, dynamic>? payload,
+  }) async {
+    try {
+      final queryParams = payload;
+
+      final response = await api.post(
+        '/get-follows-stateless',
+        queryParams,
+      );
+
+      if (response.statusCode == 200) {
+        final data = Map<String, dynamic>.from(response.data);
+        return data['NumFollowers'];
+      }
+      return 0;
     } on DioError catch (err) {
       print(err);
       throw Failure(message: err.response?.statusMessage);

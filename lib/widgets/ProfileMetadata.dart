@@ -2,6 +2,7 @@ import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,46 +16,47 @@ class ProfileMetadata extends HookWidget {
         children: [
           Container(
             margin: EdgeInsets.only(bottom: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
+            child: Observer(
+              builder: (context) {
+                final followers = _profileStore.userFollowers;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
-                      '30',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Column(
+                      children: [
+                        Text(
+                          followers,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text('Followers',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            )),
+                      ],
                     ),
-                    SizedBox(
-                      height: 8,
+                    Column(
+                      children: [
+                        Text(
+                          '~\$470.40',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text('Coin Price',
+                            style: TextStyle(
+                              color: Colors.grey,
+                            )),
+                      ],
                     ),
-                    Text('Followers',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        )),
                   ],
-                ),
-                Column(
-                  children: [
-                    Text(
-                      '~\$470.40',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text('Coin Price',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        )),
-                  ],
-                ),
-              ],
+                );
+              },
             ),
           ),
           Container(

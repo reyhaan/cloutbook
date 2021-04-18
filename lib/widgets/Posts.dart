@@ -1,16 +1,15 @@
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/PostModel.dart';
-import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jiffy/jiffy.dart';
-import 'dart:convert';
 
 class Posts extends HookWidget {
   final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
@@ -41,7 +40,7 @@ class Posts extends HookWidget {
           itemBuilder: (context, index) {
             // Profile section
             if (isProfile == true) {
-              if (index == 0) {
+              if (index == 0 && posts.length > 0) {
                 return Column(
                   children: [
                     ProfileHeader(),
@@ -50,6 +49,13 @@ class Posts extends HookWidget {
                       visible: posts.length > 0,
                       child: PostItem(post: posts[index]),
                     ),
+                  ],
+                );
+              } else if (index == 0) {
+                return Column(
+                  children: [
+                    ProfileHeader(),
+                    ProfileMetadata(),
                   ],
                 );
               }
@@ -68,7 +74,7 @@ class Posts extends HookWidget {
             // Profile section ends
 
             // Add load more button here
-            if (posts.length - 1 >= 0 && index == posts.length - 1) {
+            if (posts.length - 1 > 0 && index == posts.length - 1) {
               return Column(
                 children: [
                   PostItem(post: posts[index]),
@@ -186,11 +192,32 @@ class PostItem extends StatelessWidget {
                 SizedBox(height: 5.0),
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
-                  child: Text(
-                    post?.body ?? '',
-                    textAlign: TextAlign.left,
+                  child: ParsedText(
+                    text: post?.body ?? '',
                     style: TextStyle(
-                        color: Colors.white, fontSize: 15, height: 1.2),
+                        color: Colors.white, fontSize: 15, height: 1.3),
+                    parse: <MatchText>[
+                      MatchText(
+                        pattern: r"\@[A-Za-z]\w+",
+                        style: TextStyle(
+                          color: Palette.primary3,
+                          fontSize: 15,
+                        ),
+                        onTap: (name) {
+                          print(name);
+                        },
+                      ),
+                      MatchText(
+                        type: ParsedType.URL,
+                        style: TextStyle(
+                          color: Palette.primary3,
+                          fontSize: 15,
+                        ),
+                        onTap: (url) {
+                          print(url);
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 Visibility(
