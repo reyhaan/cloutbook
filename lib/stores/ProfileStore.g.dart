@@ -39,6 +39,66 @@ mixin _$ProfileStore on _ProfileStore, Store {
     });
   }
 
+  final _$coinPriceAtom = Atom(name: '_ProfileStore.coinPrice');
+
+  @override
+  String get coinPrice {
+    _$coinPriceAtom.reportRead();
+    return super.coinPrice;
+  }
+
+  @override
+  set coinPrice(String value) {
+    _$coinPriceAtom.reportWrite(value, super.coinPrice, () {
+      super.coinPrice = value;
+    });
+  }
+
+  final _$inCirculationAtom = Atom(name: '_ProfileStore.inCirculation');
+
+  @override
+  String get inCirculation {
+    _$inCirculationAtom.reportRead();
+    return super.inCirculation;
+  }
+
+  @override
+  set inCirculation(String value) {
+    _$inCirculationAtom.reportWrite(value, super.inCirculation, () {
+      super.inCirculation = value;
+    });
+  }
+
+  final _$totalUSDLoackedAtom = Atom(name: '_ProfileStore.totalUSDLoacked');
+
+  @override
+  String get totalUSDLoacked {
+    _$totalUSDLoackedAtom.reportRead();
+    return super.totalUSDLoacked;
+  }
+
+  @override
+  set totalUSDLoacked(String value) {
+    _$totalUSDLoackedAtom.reportWrite(value, super.totalUSDLoacked, () {
+      super.totalUSDLoacked = value;
+    });
+  }
+
+  final _$totalUSDMarketCapAtom = Atom(name: '_ProfileStore.totalUSDMarketCap');
+
+  @override
+  String get totalUSDMarketCap {
+    _$totalUSDMarketCapAtom.reportRead();
+    return super.totalUSDMarketCap;
+  }
+
+  @override
+  set totalUSDMarketCap(String value) {
+    _$totalUSDMarketCapAtom.reportWrite(value, super.totalUSDMarketCap, () {
+      super.totalUSDMarketCap = value;
+    });
+  }
+
   final _$isLoadingAtom = Atom(name: '_ProfileStore.isLoading');
 
   @override
@@ -67,6 +127,14 @@ mixin _$ProfileStore on _ProfileStore, Store {
   @override
   Future<void> getFollowers() {
     return _$getFollowersAsyncAction.run(() => super.getFollowers());
+  }
+
+  final _$getExchangeRateAsyncAction =
+      AsyncAction('_ProfileStore.getExchangeRate');
+
+  @override
+  Future<void> getExchangeRate() {
+    return _$getExchangeRateAsyncAction.run(() => super.getExchangeRate());
   }
 
   final _$_ProfileStoreActionController =
@@ -110,6 +178,10 @@ mixin _$ProfileStore on _ProfileStore, Store {
     return '''
 userProfile: ${userProfile},
 userFollowers: ${userFollowers},
+coinPrice: ${coinPrice},
+inCirculation: ${inCirculation},
+totalUSDLoacked: ${totalUSDLoacked},
+totalUSDMarketCap: ${totalUSDMarketCap},
 isLoading: ${isLoading}
     ''';
   }

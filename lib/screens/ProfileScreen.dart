@@ -20,9 +20,26 @@ class ProfileScreen extends HookWidget {
     return Scaffold(
       body: Observer(
         builder: (context) {
-          return Posts(
-            posts: _profileStore.userProfile.posts,
-            isProfile: true,
+          return Stack(
+            children: [
+              Positioned(
+                child: Center(
+                  child: Visibility(
+                    visible: _profileStore.isLoading,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: Visibility(
+                  visible: !_profileStore.isLoading,
+                  child: Posts(
+                    posts: _profileStore.userProfile.posts,
+                    isProfile: true,
+                  ),
+                ),
+              ),
+            ],
           );
         },
       ),

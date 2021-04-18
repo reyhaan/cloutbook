@@ -18,7 +18,19 @@ abstract class _ProfileStore with Store {
   ProfileEntryResponse userProfile = ProfileEntryResponse(posts: []);
 
   @observable
-  String userFollowers = '0';
+  String userFollowers = '-';
+
+  @observable
+  String coinPrice = '-';
+
+  @observable
+  String inCirculation = '-';
+
+  @observable
+  String totalUSDLoacked = '-';
+
+  @observable
+  String totalUSDMarketCap = '-';
 
   @observable
   bool isLoading = true;
@@ -31,7 +43,7 @@ abstract class _ProfileStore with Store {
   @action
   void setUserFollowers(followers) {
     userFollowers = '';
-    userFollowers = followers;
+    userFollowers = followers.toString();
   }
 
   @action
@@ -60,7 +72,7 @@ abstract class _ProfileStore with Store {
       setUserProfile(response);
 
       final followers = await _profileRepository.getFollowers(payload: {
-        "username": "mohammadrehaan",
+        "username": "cloutbookapp",
         "PublicKeyBase58Check": "",
         "GetEntriesFollowingUsername": true,
         "LastPublicKeyBase58Check": "",
@@ -82,6 +94,13 @@ abstract class _ProfileStore with Store {
         "NumToFetch": 50
       });
       setUserFollowers(response.toString());
+    } catch (e) {}
+  }
+
+  @action
+  Future<void> getExchangeRate() async {
+    try {
+      final response = await _profileRepository.getExchangeRate();
     } catch (e) {}
   }
 }

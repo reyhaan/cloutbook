@@ -1,6 +1,8 @@
 import 'package:cloutbook/common/api_client/api_client.dart';
+import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:cloutbook/repository/HomeRepository.dart';
 import 'package:cloutbook/repository/ProfileRepository.dart';
+import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:dio/dio.dart';
@@ -15,12 +17,15 @@ void main() {
   GetIt.I.registerSingleton<ApiClient>(ApiClient(Dio()));
   GetIt.I.registerSingleton<HomeRepository>(HomeRepository());
   GetIt.I.registerSingleton<ProfileRepository>(ProfileRepository());
+  GetIt.I.registerSingleton<ExchangeRepository>(ExchangeRepository());
 
   final homeRepository = GetIt.I<HomeRepository>();
   final profileRepository = GetIt.I<ProfileRepository>();
+  final exchangeRepository = GetIt.I<ExchangeRepository>();
 
   GetIt.I.registerSingleton<GlobalFeedStore>(GlobalFeedStore(homeRepository));
   GetIt.I.registerSingleton<ProfileStore>(ProfileStore(profileRepository));
+  GetIt.I.registerSingleton<ExchangeStore>(ExchangeStore(exchangeRepository));
   runApp(MyApp());
 }
 

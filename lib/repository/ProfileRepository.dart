@@ -15,6 +15,8 @@ abstract class BaseProfileRepository {
   Future<int> getFollowers({
     Map<String, dynamic>? payload,
   });
+  Future<Map<String, dynamic>> getExchangeRate();
+  Future<Map<String, dynamic>> getTicker();
 }
 
 @lazySingleton
@@ -64,6 +66,42 @@ class ProfileRepository extends BaseProfileRepository {
         return data['NumFollowers'];
       }
       return 0;
+    } on DioError catch (err) {
+      print(err);
+      throw Failure(message: err.response?.statusMessage);
+    } on SocketException catch (err) {
+      print(err);
+      throw Failure(message: 'Please check your connection.');
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getExchangeRate() async {
+    try {
+      final response = await api.get('/get-exchange-rate');
+      if (response.statusCode == 200) {
+        final data = Map<String, dynamic>.from(response.data);
+        return data;
+      }
+      return {};
+    } on DioError catch (err) {
+      print(err);
+      throw Failure(message: err.response?.statusMessage);
+    } on SocketException catch (err) {
+      print(err);
+      throw Failure(message: 'Please check your connection.');
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getTicker() async {
+    try {
+      final response = await api.get('https://blockchain.info/ticker');
+      if (response.statusCode == 200) {
+        final data = Map<String, dynamic>.from(response.data);
+        return data;
+      }
+      return {};
     } on DioError catch (err) {
       print(err);
       throw Failure(message: err.response?.statusMessage);
