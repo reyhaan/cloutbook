@@ -1,15 +1,13 @@
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfileMetadata extends StatefulWidget {
-  ProfileMetadata({Key? key}) : super(key: key);
+class ProfileMetadata extends HookWidget {
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
 
-  @override
-  _ProfileMetadataState createState() => _ProfileMetadataState();
-}
-
-class _ProfileMetadataState extends State<ProfileMetadata> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,8 +18,42 @@ class _ProfileMetadataState extends State<ProfileMetadata> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text('16 Followers'),
-                Text('~\$3.40 Coin Price'),
+                Column(
+                  children: [
+                    Text(
+                      '30',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text('Followers',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        )),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      '~\$470.40',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text('Coin Price',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        )),
+                  ],
+                ),
               ],
             ),
           ),

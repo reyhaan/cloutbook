@@ -1,5 +1,7 @@
+import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/PostModel.dart';
+import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
@@ -40,10 +42,16 @@ class Posts extends HookWidget {
             // Profile section
             if (isProfile == true) {
               if (index == 0) {
-                return ProfileHeader();
-              }
-              if (index == 1) {
-                return ProfileMetadata();
+                return Column(
+                  children: [
+                    ProfileHeader(),
+                    ProfileMetadata(),
+                    Visibility(
+                      visible: posts.length > 0,
+                      child: PostItem(post: posts[index]),
+                    ),
+                  ],
+                );
               }
             }
             if (posts.length == 0) {
@@ -60,7 +68,7 @@ class Posts extends HookWidget {
             // Profile section ends
 
             // Add load more button here
-            if (index == posts.length - 1) {
+            if (posts.length - 1 >= 0 && index == posts.length - 1) {
               return Column(
                 children: [
                   PostItem(post: posts[index]),
@@ -103,10 +111,7 @@ class PostItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stripped = post?.profileEntryResponse?.profilePic
-        ?.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '') as String;
-
-    final avatar = base64.decode(stripped);
+    final avatar = processDataImage(post?.profileEntryResponse?.profilePic);
 
     var imageUrl = '';
 
@@ -225,11 +230,13 @@ class PostItem extends StatelessWidget {
                     children: [
                       Text.rich(
                         TextSpan(
+                          style: TextStyle(color: Colors.white60),
                           children: [
                             WidgetSpan(
                               child: Icon(
                                 CupertinoIcons.bubble_left,
                                 size: 18.0,
+                                color: Colors.white60,
                               ),
                             ),
                             TextSpan(text: '  ${post?.commentCount}'),
@@ -238,11 +245,13 @@ class PostItem extends StatelessWidget {
                       ),
                       Text.rich(
                         TextSpan(
+                          style: TextStyle(color: Colors.white60),
                           children: [
                             WidgetSpan(
                               child: Icon(
                                 CupertinoIcons.arrow_2_squarepath,
                                 size: 18.0,
+                                color: Colors.white60,
                               ),
                             ),
                             TextSpan(text: '  ${post?.recloutCount}'),
@@ -251,11 +260,13 @@ class PostItem extends StatelessWidget {
                       ),
                       Text.rich(
                         TextSpan(
+                          style: TextStyle(color: Colors.white60),
                           children: [
                             WidgetSpan(
                               child: Icon(
                                 CupertinoIcons.heart,
                                 size: 18.0,
+                                color: Colors.white60,
                               ),
                             ),
                             TextSpan(text: '  ${post?.likeCount}'),
