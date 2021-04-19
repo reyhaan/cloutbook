@@ -16,8 +16,6 @@ abstract class BaseExchangeRepository {
   Future<bool> dispose();
 }
 
-final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
-
 final HeadlessInAppWebView? bitCloutWebView = new HeadlessInAppWebView(
   initialUrlRequest:
       URLRequest(url: Uri.parse("https://api.bitclout.com/get-exchange-rate")),
@@ -25,6 +23,7 @@ final HeadlessInAppWebView? bitCloutWebView = new HeadlessInAppWebView(
     crossPlatform: InAppWebViewOptions(),
   ),
   onLoadStop: (controller, url) async {
+    final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
     final String getExchangeRateFunction = """
         var exchangeRate = await fetch("https://api.bitclout.com/get-exchange-rate");
         var x = await exchangeRate.json();
@@ -45,6 +44,7 @@ final HeadlessInAppWebView? tickerWebView = new HeadlessInAppWebView(
     crossPlatform: InAppWebViewOptions(),
   ),
   onLoadStop: (controller, url) async {
+    final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
     final String getTickerFunction = """
         var ticker = await fetch("https://blockchain.info/ticker");
         var y = await ticker.json();

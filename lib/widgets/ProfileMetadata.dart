@@ -79,7 +79,7 @@ class ProfileMetadata extends HookWidget {
                         child: Column(
                           children: [
                             Text(
-                              '~\$470.40',
+                              '~\$${_profileStore.coinPrice}',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -106,63 +106,65 @@ class ProfileMetadata extends HookWidget {
               color: Palette.foreground,
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
-                  child: Column(
-                    children: [
-                      Text('~ 2.6104'),
-                      SizedBox(height: 8),
-                      Text(
-                        'Coins in Circulation',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            color: Colors.grey),
-                      ),
-                    ],
+            child: Observer(builder: (coontext) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
+                    child: Column(
+                      children: [
+                        Text('~ ${_profileStore.inCirculation}'),
+                        SizedBox(height: 8),
+                        Text(
+                          'Coins in Circulation',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
-                  child: Column(
-                    children: [
-                      Text('~ \$2.96'),
-                      SizedBox(height: 8),
-                      Text(
-                        'Total USD Locked',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            color: Colors.grey),
-                      ),
-                    ],
+                  Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
+                    child: Column(
+                      children: [
+                        Text('~ \$${_profileStore.totalUSDLocked}'),
+                        SizedBox(height: 8),
+                        Text(
+                          'Total USD Locked',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  constraints: BoxConstraints(minWidth: 90, maxWidth: 90),
-                  child: Column(
-                    children: [
-                      Text('~ \$8.87'),
-                      SizedBox(height: 8),
-                      Text(
-                        'USD Market Cap',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            color: Colors.grey),
-                      ),
-                    ],
+                  Container(
+                    constraints: BoxConstraints(minWidth: 90, maxWidth: 90),
+                    child: Column(
+                      children: [
+                        Text('~ \$${_profileStore.totalUSDMarketCap}'),
+                        SizedBox(height: 8),
+                        Text(
+                          'USD Market Cap',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            }),
           ),
           Container(
             padding: const EdgeInsets.fromLTRB(18, 16, 10, 16),
