@@ -48,7 +48,7 @@ class Ticker extends Equatable {
   factory Ticker.fromMap(Map<String, dynamic> map) {
     USD currentRate;
 
-    currentRate = USD.fromMap(map['USD']);
+    currentRate = USD.fromMap(map['USD'] ?? {});
 
     return Ticker(
       usd: currentRate,

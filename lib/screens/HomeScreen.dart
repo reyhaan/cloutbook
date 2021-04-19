@@ -1,4 +1,5 @@
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/Posts.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,13 @@ import 'package:get_it/get_it.dart';
 
 class HomeScreen extends HookWidget {
   final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
+  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
+      _exchangeStore.getExchangeRate();
+      _exchangeStore.getTicker();
       _globalFeedStore.getGlobalFeed();
 
       // reset store when unmounted

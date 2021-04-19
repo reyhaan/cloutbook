@@ -1,3 +1,4 @@
+import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ProfileMetadata extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
@@ -35,7 +37,7 @@ class ProfileMetadata extends HookWidget {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 16),
+            margin: EdgeInsets.only(bottom: 14),
             child: Observer(
               builder: (context) {
                 String followers = _profileStore.userFollowers;
@@ -45,7 +47,7 @@ class ProfileMetadata extends HookWidget {
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.all(16),
-                        margin: EdgeInsets.only(left: 10, right: 8),
+                        margin: EdgeInsets.only(left: 12, right: 7),
                         decoration: BoxDecoration(
                           color: Palette.foreground,
                           borderRadius: BorderRadius.circular(14),
@@ -71,7 +73,7 @@ class ProfileMetadata extends HookWidget {
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.all(16),
-                        margin: EdgeInsets.only(left: 8, right: 10),
+                        margin: EdgeInsets.only(left: 7, right: 12),
                         decoration: BoxDecoration(
                           color: Palette.foreground,
                           borderRadius: BorderRadius.circular(14),
@@ -100,13 +102,17 @@ class ProfileMetadata extends HookWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+            margin: EdgeInsets.only(bottom: 16, left: 12, right: 12),
             padding: EdgeInsets.only(top: 20, bottom: 20),
             decoration: BoxDecoration(
               color: Palette.foreground,
               borderRadius: BorderRadius.circular(14),
             ),
             child: Observer(builder: (coontext) {
+              var totalUSDLocked = NumberFormat.compact()
+                  .format(double.parse(_profileStore.totalUSDLocked));
+              var totalUSDMarketCap = NumberFormat.compact()
+                  .format(double.parse(_profileStore.totalUSDMarketCap));
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -132,7 +138,7 @@ class ProfileMetadata extends HookWidget {
                     constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
                     child: Column(
                       children: [
-                        Text('~ \$${_profileStore.totalUSDLocked}'),
+                        Text('~ \$$totalUSDLocked'),
                         SizedBox(height: 8),
                         Text(
                           'Total USD Locked',
@@ -149,7 +155,7 @@ class ProfileMetadata extends HookWidget {
                     constraints: BoxConstraints(minWidth: 90, maxWidth: 90),
                     child: Column(
                       children: [
-                        Text('~ \$${_profileStore.totalUSDMarketCap}'),
+                        Text('~ \$$totalUSDMarketCap'),
                         SizedBox(height: 8),
                         Text(
                           'USD Market Cap',

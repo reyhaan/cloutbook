@@ -32,7 +32,8 @@ final HeadlessInAppWebView? bitCloutWebView = new HeadlessInAppWebView(
     var _exchangeRate = await controller.callAsyncJavaScript(
         functionBody: getExchangeRateFunction, arguments: {});
 
-    ExchangeRate exchangeRate = ExchangeRate.fromMap(_exchangeRate?.value);
+    ExchangeRate exchangeRate =
+        ExchangeRate.fromMap(_exchangeRate?.value ?? {});
     _exchangeStore.setExchangeRate(exchangeRate);
   },
 );
@@ -53,7 +54,7 @@ final HeadlessInAppWebView? tickerWebView = new HeadlessInAppWebView(
     var _ticker = await controller
         .callAsyncJavaScript(functionBody: getTickerFunction, arguments: {});
 
-    Ticker ticker = Ticker.fromMap(_ticker?.value);
+    Ticker ticker = Ticker.fromMap(_ticker?.value ?? {});
     _exchangeStore.setTicker(ticker);
   },
 );
@@ -64,8 +65,8 @@ class ExchangeRepository extends BaseExchangeRepository {
 
   @override
   Future<bool> dispose() async {
-    await tickerWebView?.dispose();
-    await bitCloutWebView?.dispose();
+    // await tickerWebView?.dispose();
+    // await bitCloutWebView?.dispose();
     return true;
   }
 
@@ -76,10 +77,8 @@ class ExchangeRepository extends BaseExchangeRepository {
       await bitCloutWebView?.run();
       return {};
     } on DioError catch (err) {
-      print(err);
       throw Failure(message: err.response?.statusMessage);
     } on SocketException catch (err) {
-      print(err);
       throw Failure(message: 'Please check your connection.');
     }
   }
@@ -91,10 +90,8 @@ class ExchangeRepository extends BaseExchangeRepository {
       await tickerWebView?.run();
       return {};
     } on DioError catch (err) {
-      print(err);
       throw Failure(message: err.response?.statusMessage);
     } on SocketException catch (err) {
-      print(err);
       throw Failure(message: 'Please check your connection.');
     }
   }
