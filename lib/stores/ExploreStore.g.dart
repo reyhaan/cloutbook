@@ -39,6 +39,21 @@ mixin _$ExploreStore on _ExploreStore, Store {
     });
   }
 
+  final _$savedProfilesAtom = Atom(name: '_ExploreStore.savedProfiles');
+
+  @override
+  List<ProfileEntryResponse> get savedProfiles {
+    _$savedProfilesAtom.reportRead();
+    return super.savedProfiles;
+  }
+
+  @override
+  set savedProfiles(List<ProfileEntryResponse> value) {
+    _$savedProfilesAtom.reportWrite(value, super.savedProfiles, () {
+      super.savedProfiles = value;
+    });
+  }
+
   final _$getProfilesAsyncAction = AsyncAction('_ExploreStore.getProfiles');
 
   @override
@@ -75,7 +90,8 @@ mixin _$ExploreStore on _ExploreStore, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
-profiles: ${profiles}
+profiles: ${profiles},
+savedProfiles: ${savedProfiles}
     ''';
   }
 }
