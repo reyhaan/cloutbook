@@ -19,6 +19,9 @@ abstract class _ExploreStore with Store {
   @observable
   List<ProfileEntryResponse> profiles = [];
 
+  @observable
+  List<ProfileEntryResponse> savedProfiles = [];
+
   @action
   void reset() {
     isLoading = false;

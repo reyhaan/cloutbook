@@ -4,7 +4,10 @@ import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+
+final TextEditingController? _textInputController = TextEditingController();
 
 class SearchBar extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
@@ -34,6 +37,8 @@ class SearchBar extends HookWidget {
           SizedBox(width: 16.0),
           Expanded(
             child: TextField(
+              restorationId: '123',
+              controller: _textInputController,
               cursorColor: Colors.white,
               onChanged: handleSearchChange,
               style: TextStyle(color: Colors.white),
@@ -43,10 +48,27 @@ class SearchBar extends HookWidget {
               ),
             ),
           ),
-          Icon(
-            CupertinoIcons.xmark,
-            size: 18.0,
-          ),
+          Observer(builder: (_) {
+            return Visibility(
+              maintainState: true,
+              visible: _exploreStore.profiles.length > 0,
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _textInputController?.clear();
+                  _exploreStore.profiles = [];
+                },
+                child: Container(
+                  padding: EdgeInsets.only(bottom: 2, left: 8, right: 8),
+                  color: Palette.secondaryForeground,
+                  child: Icon(
+                    CupertinoIcons.xmark,
+                    size: 18.0,
+                  ),
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
