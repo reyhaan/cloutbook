@@ -1,3 +1,5 @@
+import 'package:cloutbook/models/ExchangeRateModel.dart';
+import 'package:cloutbook/models/TickerModel.dart';
 import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:mobx/mobx.dart';
 
@@ -14,22 +16,10 @@ abstract class _ExchangeStore with Store {
   _ExchangeStore(this._exchangeRepository);
 
   @observable
-  Map<String, dynamic> exchangeRate = {};
+  ExchangeRate exchangeRate = ExchangeRate();
 
   @observable
-  Map<String, dynamic> ticker = {};
-
-  @observable
-  String coinPrice = '-';
-
-  @observable
-  String inCirculation = '-';
-
-  @observable
-  String totalUSDLoacked = '-';
-
-  @observable
-  String totalUSDMarketCap = '-';
+  Ticker ticker = Ticker();
 
   @observable
   bool isLoading = true;
@@ -40,18 +30,38 @@ abstract class _ExchangeStore with Store {
   }
 
   @action
-  Future<void> getExchangeRate() async {
-    try {
-      final response = await _exchangeRepository.getExchangeRate();
-      exchangeRate = response;
-    } catch (e) {}
+  void setExchangeRate(rate) {
+    exchangeRate = rate;
   }
 
   @action
-  Future<void> getTicker() async {
+  void setTicker(newTicker) {
+    ticker = newTicker;
+  }
+
+  @action
+  Future<bool> disposeWebViews() async {
+    await _exchangeRepository.dispose();
+    return true;
+  }
+
+  @action
+  Future<bool> getExchangeRate() async {
     try {
-      final response = await _exchangeRepository.getTicker();
-      ticker = response;
-    } catch (e) {}
+      await _exchangeRepository.getExchangeRate();
+      return true;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Future<bool> getTicker() async {
+    try {
+      await _exchangeRepository.getTicker();
+      return true;
+    } catch (e) {
+      throw e;
+    }
   }
 }

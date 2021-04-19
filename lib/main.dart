@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloutbook/common/api_client/api_client.dart';
 import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:cloutbook/repository/HomeRepository.dart';
@@ -8,12 +10,35 @@ import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/screens/screens.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+    var swAvailable = await AndroidWebViewFeature.isFeatureSupported(
+        AndroidWebViewFeature.SERVICE_WORKER_BASIC_USAGE);
+    var swInterceptAvailable = await AndroidWebViewFeature.isFeatureSupported(
+        AndroidWebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST);
+
+    if (swAvailable && swInterceptAvailable) {
+      AndroidServiceWorkerController serviceWorkerController =
+          AndroidServiceWorkerController.instance();
+
+      serviceWorkerController.serviceWorkerClient = AndroidServiceWorkerClient(
+        shouldInterceptRequest: (request) async {
+          print(request);
+          return null;
+        },
+      );
+    }
+  }
+
   GetIt.I.registerSingleton<ApiClient>(ApiClient(Dio()));
   GetIt.I.registerSingleton<HomeRepository>(HomeRepository());
   GetIt.I.registerSingleton<ProfileRepository>(ProfileRepository());

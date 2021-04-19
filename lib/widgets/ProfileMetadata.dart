@@ -1,3 +1,4 @@
+import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ProfileMetadata extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
@@ -13,19 +15,29 @@ class ProfileMetadata extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    void updateExchange() async {
+      await _exchangeStore.getExchangeRate();
+      await _exchangeStore.getTicker();
+    }
+
     useEffect(() {
-      // _exchangeStore.getExchangeRate();
-      // _exchangeStore.getTicker();
+      // get latest exchange rates first
+      updateExchange();
 
       // reset store when unmounted
       return _profileStore.reset;
+    }, []);
+
+    useEffect(() {
+      // reset store when unmounted
+      return _exchangeStore.disposeWebViews;
     }, []);
 
     return Container(
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 16),
+            margin: EdgeInsets.only(bottom: 14),
             child: Observer(
               builder: (context) {
                 String followers = _profileStore.userFollowers;
@@ -35,7 +47,7 @@ class ProfileMetadata extends HookWidget {
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.all(16),
-                        margin: EdgeInsets.only(left: 10, right: 8),
+                        margin: EdgeInsets.only(left: 12, right: 7),
                         decoration: BoxDecoration(
                           color: Palette.foreground,
                           borderRadius: BorderRadius.circular(14),
@@ -61,7 +73,7 @@ class ProfileMetadata extends HookWidget {
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.all(16),
-                        margin: EdgeInsets.only(left: 8, right: 10),
+                        margin: EdgeInsets.only(left: 7, right: 12),
                         decoration: BoxDecoration(
                           color: Palette.foreground,
                           borderRadius: BorderRadius.circular(14),
@@ -69,7 +81,7 @@ class ProfileMetadata extends HookWidget {
                         child: Column(
                           children: [
                             Text(
-                              '~\$470.40',
+                              '~\$${_profileStore.coinPrice}',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -90,69 +102,75 @@ class ProfileMetadata extends HookWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+            margin: EdgeInsets.only(bottom: 16, left: 12, right: 12),
             padding: EdgeInsets.only(top: 20, bottom: 20),
             decoration: BoxDecoration(
               color: Palette.foreground,
               borderRadius: BorderRadius.circular(14),
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
-                  child: Column(
-                    children: [
-                      Text('~ 2.6104'),
-                      SizedBox(height: 8),
-                      Text(
-                        'Coins in Circulation',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            color: Colors.grey),
-                      ),
-                    ],
+            child: Observer(builder: (coontext) {
+              var totalUSDLocked = NumberFormat.compact()
+                  .format(double.parse(_profileStore.totalUSDLocked));
+              var totalUSDMarketCap = NumberFormat.compact()
+                  .format(double.parse(_profileStore.totalUSDMarketCap));
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
+                    child: Column(
+                      children: [
+                        Text('~ ${_profileStore.inCirculation}'),
+                        SizedBox(height: 8),
+                        Text(
+                          'Coins in Circulation',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
-                  child: Column(
-                    children: [
-                      Text('~ \$2.96'),
-                      SizedBox(height: 8),
-                      Text(
-                        'Total USD Locked',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            color: Colors.grey),
-                      ),
-                    ],
+                  Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
+                    child: Column(
+                      children: [
+                        Text('~ \$$totalUSDLocked'),
+                        SizedBox(height: 8),
+                        Text(
+                          'Total USD Locked',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  constraints: BoxConstraints(minWidth: 90, maxWidth: 90),
-                  child: Column(
-                    children: [
-                      Text('~ \$8.87'),
-                      SizedBox(height: 8),
-                      Text(
-                        'USD Market Cap',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontFamily: GoogleFonts.robotoMono().fontFamily,
-                            color: Colors.grey),
-                      ),
-                    ],
+                  Container(
+                    constraints: BoxConstraints(minWidth: 90, maxWidth: 90),
+                    child: Column(
+                      children: [
+                        Text('~ \$$totalUSDMarketCap'),
+                        SizedBox(height: 8),
+                        Text(
+                          'USD Market Cap',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            }),
           ),
           Container(
             padding: const EdgeInsets.fromLTRB(18, 16, 10, 16),
