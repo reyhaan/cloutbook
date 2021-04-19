@@ -107,7 +107,7 @@ class ListItem extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
-                            fontSize: 16,
+                            fontSize: 15,
                           ),
                         ),
                       ),

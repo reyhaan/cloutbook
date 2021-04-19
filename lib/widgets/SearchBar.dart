@@ -43,6 +43,10 @@ class SearchBar extends HookWidget {
               ),
             ),
           ),
+          Icon(
+            CupertinoIcons.xmark,
+            size: 18.0,
+          ),
         ],
       ),
     );
