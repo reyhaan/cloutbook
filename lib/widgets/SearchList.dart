@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
@@ -51,7 +53,18 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatar = processDataImage(profile?.profilePic);
+    var _profilePic = profile?.profilePic;
+    var urlPattern =
+        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    var match = new RegExp(urlPattern, caseSensitive: false)
+        .firstMatch(_profilePic.toString());
+    // var profilePic;
+    // if (match == null) {
+    //   print('-------------------------------');
+    //   print(_profilePic);
+    //   profilePic = processDataImage(_profilePic);
+    // }
+    // final avatar = profilePic ?? Uint8List(32). _profilePic;
 
     return Container(
       margin: EdgeInsets.fromLTRB(11, 10, 11, 0),
@@ -79,7 +92,9 @@ class ListItem extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(21),
-                      child: Image.memory(avatar),
+                      child: match != null
+                          ? Image.network('$_profilePic')
+                          : Image.memory(processDataImage(_profilePic)),
                     ),
                   ),
                   Column(
