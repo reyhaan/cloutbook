@@ -1,6 +1,26 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
+import 'dart:async';
+
+class Debouncer {
+  int? milliseconds = 0;
+  VoidCallback? action;
+  Timer? _timer;
+
+  Debouncer({
+    this.milliseconds,
+  });
+  run(VoidCallback action) {
+    if (_timer != null) {
+      _timer?.cancel();
+    }
+    _timer = Timer(
+        Duration(milliseconds: int.parse(milliseconds.toString())), action);
+  }
+}
+
 Uint8List processDataImage(imageString) {
   final stripped = imageString?.replaceFirst(
       RegExp(r'data:image/[^;]+;base64,'), '') as String;

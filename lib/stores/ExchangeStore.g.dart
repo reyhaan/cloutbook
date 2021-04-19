@@ -77,6 +77,14 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
     return _$getTickerAsyncAction.run(() => super.getTicker());
   }
 
+  final _$updateExchangeAsyncAction =
+      AsyncAction('_ExchangeStore.updateExchange');
+
+  @override
+  Future<void> updateExchange() {
+    return _$updateExchangeAsyncAction.run(() => super.updateExchange());
+  }
+
   final _$_ExchangeStoreActionController =
       ActionController(name: '_ExchangeStore');
 

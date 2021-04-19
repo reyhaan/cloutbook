@@ -1,4 +1,3 @@
-import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
@@ -9,7 +8,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-class FavoriteList extends HookWidget {
+class SearchList extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
 
   @override
@@ -26,7 +25,7 @@ class FavoriteList extends HookWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 14, 10, 0),
-                        child: Text('Watchlist'),
+                        child: Text('${_exploreStore.profiles.length} Results'),
                       ),
                     ],
                   ),
@@ -91,16 +90,12 @@ class ListItem extends StatelessWidget {
                         child: Text(
                           '${profile?.username}',
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal),
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                      // SizedBox(height: 5.0),
-                      // Text(
-                      //   'Founder Reward: 25%',
-                      //   textAlign: TextAlign.left,
-                      //   style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                      // ),
                     ],
                   ),
                 ],
@@ -112,7 +107,7 @@ class ListItem extends StatelessWidget {
               Text('~\$3.50'),
               SizedBox(width: 20),
               Icon(
-                Icons.delete_outline,
+                Icons.star_border_outlined,
                 size: 18.0,
                 color: Palette.hintColor,
               ),

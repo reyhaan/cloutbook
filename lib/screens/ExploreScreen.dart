@@ -1,39 +1,37 @@
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:cloutbook/widgets/FavoriteList.dart';
 import 'package:cloutbook/widgets/SearchBar.dart';
+import 'package:cloutbook/widgets/SearchList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
 
-class ExploreScreen extends StatefulWidget {
-  ExploreScreen({Key? key}) : super(key: key);
-
-  @override
-  _ExploreScreenState createState() => _ExploreScreenState();
-}
-
-class _ExploreScreenState extends State<ExploreScreen> {
-  List<String> itemList = [];
-
-  @override
-  void initState() {
-    for (int count = 0; count < 50; count++) {
-      itemList.add("Item $count");
-    }
-    super.initState();
-  }
+class ExploreScreen extends HookWidget {
+  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
 
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+      return _exploreStore.reset;
+    });
+
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
-          return <Widget>[
-            createSilverAppBar1(),
-            createSilverAppBar2(),
-          ];
-        },
-        body: FavoriteList(),
-      ),
+      body: Observer(builder: (_) {
+        return NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
+            return <Widget>[
+              createSilverAppBar1(),
+              createSilverAppBar2(),
+            ];
+          },
+          body: (_exploreStore.profiles.length > 0)
+              ? SearchList()
+              : FavoriteList(),
+        );
+      }),
     );
   }
 }

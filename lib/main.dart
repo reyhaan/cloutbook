@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:cloutbook/common/api_client/api_client.dart';
 import 'package:cloutbook/repository/ExchangeRepository.dart';
+import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:cloutbook/repository/HomeRepository.dart';
 import 'package:cloutbook/repository/ProfileRepository.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
+import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:dio/dio.dart';
@@ -43,14 +45,17 @@ void main() async {
   GetIt.I.registerSingleton<HomeRepository>(HomeRepository());
   GetIt.I.registerSingleton<ProfileRepository>(ProfileRepository());
   GetIt.I.registerSingleton<ExchangeRepository>(ExchangeRepository());
+  GetIt.I.registerSingleton<ExploreRepository>(ExploreRepository());
 
   final homeRepository = GetIt.I<HomeRepository>();
   final profileRepository = GetIt.I<ProfileRepository>();
   final exchangeRepository = GetIt.I<ExchangeRepository>();
+  final exploreRepository = GetIt.I<ExploreRepository>();
 
   GetIt.I.registerSingleton<GlobalFeedStore>(GlobalFeedStore(homeRepository));
   GetIt.I.registerSingleton<ProfileStore>(ProfileStore(profileRepository));
   GetIt.I.registerSingleton<ExchangeStore>(ExchangeStore(exchangeRepository));
+  GetIt.I.registerSingleton<ExploreStore>(ExploreStore(exploreRepository));
   runApp(MyApp());
 }
 

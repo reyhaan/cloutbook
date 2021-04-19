@@ -14,8 +14,7 @@ class HomeScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      _exchangeStore.getExchangeRate();
-      _exchangeStore.getTicker();
+      _exchangeStore.updateExchange();
       _globalFeedStore.getGlobalFeed();
 
       // reset store when unmounted

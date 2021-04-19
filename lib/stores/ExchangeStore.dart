@@ -64,4 +64,10 @@ abstract class _ExchangeStore with Store {
       throw e;
     }
   }
+
+  @action
+  Future<void> updateExchange() async {
+    await getExchangeRate();
+    await getTicker();
+  }
 }

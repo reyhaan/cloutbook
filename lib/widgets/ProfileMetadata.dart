@@ -1,4 +1,3 @@
-import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
@@ -15,14 +14,9 @@ class ProfileMetadata extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    void updateExchange() async {
-      await _exchangeStore.getExchangeRate();
-      await _exchangeStore.getTicker();
-    }
-
     useEffect(() {
       // get latest exchange rates first
-      updateExchange();
+      _exchangeStore.updateExchange();
 
       // reset store when unmounted
       return _profileStore.reset;

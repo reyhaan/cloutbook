@@ -1,15 +1,21 @@
+import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 
-class SearchBar extends StatefulWidget {
-  SearchBar({Key? key}) : super(key: key);
+class SearchBar extends HookWidget {
+  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+  final _debouncer = Debouncer(milliseconds: 500);
 
-  @override
-  _SearchBarState createState() => _SearchBarState();
-}
+  void handleSearchChange(searchKey) {
+    if (searchKey.length > 0) {
+      _debouncer.run(() => _exploreStore.getProfiles(searchKey));
+    }
+  }
 
-class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,10 +34,13 @@ class _SearchBarState extends State<SearchBar> {
           SizedBox(width: 16.0),
           Expanded(
             child: TextField(
+              cursorColor: Colors.white,
+              onChanged: handleSearchChange,
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration.collapsed(
-                  hintText: 'Seach',
-                  hintStyle:
-                      TextStyle(color: Palette.hintColor, fontSize: 14.0)),
+                hintText: 'Seach',
+                hintStyle: TextStyle(color: Palette.hintColor, fontSize: 14.0),
+              ),
             ),
           ),
         ],
