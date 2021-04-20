@@ -29,10 +29,10 @@ class _NavScreenState extends State<NavScreen> {
             type: BottomNavigationBarType.fixed,
             backgroundColor: Palette.foreground,
             currentIndex: _currentIndex,
-            selectedItemColor: Palette.primary3,
+            selectedItemColor: Palette.primary4,
             selectedFontSize: 11.0,
-            unselectedIconTheme: const IconThemeData(color: Colors.grey),
-            unselectedItemColor: Colors.grey,
+            unselectedIconTheme: const IconThemeData(color: Colors.white30),
+            unselectedItemColor: Colors.white30,
             unselectedFontSize: 11.0,
             onTap: (index) => setState(() => _currentIndex = index),
             items: [

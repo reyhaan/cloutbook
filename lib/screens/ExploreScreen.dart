@@ -16,7 +16,7 @@ class ExploreScreen extends HookWidget {
   Widget build(BuildContext context) {
     useEffect(() {
       return _exploreStore.reset;
-    });
+    }, []);
 
     return Scaffold(
       body: Observer(builder: (_) {

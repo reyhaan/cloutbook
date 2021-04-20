@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloutbook/common/api_client/api_client.dart';
 import 'package:cloutbook/models/HiveWatchlistModel.dart';
+import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:cloutbook/repository/HomeRepository.dart';
@@ -28,6 +29,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(WatchProfileAdapter());
   await Hive.openBox<WatchProfile>('watchProfile');
+  // await Hive.box<WatchProfile>('watchProfile').clear();
 
   // stuff needed for flutter inapp_webview
   if (Platform.isAndroid) {

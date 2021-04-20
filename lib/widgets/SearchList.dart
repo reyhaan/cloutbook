@@ -124,7 +124,7 @@ class ListItem extends HookWidget {
                     await _exploreStore.removeFromWatchlist(profile);
                   } else {
                     // add this item to watch list
-                    await _exploreStore.addToWatchlist(profile);
+                    await _exploreStore.addToWatchlist(profile!);
                   }
                 },
                 child: Container(
@@ -132,9 +132,9 @@ class ListItem extends HookWidget {
                   padding: EdgeInsets.all(4),
                   child: Icon(
                     _exploreStore.isInWatchlist(profile)
-                        ? Icons.star_border
-                        : Icons.star_border_outlined,
-                    size: 18.0,
+                        ? Icons.star
+                        : Icons.star_outline,
+                    size: 22.0,
                     color: Palette.hintColor,
                   ),
                 ),

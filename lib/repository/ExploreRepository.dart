@@ -65,10 +65,16 @@ class ExploreRepository extends BaseExploreRepository {
   Future<List<ProfileEntryResponse>> getWatchlist() async {
     try {
       final box = Boxes.getWatchProfileBox();
+      // box.clear();
       List<ProfileEntryResponse> savedProfiles = [];
       for (var i = 0; i < box.length; i++) {
-        final data = box.getAt(i);
-        savedProfiles.add(data!.profile!);
+        final key = box.keyAt(i);
+        final data = box.get(key);
+        if (data != null) {
+          print('Adding profile to watchlist -------');
+          // print(ProfileEntryResponse.fromMap(data.profile!));
+          savedProfiles.add(ProfileEntryResponse.fromMap(data.profile!));
+        }
       }
       return Future.value(savedProfiles);
     } catch (e) {
@@ -82,7 +88,7 @@ class ExploreRepository extends BaseExploreRepository {
   }) {
     try {
       final box = Boxes.getWatchProfileBox();
-      WatchProfile newProfile = WatchProfile(profile: payload);
+      WatchProfile newProfile = WatchProfile(profile: payload?.toJson());
       box.put(payload?.username, newProfile);
       return Future.value(payload?.username);
     } catch (e) {
@@ -109,9 +115,11 @@ class ExploreRepository extends BaseExploreRepository {
   }) {
     try {
       final box = Boxes.getWatchProfileBox();
-      final response = box.get(payload?.username);
-      if (response?.profile?.username != null) {
-        return true;
+      WatchProfile? response = box.get(payload?.username);
+      if (response != null && response.profile != null) {
+        if (ProfileEntryResponse.fromMap(response.profile!).username != null) {
+          return true;
+        }
       }
       return false;
     } catch (e) {

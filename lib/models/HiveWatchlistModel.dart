@@ -6,7 +6,7 @@ part 'HiveWatchlistModel.g.dart';
 @HiveType(typeId: 0)
 class WatchProfile extends HiveObject {
   @HiveField(0)
-  late ProfileEntryResponse? profile;
+  late Map<String, dynamic>? profile;
 
   WatchProfile({
     this.profile,

@@ -26,6 +26,7 @@ abstract class _ExploreStore with Store {
   void reset() {
     isLoading = false;
     profiles = [];
+    savedProfiles = [];
   }
 
   @action
@@ -35,7 +36,13 @@ abstract class _ExploreStore with Store {
 
   @action
   void setSavedProfiles(newProfiles) {
-    savedProfiles.add(newProfiles);
+    savedProfiles.addAll(newProfiles);
+  }
+
+  @action
+  void removeSavedProfiles(ProfileEntryResponse profile) {
+    savedProfiles
+        .removeWhere((element) => element.username == profile.username);
   }
 
   @action
@@ -68,19 +75,22 @@ abstract class _ExploreStore with Store {
       isLoading = true;
       final response = await _exploreRepository.getWatchlist();
       isLoading = false;
-      setSavedProfiles(response);
+
+      if (response.length > 0) {
+        setSavedProfiles(response);
+      }
     } catch (e) {
       throw e;
     }
   }
 
   @action
-  Future<void> addToWatchlist(profile) async {
+  Future<void> addToWatchlist(ProfileEntryResponse profile) async {
     try {
       isLoading = true;
       await _exploreRepository.addToWatchlist(payload: profile);
       isLoading = false;
-      setSavedProfiles(profile);
+      setSavedProfiles([profile]);
     } catch (e) {
       throw e;
     }
@@ -90,10 +100,9 @@ abstract class _ExploreStore with Store {
   Future<void> removeFromWatchlist(profile) async {
     try {
       isLoading = true;
-      final response =
-          await _exploreRepository.removeFromWatchlist(payload: profile);
+      await _exploreRepository.removeFromWatchlist(payload: profile);
       isLoading = false;
-      setSavedProfiles(response);
+      removeSavedProfiles(profile);
     } catch (e) {
       throw e;
     }

@@ -72,7 +72,7 @@ mixin _$ExploreStore on _ExploreStore, Store {
       AsyncAction('_ExploreStore.addToWatchlist');
 
   @override
-  Future<void> addToWatchlist(dynamic profile) {
+  Future<void> addToWatchlist(ProfileEntryResponse profile) {
     return _$addToWatchlistAsyncAction.run(() => super.addToWatchlist(profile));
   }
 
@@ -116,6 +116,17 @@ mixin _$ExploreStore on _ExploreStore, Store {
         name: '_ExploreStore.setSavedProfiles');
     try {
       return super.setSavedProfiles(newProfiles);
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeSavedProfiles(ProfileEntryResponse profile) {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.removeSavedProfiles');
+    try {
+      return super.removeSavedProfiles(profile);
     } finally {
       _$_ExploreStoreActionController.endAction(_$actionInfo);
     }

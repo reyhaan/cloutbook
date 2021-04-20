@@ -53,10 +53,12 @@ class ProfileEntryResponse extends Equatable {
       ];
 
   factory ProfileEntryResponse.fromMap(Map<String, dynamic> map) {
-    CoinEntry coinEntry;
+    CoinEntry coinEntry = CoinEntry.fromMap({});
     List<Post> posts = [];
 
-    coinEntry = CoinEntry.fromMap(map['CoinEntry']);
+    if (map['CoinEntry'] != null) {
+      coinEntry = CoinEntry.fromMap(map['CoinEntry']);
+    }
 
     if (map['Posts'] != null) {
       List<dynamic> allPosts = map['Posts'];
@@ -82,4 +84,21 @@ class ProfileEntryResponse extends Equatable {
       usersThatHODL: map['UsersThatHODL'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "coinEntry": this.coinEntry.toString(),
+        "coinPriceBitCloutNanos": this.coinPriceBitCloutNanos,
+        "comments": this.comments,
+        "description": this.description,
+        "isHidden": this.isHidden,
+        "isReserved": this.isReserved,
+        "isVerified": this.isVerified,
+        "posts": this.posts.toString(),
+        "profilePic": this.profilePic,
+        "publicKeyBase58Check": this.publicKeyBase58Check,
+        "stakeEntryStats": this.stakeEntryStats,
+        "stakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
+        "username": this.username,
+        "usersThatHODL": this.usersThatHODL,
+      };
 }

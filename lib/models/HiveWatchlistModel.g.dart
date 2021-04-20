@@ -17,7 +17,7 @@ class WatchProfileAdapter extends TypeAdapter<WatchProfile> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return WatchProfile(
-      profile: fields[0] as ProfileEntryResponse?,
+      profile: (fields[0] as Map?)?.cast<String, dynamic>(),
     );
   }
 
