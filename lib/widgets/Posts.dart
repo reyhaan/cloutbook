@@ -222,7 +222,7 @@ class PostItem extends StatelessWidget {
                 ),
                 Visibility(
                   visible: post?.body != '',
-                  child: SizedBox(height: 16),
+                  child: SizedBox(height: 14),
                 ),
                 Visibility(
                   visible: imageUrl != '',

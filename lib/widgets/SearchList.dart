@@ -47,10 +47,12 @@ class ListItem extends HookWidget {
   final ProfileEntryResponse? profile;
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
   final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+  final bool? render;
 
   ListItem({
     Key? key,
     this.profile,
+    this.render = false,
   }) : super(key: key);
 
   @override
@@ -60,6 +62,8 @@ class ListItem extends HookWidget {
         r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
     var match = new RegExp(urlPattern, caseSensitive: false)
         .firstMatch(_profilePic.toString());
+
+    final rerender = useState(render);
 
     return Container(
       margin: EdgeInsets.fromLTRB(11, 10, 11, 0),
@@ -98,7 +102,7 @@ class ListItem extends HookWidget {
                     children: [
                       Container(
                         child: Text(
-                          '${profile?.username}',
+                          '@${profile?.username}',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.normal,
@@ -129,6 +133,7 @@ class ListItem extends HookWidget {
                     // add this item to watch list
                     await _exploreStore.addToWatchlist(profile!);
                   }
+                  rerender.value = !rerender.value!;
                 },
                 child: Container(
                   color: Palette.background,

@@ -96,10 +96,10 @@ class ListItem extends StatelessWidget {
                     children: [
                       Container(
                         child: Text(
-                          '${profile?.username}',
+                          '@${profile?.username}',
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal),
+                              color: Palette.primary3,
+                              fontWeight: FontWeight.w600),
                         ),
                       ),
                       // SizedBox(height: 5.0),
@@ -117,7 +117,13 @@ class ListItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                  '~\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}'),
+                '~\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1.1,
+                ),
+              ),
               SizedBox(width: 20),
               GestureDetector(
                 onTap: () async {

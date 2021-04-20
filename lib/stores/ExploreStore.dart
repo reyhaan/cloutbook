@@ -46,8 +46,9 @@ abstract class _ExploreStore with Store {
 
   @action
   void removeSavedProfiles(ProfileEntryResponse profile) {
-    savedProfiles
-        .removeWhere((element) => element.username == profile.username);
+    List<ProfileEntryResponse> oldProfiles = savedProfiles;
+    oldProfiles.removeWhere((element) => element.username == profile.username);
+    savedProfiles = oldProfiles;
   }
 
   @action
