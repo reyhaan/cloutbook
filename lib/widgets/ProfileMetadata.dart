@@ -118,11 +118,11 @@ class ProfileMetadata extends HookWidget {
                         Text('~ ${_profileStore.inCirculation}'),
                         SizedBox(height: 8),
                         Text(
-                          'Coins in Circulation',
+                          'In Circulation',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
-                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
                       ],
@@ -135,11 +135,11 @@ class ProfileMetadata extends HookWidget {
                         Text('~ \$$totalUSDLocked'),
                         SizedBox(height: 8),
                         Text(
-                          'Total USD Locked',
+                          'Total Locked',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
-                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
                       ],
@@ -152,11 +152,11 @@ class ProfileMetadata extends HookWidget {
                         Text('~ \$$totalUSDMarketCap'),
                         SizedBox(height: 8),
                         Text(
-                          'USD Market Cap',
+                          'Market Cap',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
-                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
                       ],

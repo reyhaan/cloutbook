@@ -14,10 +14,14 @@ class FavoriteList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    useEffect(() {
+      _exploreStore.getWatchlist();
+    }, []);
+
     return Container(
       child: Observer(builder: (_) {
         return ListView.builder(
-          itemCount: _exploreStore.profiles.length,
+          itemCount: _exploreStore.savedProfiles.length,
           itemBuilder: (context, index) {
             if (index == 0) {
               return Column(
@@ -30,11 +34,11 @@ class FavoriteList extends HookWidget {
                       ),
                     ],
                   ),
-                  ListItem(profile: _exploreStore.profiles[index])
+                  ListItem(profile: _exploreStore.savedProfiles[index])
                 ],
               );
             }
-            return ListItem(profile: _exploreStore.profiles[index]);
+            return ListItem(profile: _exploreStore.savedProfiles[index]);
           },
         );
       }),

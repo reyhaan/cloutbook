@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-
+import 'package:cloutbook/common/boxes.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
@@ -43,10 +42,11 @@ class SearchList extends HookWidget {
   }
 }
 
-class ListItem extends StatelessWidget {
+class ListItem extends HookWidget {
   final ProfileEntryResponse? profile;
+  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
 
-  const ListItem({
+  ListItem({
     Key? key,
     this.profile,
   }) : super(key: key);
@@ -58,13 +58,6 @@ class ListItem extends StatelessWidget {
         r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
     var match = new RegExp(urlPattern, caseSensitive: false)
         .firstMatch(_profilePic.toString());
-    // var profilePic;
-    // if (match == null) {
-    //   print('-------------------------------');
-    //   print(_profilePic);
-    //   profilePic = processDataImage(_profilePic);
-    // }
-    // final avatar = profilePic ?? Uint8List(32). _profilePic;
 
     return Container(
       margin: EdgeInsets.fromLTRB(11, 10, 11, 0),
@@ -121,10 +114,30 @@ class ListItem extends StatelessWidget {
             children: [
               Text('~\$3.50'),
               SizedBox(width: 20),
-              Icon(
-                Icons.star_border_outlined,
-                size: 18.0,
-                color: Palette.hintColor,
+              GestureDetector(
+                onTap: () async {
+                  // save item to watchlist
+                  final bool inList = _exploreStore.isInWatchlist(profile);
+
+                  if (inList) {
+                    // remove this item from watch list
+                    await _exploreStore.removeFromWatchlist(profile);
+                  } else {
+                    // add this item to watch list
+                    await _exploreStore.addToWatchlist(profile);
+                  }
+                },
+                child: Container(
+                  color: Palette.background,
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    _exploreStore.isInWatchlist(profile)
+                        ? Icons.star_border
+                        : Icons.star_border_outlined,
+                    size: 18.0,
+                    color: Palette.hintColor,
+                  ),
+                ),
               ),
             ],
           )

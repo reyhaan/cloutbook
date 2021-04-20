@@ -61,6 +61,30 @@ mixin _$ExploreStore on _ExploreStore, Store {
     return _$getProfilesAsyncAction.run(() => super.getProfiles(searchKey));
   }
 
+  final _$getWatchlistAsyncAction = AsyncAction('_ExploreStore.getWatchlist');
+
+  @override
+  Future<void> getWatchlist() {
+    return _$getWatchlistAsyncAction.run(() => super.getWatchlist());
+  }
+
+  final _$addToWatchlistAsyncAction =
+      AsyncAction('_ExploreStore.addToWatchlist');
+
+  @override
+  Future<void> addToWatchlist(dynamic profile) {
+    return _$addToWatchlistAsyncAction.run(() => super.addToWatchlist(profile));
+  }
+
+  final _$removeFromWatchlistAsyncAction =
+      AsyncAction('_ExploreStore.removeFromWatchlist');
+
+  @override
+  Future<void> removeFromWatchlist(dynamic profile) {
+    return _$removeFromWatchlistAsyncAction
+        .run(() => super.removeFromWatchlist(profile));
+  }
+
   final _$_ExploreStoreActionController =
       ActionController(name: '_ExploreStore');
 
@@ -81,6 +105,28 @@ mixin _$ExploreStore on _ExploreStore, Store {
         name: '_ExploreStore.setProfiles');
     try {
       return super.setProfiles(newProfiles);
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSavedProfiles(dynamic newProfiles) {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.setSavedProfiles');
+    try {
+      return super.setSavedProfiles(newProfiles);
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool isInWatchlist(dynamic profile) {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.isInWatchlist');
+    try {
+      return super.isInWatchlist(profile);
     } finally {
       _$_ExploreStoreActionController.endAction(_$actionInfo);
     }

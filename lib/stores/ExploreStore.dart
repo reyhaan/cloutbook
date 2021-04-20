@@ -34,6 +34,11 @@ abstract class _ExploreStore with Store {
   }
 
   @action
+  void setSavedProfiles(newProfiles) {
+    savedProfiles.add(newProfiles);
+  }
+
+  @action
   Future<void> getProfiles(searchKey) async {
     try {
       isLoading = true;
@@ -51,8 +56,56 @@ abstract class _ExploreStore with Store {
         "AddGlobalFeedBool": false
       });
       isLoading = false;
-      print(response.length);
       setProfiles(response);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Future<void> getWatchlist() async {
+    try {
+      isLoading = true;
+      final response = await _exploreRepository.getWatchlist();
+      isLoading = false;
+      setSavedProfiles(response);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Future<void> addToWatchlist(profile) async {
+    try {
+      isLoading = true;
+      await _exploreRepository.addToWatchlist(payload: profile);
+      isLoading = false;
+      setSavedProfiles(profile);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Future<void> removeFromWatchlist(profile) async {
+    try {
+      isLoading = true;
+      final response =
+          await _exploreRepository.removeFromWatchlist(payload: profile);
+      isLoading = false;
+      setSavedProfiles(response);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  bool isInWatchlist(profile) {
+    try {
+      isLoading = true;
+      final response = _exploreRepository.isInWatchlist(payload: profile);
+      isLoading = false;
+      return response;
     } catch (e) {
       throw e;
     }
