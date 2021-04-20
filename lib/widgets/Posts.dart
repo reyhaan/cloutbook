@@ -222,7 +222,7 @@ class PostItem extends StatelessWidget {
                 ),
                 Visibility(
                   visible: post?.body != '',
-                  child: SizedBox(height: 16),
+                  child: SizedBox(height: 14),
                 ),
                 Visibility(
                   visible: imageUrl != '',
@@ -251,7 +251,7 @@ class PostItem extends StatelessWidget {
                   child: SizedBox(height: 20),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 14, right: 20),
+                  padding: const EdgeInsets.only(left: 4, right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -298,6 +298,12 @@ class PostItem extends StatelessWidget {
                             ),
                             TextSpan(text: '  ${post?.likeCount}'),
                           ],
+                        ),
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          style: TextStyle(color: Colors.white60),
+                          children: [],
                         ),
                       ),
                     ],

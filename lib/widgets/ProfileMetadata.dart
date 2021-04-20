@@ -1,4 +1,3 @@
-import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
@@ -15,14 +14,9 @@ class ProfileMetadata extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    void updateExchange() async {
-      await _exchangeStore.getExchangeRate();
-      await _exchangeStore.getTicker();
-    }
-
     useEffect(() {
       // get latest exchange rates first
-      updateExchange();
+      _exchangeStore.updateExchange();
 
       // reset store when unmounted
       return _profileStore.reset;
@@ -124,11 +118,11 @@ class ProfileMetadata extends HookWidget {
                         Text('~ ${_profileStore.inCirculation}'),
                         SizedBox(height: 8),
                         Text(
-                          'Coins in Circulation',
+                          'In Circulation',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
-                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
                       ],
@@ -141,11 +135,11 @@ class ProfileMetadata extends HookWidget {
                         Text('~ \$$totalUSDLocked'),
                         SizedBox(height: 8),
                         Text(
-                          'Total USD Locked',
+                          'Total Locked',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
-                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
                       ],
@@ -158,11 +152,11 @@ class ProfileMetadata extends HookWidget {
                         Text('~ \$$totalUSDMarketCap'),
                         SizedBox(height: 8),
                         Text(
-                          'USD Market Cap',
+                          'Market Cap',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
-                              fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
                       ],

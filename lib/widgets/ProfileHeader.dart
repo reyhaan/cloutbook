@@ -1,4 +1,3 @@
-import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';

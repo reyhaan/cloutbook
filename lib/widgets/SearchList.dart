@@ -9,20 +9,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-class FavoriteList extends HookWidget {
+class SearchList extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
 
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      _exploreStore.getWatchlist();
-    }, []);
-
     return Container(
       child: Observer(builder: (_) {
-        final watchlist = _exploreStore.savedProfiles;
+        final searchResults = _exploreStore.profiles;
         return ListView.builder(
-          itemCount: watchlist.length,
+          itemCount: searchResults.length,
           itemBuilder: (context, index) {
             if (index == 0) {
               return Column(
@@ -31,15 +27,15 @@ class FavoriteList extends HookWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 14, 10, 0),
-                        child: Text('Watchlist'),
+                        child: Text('${searchResults.length} Results'),
                       ),
                     ],
                   ),
-                  ListItem(profile: watchlist[index])
+                  ListItem(profile: searchResults[index])
                 ],
               );
             }
-            return ListItem(profile: watchlist[index]);
+            return ListItem(profile: searchResults[index]);
           },
         );
       }),
@@ -47,19 +43,27 @@ class FavoriteList extends HookWidget {
   }
 }
 
-class ListItem extends StatelessWidget {
+class ListItem extends HookWidget {
   final ProfileEntryResponse? profile;
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
   final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+  final bool? render;
 
   ListItem({
     Key? key,
     this.profile,
+    this.render = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final avatar = processDataImage(profile?.profilePic);
+    var _profilePic = profile?.profilePic;
+    var urlPattern =
+        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    var match = new RegExp(urlPattern, caseSensitive: false)
+        .firstMatch(_profilePic.toString());
+
+    final rerender = useState(render);
 
     return Container(
       margin: EdgeInsets.fromLTRB(11, 10, 11, 0),
@@ -87,7 +91,9 @@ class ListItem extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(21),
-                      child: Image.memory(avatar),
+                      child: match != null
+                          ? Image.network('$_profilePic')
+                          : Image.memory(processDataImage(_profilePic)),
                     ),
                   ),
                   Column(
@@ -98,16 +104,12 @@ class ListItem extends StatelessWidget {
                         child: Text(
                           '@${profile?.username}',
                           style: TextStyle(
-                              color: Palette.primary3,
-                              fontWeight: FontWeight.w600),
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
-                      // SizedBox(height: 5.0),
-                      // Text(
-                      //   'Founder Reward: 25%',
-                      //   textAlign: TextAlign.left,
-                      //   style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                      // ),
                     ],
                   ),
                 ],
@@ -117,25 +119,30 @@ class ListItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                '~\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 1.1,
-                ),
-              ),
+                  '~\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}'),
               SizedBox(width: 20),
               GestureDetector(
                 onTap: () async {
                   // save item to watchlist
-                  await _exploreStore.removeFromWatchlist(profile);
+                  final bool inList = _exploreStore.isInWatchlist(profile);
+
+                  if (inList) {
+                    // remove this item from watch list
+                    await _exploreStore.removeFromWatchlist(profile);
+                  } else {
+                    // add this item to watch list
+                    await _exploreStore.addToWatchlist(profile!);
+                  }
+                  rerender.value = !rerender.value!;
                 },
                 child: Container(
                   color: Palette.background,
                   padding: EdgeInsets.all(4),
                   child: Icon(
-                    Icons.delete_outline,
-                    size: 18.0,
+                    _exploreStore.isInWatchlist(profile)
+                        ? Icons.star
+                        : Icons.star_outline,
+                    size: 22.0,
                     color: Palette.hintColor,
                   ),
                 ),

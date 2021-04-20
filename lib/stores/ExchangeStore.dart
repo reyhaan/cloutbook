@@ -64,4 +64,25 @@ abstract class _ExchangeStore with Store {
       throw e;
     }
   }
+
+  @action
+  Future<void> updateExchange() async {
+    await getExchangeRate();
+    await getTicker();
+  }
+
+  @action
+  String getCoinPrice(bitCloutNanos) {
+    if (ticker.usd != null &&
+        bitCloutNanos != null &&
+        exchangeRate.satoshisPerBitCloutExchangeRate != null) {
+      double? bitcoinInUSD = ticker.usd?.current;
+      double? bitCoinsPerBitClout =
+          (exchangeRate.satoshisPerBitCloutExchangeRate! / 100000000)
+              .toDouble();
+      double? bitCloutPrice = (bitcoinInUSD! * bitCoinsPerBitClout);
+      return ((bitCloutNanos! / 1000000000) * bitCloutPrice).toStringAsFixed(2);
+    }
+    return '0';
+  }
 }
