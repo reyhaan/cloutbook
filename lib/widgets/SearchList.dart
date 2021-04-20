@@ -1,4 +1,3 @@
-import 'package:cloutbook/common/boxes.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
@@ -16,8 +15,9 @@ class SearchList extends HookWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Observer(builder: (_) {
+        final searchResults = _exploreStore.profiles;
         return ListView.builder(
-          itemCount: _exploreStore.profiles.length,
+          itemCount: searchResults.length,
           itemBuilder: (context, index) {
             if (index == 0) {
               return Column(
@@ -26,15 +26,15 @@ class SearchList extends HookWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(18, 14, 10, 0),
-                        child: Text('${_exploreStore.profiles.length} Results'),
+                        child: Text('${searchResults.length} Results'),
                       ),
                     ],
                   ),
-                  ListItem(profile: _exploreStore.profiles[index])
+                  ListItem(profile: searchResults[index])
                 ],
               );
             }
-            return ListItem(profile: _exploreStore.profiles[index]);
+            return ListItem(profile: searchResults[index]);
           },
         );
       }),

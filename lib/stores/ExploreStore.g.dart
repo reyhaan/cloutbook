@@ -122,6 +122,17 @@ mixin _$ExploreStore on _ExploreStore, Store {
   }
 
   @override
+  void updateSavedProfiles(dynamic newProfiles) {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.updateSavedProfiles');
+    try {
+      return super.updateSavedProfiles(newProfiles);
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void removeSavedProfiles(ProfileEntryResponse profile) {
     final _$actionInfo = _$_ExploreStoreActionController.startAction(
         name: '_ExploreStore.removeSavedProfiles');

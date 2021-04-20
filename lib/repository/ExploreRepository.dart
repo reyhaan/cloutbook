@@ -67,14 +67,10 @@ class ExploreRepository extends BaseExploreRepository {
       final box = Boxes.getWatchProfileBox();
       // box.clear();
       List<ProfileEntryResponse> savedProfiles = [];
-      for (var i = 0; i < box.length; i++) {
-        final key = box.keyAt(i);
-        final data = box.get(key);
-        if (data != null) {
-          print('Adding profile to watchlist -------');
-          // print(ProfileEntryResponse.fromMap(data.profile!));
-          savedProfiles.add(ProfileEntryResponse.fromMap(data.profile!));
-        }
+      final list = box.values.toList();
+      for (var i = 0; i < list.length; i++) {
+        final data = list[i];
+        savedProfiles.add(ProfileEntryResponse.fromMap(data.profile!));
       }
       return Future.value(savedProfiles);
     } catch (e) {
@@ -116,7 +112,7 @@ class ExploreRepository extends BaseExploreRepository {
     try {
       final box = Boxes.getWatchProfileBox();
       WatchProfile? response = box.get(payload?.username);
-      if (response != null && response.profile != null) {
+      if (response != null) {
         if (ProfileEntryResponse.fromMap(response.profile!).username != null) {
           return true;
         }

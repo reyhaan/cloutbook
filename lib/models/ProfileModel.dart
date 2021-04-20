@@ -57,7 +57,8 @@ class ProfileEntryResponse extends Equatable {
     List<Post> posts = [];
 
     if (map['CoinEntry'] != null) {
-      coinEntry = CoinEntry.fromMap(map['CoinEntry']);
+      coinEntry =
+          CoinEntry.fromMap(Map<String, dynamic>.from(map['CoinEntry']));
     }
 
     if (map['Posts'] != null) {
@@ -85,20 +86,26 @@ class ProfileEntryResponse extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "coinEntry": this.coinEntry.toString(),
-        "coinPriceBitCloutNanos": this.coinPriceBitCloutNanos,
-        "comments": this.comments,
-        "description": this.description,
-        "isHidden": this.isHidden,
-        "isReserved": this.isReserved,
-        "isVerified": this.isVerified,
-        "posts": this.posts.toString(),
-        "profilePic": this.profilePic,
-        "publicKeyBase58Check": this.publicKeyBase58Check,
-        "stakeEntryStats": this.stakeEntryStats,
-        "stakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
-        "username": this.username,
-        "usersThatHODL": this.usersThatHODL,
-      };
+  Map<String, dynamic> toJson() {
+    final posts = [];
+    this.posts.forEach((post) {
+      posts.add(post);
+    });
+    return {
+      "CoinEntry": this.coinEntry?.toJson(),
+      "CoinPriceBitCloutNanos": this.coinPriceBitCloutNanos,
+      "Comments": this.comments,
+      "Description": this.description,
+      "IsHidden": this.isHidden,
+      "IsReserved": this.isReserved,
+      "IsVerified": this.isVerified,
+      "Posts": posts,
+      "ProfilePic": this.profilePic,
+      "PublicKeyBase58Check": this.publicKeyBase58Check,
+      "StakeEntryStats": this.stakeEntryStats,
+      "StakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
+      "Username": this.username,
+      "UsersThatHODL": this.usersThatHODL,
+    };
+  }
 }

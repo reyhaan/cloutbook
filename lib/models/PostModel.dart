@@ -83,4 +83,23 @@ class Post extends Equatable {
       timestampNanos: map['TimestampNanos'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "Body": this.body,
+        "CommentCount": this.commentCount,
+        "Comments": this.comments,
+        "ImageUrls": this.imageUrls,
+        "IsHidden": this.isHidden,
+        "IsPinned": this.isPinned,
+        "LikeCount": this.likeCount,
+        "ParentPosts": this.parentPosts,
+        "ParentStakeId": this.parentStakeId,
+        "PostEntryReaderState": this.postEntryReaderState,
+        "PostHashHex": this.postHashHex,
+        "PosterPublicKeyBase58Check": this.posterPublicKeyBase58Check,
+        "ProfileEntryResponse": this.profileEntryResponse,
+        "RecloutCount": this.recloutCount,
+        "StakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
+        "TimestampNanos": this.timestampNanos,
+      };
 }

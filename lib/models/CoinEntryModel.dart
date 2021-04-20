@@ -32,4 +32,12 @@ class CoinEntry extends Equatable {
       numberOfHolders: map['NumberOfHolders'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        "BitCloutLockedNanos": this.bitCloutLockedNanos,
+        "CoinWatermarkNanos": this.coinWatermarkNanos,
+        "CoinsInCirculationNanos": this.coinsInCirculationNanos,
+        "CreatorBasisPoints": this.creatorBasisPoints,
+        "NumberOfHolders": this.numberOfHolders,
+      };
 }

@@ -36,6 +36,11 @@ abstract class _ExploreStore with Store {
 
   @action
   void setSavedProfiles(newProfiles) {
+    savedProfiles = newProfiles;
+  }
+
+  @action
+  void updateSavedProfiles(newProfiles) {
     savedProfiles.addAll(newProfiles);
   }
 
@@ -90,7 +95,7 @@ abstract class _ExploreStore with Store {
       isLoading = true;
       await _exploreRepository.addToWatchlist(payload: profile);
       isLoading = false;
-      setSavedProfiles([profile]);
+      updateSavedProfiles([profile]);
     } catch (e) {
       throw e;
     }

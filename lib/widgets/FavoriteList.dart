@@ -1,4 +1,3 @@
-import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
@@ -20,8 +19,9 @@ class FavoriteList extends HookWidget {
 
     return Container(
       child: Observer(builder: (_) {
+        final watchlist = _exploreStore.savedProfiles;
         return ListView.builder(
-          itemCount: _exploreStore.savedProfiles.length,
+          itemCount: watchlist.length,
           itemBuilder: (context, index) {
             if (index == 0) {
               return Column(
@@ -34,11 +34,11 @@ class FavoriteList extends HookWidget {
                       ),
                     ],
                   ),
-                  ListItem(profile: _exploreStore.savedProfiles[index])
+                  ListItem(profile: watchlist[index])
                 ],
               );
             }
-            return ListItem(profile: _exploreStore.savedProfiles[index]);
+            return ListItem(profile: watchlist[index]);
           },
         );
       }),
