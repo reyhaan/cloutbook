@@ -64,7 +64,7 @@ class ExploreRepository extends BaseExploreRepository {
   @override
   Future<List<ProfileEntryResponse>> getWatchlist() async {
     try {
-      final box = Boxes.getWatchlistBox();
+      final box = Boxes.getWatchProfileBox();
       List<ProfileEntryResponse> savedProfiles = [];
       for (var i = 0; i < box.length; i++) {
         final data = box.getAt(i);
@@ -81,8 +81,9 @@ class ExploreRepository extends BaseExploreRepository {
     @required ProfileEntryResponse? payload,
   }) {
     try {
-      final box = Boxes.getWatchlistBox();
-      box.put(payload?.username, WatchProfile(profile: payload));
+      final box = Boxes.getWatchProfileBox();
+      WatchProfile newProfile = WatchProfile(profile: payload);
+      box.put(payload?.username, newProfile);
       return Future.value(payload?.username);
     } catch (e) {
       throw e;
@@ -94,7 +95,7 @@ class ExploreRepository extends BaseExploreRepository {
     @required ProfileEntryResponse? payload,
   }) async {
     try {
-      final box = Boxes.getWatchlistBox();
+      final box = Boxes.getWatchProfileBox();
       await box.delete(payload?.username);
       return Future.value(payload?.username);
     } catch (e) {
@@ -107,7 +108,7 @@ class ExploreRepository extends BaseExploreRepository {
     @required ProfileEntryResponse? payload,
   }) {
     try {
-      final box = Boxes.getWatchlistBox();
+      final box = Boxes.getWatchProfileBox();
       final response = box.get(payload?.username);
       if (response?.profile?.username != null) {
         return true;

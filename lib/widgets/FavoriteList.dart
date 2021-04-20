@@ -48,8 +48,9 @@ class FavoriteList extends HookWidget {
 
 class ListItem extends StatelessWidget {
   final ProfileEntryResponse? profile;
+  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
 
-  const ListItem({
+  ListItem({
     Key? key,
     this.profile,
   }) : super(key: key);
@@ -115,10 +116,20 @@ class ListItem extends StatelessWidget {
             children: [
               Text('~\$3.50'),
               SizedBox(width: 20),
-              Icon(
-                Icons.delete_outline,
-                size: 18.0,
-                color: Palette.hintColor,
+              GestureDetector(
+                onTap: () async {
+                  // save item to watchlist
+                  await _exploreStore.removeFromWatchlist(profile);
+                },
+                child: Container(
+                  color: Palette.background,
+                  padding: EdgeInsets.all(4),
+                  child: Icon(
+                    Icons.delete_outline,
+                    size: 18.0,
+                    color: Palette.hintColor,
+                  ),
+                ),
               ),
             ],
           )
