@@ -1,6 +1,7 @@
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
+import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class SearchList extends HookWidget {
 class ListItem extends HookWidget {
   final ProfileEntryResponse? profile;
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
 
   ListItem({
     Key? key,
@@ -112,7 +114,8 @@ class ListItem extends HookWidget {
           ),
           Row(
             children: [
-              Text('~\$3.50'),
+              Text(
+                  '~\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}'),
               SizedBox(width: 20),
               GestureDetector(
                 onTap: () async {

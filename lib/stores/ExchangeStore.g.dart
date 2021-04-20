@@ -122,6 +122,17 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
   }
 
   @override
+  String getCoinPrice(dynamic bitCloutNanos) {
+    final _$actionInfo = _$_ExchangeStoreActionController.startAction(
+        name: '_ExchangeStore.getCoinPrice');
+    try {
+      return super.getCoinPrice(bitCloutNanos);
+    } finally {
+      _$_ExchangeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 exchangeRate: ${exchangeRate},
