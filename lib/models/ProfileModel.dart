@@ -1,5 +1,6 @@
 import 'package:cloutbook/models/CoinEntryModel.dart';
 import 'package:cloutbook/models/PostModel.dart';
+import 'package:cloutbook/models/StakeEntryStatsModel.dart';
 import 'package:equatable/equatable.dart';
 
 class ProfileEntryResponse extends Equatable {
@@ -13,7 +14,7 @@ class ProfileEntryResponse extends Equatable {
   final List<Post> posts;
   final String? profilePic;
   final String? publicKeyBase58Check;
-  final Map<String, dynamic>? stakeEntryStats;
+  final StakeEntryStats? stakeEntryStats;
   final int? stakeMultipleBasisPoints;
   final String? username;
   final dynamic? usersThatHODL;
@@ -54,6 +55,7 @@ class ProfileEntryResponse extends Equatable {
 
   factory ProfileEntryResponse.fromMap(Map<String, dynamic> map) {
     CoinEntry coinEntry = CoinEntry.fromMap({});
+    StakeEntryStats stakeEntryStats = StakeEntryStats.fromMap({});
     List<Post> posts = [];
 
     if (map['CoinEntry'] != null) {
@@ -61,10 +63,16 @@ class ProfileEntryResponse extends Equatable {
           CoinEntry.fromMap(Map<String, dynamic>.from(map['CoinEntry']));
     }
 
+    if (map['StakeEntryStats'] != null) {
+      stakeEntryStats = StakeEntryStats.fromMap(
+          Map<String, dynamic>.from(map['StakeEntryStats']));
+    }
+
     if (map['Posts'] != null) {
       List<dynamic> allPosts = map['Posts'];
+
       allPosts.forEach((post) {
-        posts.add(Post.fromMap(post));
+        posts.add(Post.fromMap(post.cast<String, dynamic>()));
       });
     }
 
@@ -79,7 +87,7 @@ class ProfileEntryResponse extends Equatable {
       posts: posts,
       profilePic: map['ProfilePic'],
       publicKeyBase58Check: map['PublicKeyBase58Check'],
-      stakeEntryStats: map['StakeEntryStats'],
+      stakeEntryStats: stakeEntryStats,
       stakeMultipleBasisPoints: map['StakeMultipleBasisPoints'],
       username: map['Username'],
       usersThatHODL: map['UsersThatHODL'],
@@ -87,10 +95,11 @@ class ProfileEntryResponse extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    final posts = [];
+    final List<Post> posts = [];
     this.posts.forEach((post) {
       posts.add(post);
     });
+
     return {
       "CoinEntry": this.coinEntry?.toJson(),
       "CoinPriceBitCloutNanos": this.coinPriceBitCloutNanos,
@@ -102,7 +111,7 @@ class ProfileEntryResponse extends Equatable {
       "Posts": posts,
       "ProfilePic": this.profilePic,
       "PublicKeyBase58Check": this.publicKeyBase58Check,
-      "StakeEntryStats": this.stakeEntryStats,
+      "StakeEntryStats": this.stakeEntryStats?.toJson(),
       "StakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
       "Username": this.username,
       "UsersThatHODL": this.usersThatHODL,

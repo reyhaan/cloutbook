@@ -14,7 +14,7 @@ class ProfileScreen extends HookWidget {
       _profileStore.getUserProfile();
 
       // reset store when unmounted
-      return _profileStore.reset;
+      // return _profileStore.reset;
     }, []);
 
     return Scaffold(

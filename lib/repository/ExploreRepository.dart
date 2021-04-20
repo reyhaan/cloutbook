@@ -70,7 +70,8 @@ class ExploreRepository extends BaseExploreRepository {
       final list = box.values.toList();
       for (var i = 0; i < list.length; i++) {
         final data = list[i];
-        savedProfiles.add(ProfileEntryResponse.fromMap(data.profile!));
+        savedProfiles.add(ProfileEntryResponse.fromMap(
+            data.profile!.cast<String, dynamic>()));
       }
       return Future.value(savedProfiles);
     } catch (e) {

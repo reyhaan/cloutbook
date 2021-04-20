@@ -16,7 +16,7 @@ class _NavScreenState extends State<NavScreen> {
     ExploreScreen(),
     SettingsScreen()
   ];
-  int _currentIndex = 2;
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
