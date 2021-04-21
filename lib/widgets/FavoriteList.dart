@@ -79,7 +79,7 @@ class ListItem extends StatelessWidget {
                   Container(
                     height: 38,
                     width: 38,
-                    margin: EdgeInsets.only(right: 18),
+                    margin: EdgeInsets.only(right: 10),
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
@@ -117,11 +117,10 @@ class ListItem extends StatelessWidget {
           Row(
             children: [
               Text(
-                '~\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}',
+                '\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  letterSpacing: 1.1,
                 ),
               ),
               SizedBox(width: 20),

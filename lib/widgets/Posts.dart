@@ -178,7 +178,7 @@ class PostItem extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(top: 4, bottom: 6),
+                  padding: EdgeInsets.only(top: 2, bottom: 6),
                   child: Text.rich(
                     TextSpan(
                       children: [
@@ -195,7 +195,7 @@ class PostItem extends StatelessWidget {
                   child: ParsedText(
                     text: post?.body ?? '',
                     style: TextStyle(
-                        color: Colors.white, fontSize: 15, height: 1.3),
+                        color: Colors.white, fontSize: 14, height: 1.3),
                     parse: <MatchText>[
                       MatchText(
                         pattern: r"\@[A-Za-z]\w+",
