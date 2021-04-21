@@ -75,7 +75,7 @@ class ProfileMetadata extends HookWidget {
                         child: Column(
                           children: [
                             Text(
-                              '~\$${_profileStore.coinPrice}',
+                              '\$${_profileStore.coinPrice}',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class ProfileMetadata extends HookWidget {
           ),
           Container(
             margin: EdgeInsets.only(bottom: 16, left: 12, right: 12),
-            padding: EdgeInsets.only(top: 20, bottom: 20),
+            padding: EdgeInsets.only(top: 22, bottom: 22),
             decoration: BoxDecoration(
               color: Palette.foreground,
               borderRadius: BorderRadius.circular(14),
@@ -115,13 +115,13 @@ class ProfileMetadata extends HookWidget {
                     constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
                     child: Column(
                       children: [
-                        Text('~ ${_profileStore.inCirculation}'),
+                        Text('${_profileStore.inCirculation}'),
                         SizedBox(height: 8),
                         Text(
                           'In Circulation',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 12,
                               // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
@@ -132,13 +132,13 @@ class ProfileMetadata extends HookWidget {
                     constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
                     child: Column(
                       children: [
-                        Text('~ \$$totalUSDLocked'),
+                        Text('\$$totalUSDLocked'),
                         SizedBox(height: 8),
                         Text(
                           'Total Locked',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 12,
                               // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
@@ -149,13 +149,13 @@ class ProfileMetadata extends HookWidget {
                     constraints: BoxConstraints(minWidth: 90, maxWidth: 90),
                     child: Column(
                       children: [
-                        Text('~ \$$totalUSDMarketCap'),
+                        Text('\$$totalUSDMarketCap'),
                         SizedBox(height: 8),
                         Text(
                           'Market Cap',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 12,
                               // fontFamily: GoogleFonts.robotoMono().fontFamily,
                               color: Colors.grey),
                         ),
