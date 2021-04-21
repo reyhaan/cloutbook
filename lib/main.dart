@@ -91,8 +91,8 @@ class MyApp extends StatelessWidget {
           primaryColor: Palette.primary,
           accentColor: Palette.primary,
           iconTheme: const IconThemeData(color: Colors.white),
-          fontFamily: GoogleFonts.rubik().fontFamily,
-          textTheme: GoogleFonts.rubikTextTheme(
+          fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
+          textTheme: GoogleFonts.ibmPlexSansTextTheme(
             TextTheme(
               bodyText1: TextStyle(color: Colors.white),
               bodyText2: TextStyle(color: Colors.white),

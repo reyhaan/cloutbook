@@ -76,16 +76,19 @@ class ProfileMetadata extends HookWidget {
                           children: [
                             Text(
                               '\$${_profileStore.coinPrice}',
+                              textAlign: TextAlign.end,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(height: 8),
-                            Text('Coin Price',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                )),
+                            Text(
+                              'Coin Price',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
                           ],
                         ),
                       ),
