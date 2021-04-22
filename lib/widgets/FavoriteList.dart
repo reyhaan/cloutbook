@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 
 class FavoriteList extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
@@ -30,7 +31,7 @@ class FavoriteList extends HookWidget {
                   Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 14, 10, 0),
+                        padding: const EdgeInsets.fromLTRB(18, 14, 10, 10),
                         child: Text('Watchlist'),
                       ),
                     ],
@@ -60,10 +61,12 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final avatar = processDataImage(profile?.profilePic);
+    final formatter = new NumberFormat("#,###");
+    final coinPrice = formatter.format(double.parse(_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
     return Container(
-      margin: EdgeInsets.fromLTRB(11, 10, 11, 0),
-      padding: EdgeInsets.fromLTRB(10, 14, 8, 14),
+      margin: EdgeInsets.fromLTRB(11, 0, 11, 0),
+      padding: EdgeInsets.fromLTRB(10, 10, 8, 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Palette.background,
@@ -77,9 +80,9 @@ class ListItem extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    height: 38,
-                    width: 38,
-                    margin: EdgeInsets.only(right: 10),
+                    height: 46,
+                    width: 46,
+                    margin: EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
@@ -97,17 +100,15 @@ class ListItem extends StatelessWidget {
                       Container(
                         child: Text(
                           '@${profile?.username}',
-                          style: TextStyle(
-                              color: Palette.primary3,
-                              fontWeight: FontWeight.w600),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                         ),
                       ),
-                      // SizedBox(height: 5.0),
-                      // Text(
-                      //   'Founder Reward: 25%',
-                      //   textAlign: TextAlign.left,
-                      //   style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                      // ),
+                      SizedBox(height: 5.0),
+                      Text(
+                        '243 Followers',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                      ),
                     ],
                   ),
                 ],
@@ -116,12 +117,26 @@ class ListItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
-                '\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Text(
+                      '\$$coinPrice',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5.0),
+                  Text(
+                    '-2.30%',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.green, fontSize: 12.0),
+                  ),
+                ],
               ),
               SizedBox(width: 20),
               GestureDetector(

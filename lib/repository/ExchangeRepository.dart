@@ -17,8 +17,7 @@ abstract class BaseExchangeRepository {
 }
 
 final HeadlessInAppWebView? bitCloutWebView = new HeadlessInAppWebView(
-  initialUrlRequest:
-      URLRequest(url: Uri.parse("https://api.bitclout.com/get-exchange-rate")),
+  initialUrlRequest: URLRequest(url: Uri.parse("https://api.bitclout.com/get-exchange-rate")),
   initialOptions: InAppWebViewGroupOptions(
     crossPlatform: InAppWebViewOptions(),
   ),
@@ -29,18 +28,17 @@ final HeadlessInAppWebView? bitCloutWebView = new HeadlessInAppWebView(
         var x = await exchangeRate.json();
         return x;
         """;
-    var _exchangeRate = await controller.callAsyncJavaScript(
-        functionBody: getExchangeRateFunction, arguments: {});
+    var _exchangeRate = await controller.callAsyncJavaScript(functionBody: getExchangeRateFunction, arguments: {});
 
-    ExchangeRate exchangeRate =
-        ExchangeRate.fromMap(_exchangeRate?.value ?? {});
+    Map<String, dynamic> exchangeValue = _exchangeRate!.toMap().cast<String, dynamic>();
+
+    ExchangeRate exchangeRate = ExchangeRate.fromMap(exchangeValue['value'].cast<String, dynamic>());
     _exchangeStore.setExchangeRate(exchangeRate);
   },
 );
 
 final HeadlessInAppWebView? tickerWebView = new HeadlessInAppWebView(
-  initialUrlRequest:
-      URLRequest(url: Uri.parse("https://blockchain.info/ticker")),
+  initialUrlRequest: URLRequest(url: Uri.parse("https://blockchain.info/ticker")),
   initialOptions: InAppWebViewGroupOptions(
     crossPlatform: InAppWebViewOptions(),
   ),
@@ -51,10 +49,11 @@ final HeadlessInAppWebView? tickerWebView = new HeadlessInAppWebView(
         var y = await ticker.json();
         return y;
         """;
-    var _ticker = await controller
-        .callAsyncJavaScript(functionBody: getTickerFunction, arguments: {});
+    var _ticker = await controller.callAsyncJavaScript(functionBody: getTickerFunction, arguments: {});
 
-    Ticker ticker = Ticker.fromMap(_ticker?.value ?? {});
+    Map<String, dynamic> tickerValue = _ticker!.toMap().cast<String, dynamic>();
+
+    Ticker ticker = Ticker.fromMap(tickerValue['value'].cast<String, dynamic>());
     _exchangeStore.setTicker(ticker);
   },
 );

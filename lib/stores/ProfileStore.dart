@@ -106,24 +106,21 @@ abstract class _ProfileStore with Store {
   }
 
   @action
+  void setProfilePosts(posts) {
+    ProfileEntryResponse oldProfile = userProfile;
+    oldProfile.posts.addAll(posts);
+    userProfile = oldProfile;
+  }
+
+  @action
   Future<void> getUserProfile() async {
     try {
       isLoading = true;
-      final response = await _profileRepository.getUserProfile(payload: {
+      final profile = await _profileRepository.getUserProfile(payload: {
         "PublicKeyBase58Check": "",
         "Username": "CloutbookApp",
-        "UsernamePrefix": "",
-        "Description": "",
-        "OrderBy": "newest_last_post",
-        "NumToFetch": 1,
-        "ReaderPublicKeyBase58Check":
-            "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
-        "ModerationType": "",
-        "FetchUsersThatHODL": true,
-        "AddGlobalFeedBool": false
       });
-      isLoading = false;
-      setUserProfile(response);
+      setUserProfile(profile);
 
       final followers = await _profileRepository.getFollowers(payload: {
         "username": "cloutbookapp",
@@ -134,6 +131,19 @@ abstract class _ProfileStore with Store {
       });
 
       setUserFollowers(followers);
+
+      final posts = await _profileRepository.getPostsForPublicKey(payload: {
+        "PublicKeyBase58Check": "",
+        "Username": "CloutbookApp",
+        "ReaderPublicKeyBase58Check":
+            "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
+        "LastPostHashHex": "",
+        "NumToFetch": 50
+      }, profile: profile);
+
+      setProfilePosts(posts);
+
+      isLoading = false;
     } catch (e) {}
   }
 

@@ -6,6 +6,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:get_it/get_it.dart';
 
+import '../config/palette.dart';
+
 class ProfileHeader extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
 
@@ -20,14 +22,14 @@ class ProfileHeader extends HookWidget {
           Container(
             height: 100,
             width: 100,
-            margin: EdgeInsets.fromLTRB(14.0, 32.0, 8.0, 20.0),
+            margin: EdgeInsets.fromLTRB(14.0, 32.0, 8.0, 12.0),
             decoration: BoxDecoration(
               color: Colors.grey,
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 4),
+              border: Border.all(color: Colors.white60, width: 2),
+              borderRadius: BorderRadius.circular(10),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: BorderRadius.circular(10),
               child: Visibility(
                 visible: _profileStore.userProfile.profilePic != null,
                 child: Image.memory(avatar),
@@ -35,7 +37,7 @@ class ProfileHeader extends HookWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 14, top: 4.0, bottom: 16.0),
+            margin: EdgeInsets.only(left: 14, top: 0.0, bottom: 16.0),
             child: Text(
               '@${_profileStore.userProfile.username}',
               style: TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
@@ -47,7 +49,7 @@ class ProfileHeader extends HookWidget {
             child: ParsedText(
               text: '${_profileStore.userProfile.description}',
               alignment: TextAlign.start,
-              style: TextStyle(fontSize: 14, color: Colors.white, height: 1.3),
+              style: TextStyle(fontSize: 14, color: Colors.white, height: 1.4),
               parse: <MatchText>[
                 MatchText(
                   type: ParsedType.URL,
@@ -70,7 +72,7 @@ class ProfileHeader extends HookWidget {
                   },
                 ),
                 MatchText(
-                  pattern: r"\@[A-Za-z]\w+",
+                  pattern: r"(?<![A-Za-z])@[A-Za-z]\w+",
                   style: TextStyle(
                     color: Palette.primary4,
                     fontSize: 15,

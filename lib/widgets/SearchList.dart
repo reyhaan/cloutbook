@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 
 class SearchList extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
@@ -26,7 +27,7 @@ class SearchList extends HookWidget {
                   Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 14, 10, 0),
+                        padding: const EdgeInsets.fromLTRB(18, 14, 10, 10),
                         child: Text('${searchResults.length} Results'),
                       ),
                     ],
@@ -58,16 +59,16 @@ class ListItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var _profilePic = profile?.profilePic;
-    var urlPattern =
-        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
-    var match = new RegExp(urlPattern, caseSensitive: false)
-        .firstMatch(_profilePic.toString());
+    var urlPattern = r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    var match = new RegExp(urlPattern, caseSensitive: false).firstMatch(_profilePic.toString());
 
     final rerender = useState(render);
+    final formatter = new NumberFormat("#,###");
+    final coinPrice = formatter.format(double.parse(_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
     return Container(
-      margin: EdgeInsets.fromLTRB(11, 10, 11, 0),
-      padding: EdgeInsets.fromLTRB(10, 14, 8, 14),
+      margin: EdgeInsets.fromLTRB(11, 0, 11, 0),
+      padding: EdgeInsets.fromLTRB(10, 12, 8, 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         color: Palette.background,
@@ -81,9 +82,9 @@ class ListItem extends HookWidget {
               Row(
                 children: [
                   Container(
-                    height: 38,
-                    width: 38,
-                    margin: EdgeInsets.only(right: 18),
+                    height: 46,
+                    width: 46,
+                    margin: EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
@@ -91,9 +92,8 @@ class ListItem extends HookWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(21),
-                      child: match != null
-                          ? Image.network('$_profilePic')
-                          : Image.memory(processDataImage(_profilePic)),
+                      child:
+                          match != null ? Image.network('$_profilePic') : Image.memory(processDataImage(_profilePic)),
                     ),
                   ),
                   Column(
@@ -103,11 +103,7 @@ class ListItem extends HookWidget {
                       Container(
                         child: Text(
                           '@${profile?.username}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                          ),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -119,7 +115,12 @@ class ListItem extends HookWidget {
           Row(
             children: [
               Text(
-                  '~\$${_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)}'),
+                '~\$$coinPrice',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
               SizedBox(width: 20),
               GestureDetector(
                 onTap: () async {
@@ -139,9 +140,7 @@ class ListItem extends HookWidget {
                   color: Palette.background,
                   padding: EdgeInsets.all(4),
                   child: Icon(
-                    _exploreStore.isInWatchlist(profile)
-                        ? Icons.star
-                        : Icons.star_outline,
+                    _exploreStore.isInWatchlist(profile) ? Icons.star : Icons.star_outline,
                     size: 22.0,
                     color: Palette.hintColor,
                   ),

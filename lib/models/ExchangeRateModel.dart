@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 class ExchangeRate extends Equatable {
-  final int? nanosSold;
-  final int? satoshisPerBitCloutExchangeRate;
-  final int? usdCentsPerBitcoinExchangeRate;
+  final double? nanosSold;
+  final double? satoshisPerBitCloutExchangeRate;
+  final double? usdCentsPerBitcoinExchangeRate;
 
   ExchangeRate({
     this.nanosSold,
@@ -19,9 +19,11 @@ class ExchangeRate extends Equatable {
 
   factory ExchangeRate.fromMap(Map<String, dynamic> map) {
     return ExchangeRate(
-      nanosSold: map['NanosSold'],
-      satoshisPerBitCloutExchangeRate: map['SatoshisPerBitCloutExchangeRate'],
-      usdCentsPerBitcoinExchangeRate: map['USDCentsPerBitcoinExchangeRate'],
+      nanosSold: double.parse(map['NanosSold'].toString()),
+      satoshisPerBitCloutExchangeRate:
+          double.parse(map['SatoshisPerBitCloutExchangeRate'].toString()),
+      usdCentsPerBitcoinExchangeRate:
+          double.parse(map['USDCentsPerBitcoinExchangeRate'].toString()),
     );
   }
 }
