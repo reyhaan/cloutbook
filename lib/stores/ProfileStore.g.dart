@@ -142,6 +142,17 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   @override
+  void setProfilePosts(dynamic posts) {
+    final _$actionInfo = _$_ProfileStoreActionController.startAction(
+        name: '_ProfileStore.setProfilePosts');
+    try {
+      return super.setProfilePosts(posts);
+    } finally {
+      _$_ProfileStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 userProfile: ${userProfile},

@@ -49,7 +49,7 @@ class ProfileHeader extends HookWidget {
             child: ParsedText(
               text: '${_profileStore.userProfile.description}',
               alignment: TextAlign.start,
-              style: TextStyle(fontSize: 14, color: Colors.white, height: 1.3),
+              style: TextStyle(fontSize: 14, color: Colors.white, height: 1.4),
               parse: <MatchText>[
                 MatchText(
                   type: ParsedType.URL,
@@ -72,7 +72,7 @@ class ProfileHeader extends HookWidget {
                   },
                 ),
                 MatchText(
-                  pattern: r"\@[A-Za-z]\w+",
+                  pattern: r"(?<![A-Za-z])@[A-Za-z]\w+",
                   style: TextStyle(
                     color: Palette.primary4,
                     fontSize: 15,

@@ -7,6 +7,8 @@ import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:cloutbook/repository/HomeRepository.dart';
 import 'package:cloutbook/repository/ProfileRepository.dart';
+import 'package:cloutbook/routes/authGuard.dart';
+import 'package:cloutbook/routes/router.gr.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
@@ -79,6 +81,23 @@ class MyApp extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: MaterialApp(
+        builder: (_, navigator) => (Theme(
+          child: navigator!,
+          data: ThemeData(
+            appBarTheme: const AppBarTheme(backgroundColor: Palette.foreground),
+            scaffoldBackgroundColor: Palette.background,
+            primaryColor: Palette.primary,
+            accentColor: Palette.primary,
+            iconTheme: const IconThemeData(color: Colors.white),
+            fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
+            textTheme: GoogleFonts.ibmPlexSansTextTheme(
+              TextTheme(
+                bodyText1: TextStyle(color: Colors.white),
+                bodyText2: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        )),
         title: 'Cloutbook',
         debugShowCheckedModeBanner: false,
         routes: {

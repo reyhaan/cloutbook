@@ -58,11 +58,12 @@ class Post extends Equatable {
       ];
 
   factory Post.fromMap(Map<String, dynamic> map) {
-    ProfileEntryResponse profileEntryResponse;
+    ProfileEntryResponse profileEntryResponse = ProfileEntryResponse(posts: []);
 
-    if (map['ProfileEntryResponse'] != null) {}
-    profileEntryResponse =
-        ProfileEntryResponse.fromMap(map['ProfileEntryResponse']);
+    if (map['ProfileEntryResponse'] != null) {
+      profileEntryResponse =
+          ProfileEntryResponse.fromMap(map['ProfileEntryResponse']);
+    }
 
     return Post(
       body: map['Body'] ?? '',

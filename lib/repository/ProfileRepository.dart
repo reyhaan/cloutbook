@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloutbook/common/api_client/api_client.dart';
 import 'package:cloutbook/models/FailureModel.dart';
+import 'package:cloutbook/models/PostModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,10 @@ import 'package:injectable/injectable.dart';
 abstract class BaseProfileRepository {
   Future<ProfileEntryResponse> getUserProfile({
     Map<String, dynamic>? payload,
+  });
+  Future<List<Post>> getPostsForPublicKey({
+    required Map<String, dynamic> payload,
+    required ProfileEntryResponse profile,
   });
   Future<int> getFollowers({
     Map<String, dynamic>? payload,
@@ -31,15 +36,51 @@ class ProfileRepository extends BaseProfileRepository {
       final queryParams = payload;
 
       final response = await api.post(
-        '/get-profiles',
+        '/get-single-profile',
         queryParams,
       );
 
       if (response.statusCode == 200) {
         final data = Map<String, dynamic>.from(response.data);
-        return ProfileEntryResponse.fromMap(data['ProfilesFound'][0]);
+        return ProfileEntryResponse.fromMap(data['Profile']);
       }
       return ProfileEntryResponse(posts: []);
+    } on DioError catch (err) {
+      print(err);
+      throw Failure(message: err.response?.statusMessage);
+    } on SocketException catch (err) {
+      print(err);
+      throw Failure(message: 'Please check your connection.');
+    }
+  }
+
+  @override
+  Future<List<Post>> getPostsForPublicKey({
+    required Map<String, dynamic> payload,
+    required ProfileEntryResponse profile,
+  }) async {
+    try {
+      final queryParams = payload;
+
+      final response = await api.post(
+        '/get-posts-for-public-key',
+        queryParams,
+      );
+
+      if (response.statusCode == 200) {
+        final data = Map<String, dynamic>.from(response.data);
+        List<Map<String, dynamic>> posts =
+            List<Map<String, dynamic>>.from(data['Posts']);
+        List<Post> result = [];
+
+        posts.forEach((post) {
+          post['ProfileEntryResponse'] = profile.toJson();
+          result.add(Post.fromMap(post));
+        });
+
+        return result;
+      }
+      return [];
     } on DioError catch (err) {
       print(err);
       throw Failure(message: err.response?.statusMessage);

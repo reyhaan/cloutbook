@@ -10,6 +10,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:photo_view/photo_view.dart';
 
 class Posts extends HookWidget {
   final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
@@ -198,7 +199,7 @@ class PostItem extends StatelessWidget {
                         color: Colors.white, fontSize: 14, height: 1.3),
                     parse: <MatchText>[
                       MatchText(
-                        pattern: r"\@[A-Za-z]\w+",
+                        pattern: r"(?<![A-Za-z])@[A-Za-z]\w+",
                         style: TextStyle(
                           color: Palette.primary3,
                           fontSize: 15,
