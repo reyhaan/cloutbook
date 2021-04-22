@@ -5,50 +5,57 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i1;
+import 'package:cloutbook/screens/screens.dart' as _i2;
 import 'package:flutter/widgets.dart' as _i3;
 
-import '../screens/screens.dart' as _i2;
-
-class AppRouter extends _i1.RootStackRouter {
-  AppRouter();
+class FlutterRouter extends _i1.RootStackRouter {
+  FlutterRouter();
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
-    HomeScreen.name: (entry) {
-      return _i1.MaterialPageX(entry: entry, child: _i2.HomeScreen());
-    },
-    LoginScreen.name: (entry) {
+    LoginRoute.name: (entry) {
       var args = entry.routeData
-          .argsAs<LoginScreenArgs>(orElse: () => LoginScreenArgs());
-      return _i1.MaterialPageX(
+          .argsAs<LoginRouteArgs>(orElse: () => LoginRouteArgs());
+      return _i1.AdaptivePage(
           entry: entry, child: _i2.LoginScreen(key: args.key));
+    },
+    NavRoute.name: (entry) {
+      var args =
+          entry.routeData.argsAs<NavRouteArgs>(orElse: () => NavRouteArgs());
+      return _i1.AdaptivePage(
+          entry: entry, child: _i2.NavScreen(key: args.key));
     }
   };
 
   @override
   List<_i1.RouteConfig> get routes => [
-        _i1.RouteConfig(HomeScreen.name, path: '/'),
-        _i1.RouteConfig(LoginScreen.name, path: '/login'),
-        _i1.RouteConfig('*#redirect',
-            path: '*', redirectTo: '/', fullMatch: true)
+        _i1.RouteConfig(LoginRoute.name, path: '/'),
+        _i1.RouteConfig(NavRoute.name, path: '/nav-screen')
       ];
 }
 
-class HomeScreen extends _i1.PageRouteInfo {
-  const HomeScreen() : super(name, path: '/');
+class LoginRoute extends _i1.PageRouteInfo<LoginRouteArgs> {
+  LoginRoute({_i3.Key? key})
+      : super(name, path: '/', args: LoginRouteArgs(key: key));
 
-  static const String name = 'HomeScreen';
+  static const String name = 'LoginRoute';
 }
 
-class LoginScreen extends _i1.PageRouteInfo<LoginScreenArgs> {
-  LoginScreen({_i3.Key? key})
-      : super(name, path: '/login', args: LoginScreenArgs(key: key));
+class LoginRouteArgs {
+  const LoginRouteArgs({this.key});
 
-  static const String name = 'LoginScreen';
+  final _i3.Key? key;
 }
 
-class LoginScreenArgs {
-  const LoginScreenArgs({this.key});
+class NavRoute extends _i1.PageRouteInfo<NavRouteArgs> {
+  NavRoute({_i3.Key? key})
+      : super(name, path: '/nav-screen', args: NavRouteArgs(key: key));
+
+  static const String name = 'NavRoute';
+}
+
+class NavRouteArgs {
+  const NavRouteArgs({this.key});
 
   final _i3.Key? key;
 }

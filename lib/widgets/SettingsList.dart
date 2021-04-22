@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/routes/router.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,8 @@ class SettingsList extends HookWidget {
       child: Scaffold(
         body: Observer(
           builder: (_) {
-            final avatar = processDataImage(_profileStore.userProfile.profilePic ?? '');
+            final avatar =
+                processDataImage(_profileStore.userProfile.profilePic ?? '');
             return ListView(
               children: [
                 Padding(
@@ -38,13 +41,15 @@ class SettingsList extends HookWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Visibility(
-                            visible: _profileStore.userProfile.profilePic != null,
+                            visible:
+                                _profileStore.userProfile.profilePic != null,
                             child: Image.memory(avatar),
                           ),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 4, top: 4.0, bottom: 16.0),
+                        margin:
+                            EdgeInsets.only(left: 4, top: 4.0, bottom: 16.0),
                         child: Text(
                           '@${_profileStore.userProfile.username}',
                           style: TextStyle(
@@ -62,7 +67,8 @@ class SettingsList extends HookWidget {
                     Container(
                       padding: EdgeInsets.all(16),
                       margin: EdgeInsets.fromLTRB(8, 8, 0, 0),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0)),
                       child: Row(
                         children: [
                           Container(
@@ -81,22 +87,27 @@ class SettingsList extends HookWidget {
                 ),
                 Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      decoration: BoxDecoration(color: Palette.foreground, borderRadius: BorderRadius.circular(5.0)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text('Sign Out'),
-                          ),
-                          Icon(
-                            Icons.logout,
-                            size: 18.0,
-                            color: Palette.hintColor,
-                          ),
-                        ],
+                    GestureDetector(
+                      onTap: () => AutoRouter.of(context).replace(LoginRoute()),
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                        decoration: BoxDecoration(
+                            color: Palette.foreground,
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Text('Sign Out'),
+                            ),
+                            Icon(
+                              Icons.logout,
+                              size: 18.0,
+                              color: Palette.hintColor,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -106,7 +117,8 @@ class SettingsList extends HookWidget {
                     Container(
                       padding: EdgeInsets.all(16),
                       margin: EdgeInsets.fromLTRB(8, 8, 16, 0),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0)),
                       child: Row(
                         children: [
                           Container(

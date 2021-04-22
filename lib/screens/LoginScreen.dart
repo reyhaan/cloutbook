@@ -1,6 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/config/palette.dart';
-import 'package:cloutbook/screens/NavScreen.dart';
+import 'package:cloutbook/routes/router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -61,12 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NavScreen(),
-                      ),
-                    );
+                    AutoRouter.of(context).replace(NavRoute());
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
