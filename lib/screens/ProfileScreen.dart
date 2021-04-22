@@ -7,14 +7,17 @@ import 'package:get_it/get_it.dart';
 
 class ProfileScreen extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
+  final String username;
+
+  ProfileScreen({
+    Key? key,
+    this.username = '',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      _profileStore.getUserProfile();
-
-      // reset store when unmounted
-      // return _profileStore.reset;
+      _profileStore.getUserProfile(username: username);
     }, []);
 
     return Scaffold(

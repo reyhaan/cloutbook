@@ -8,6 +8,7 @@ export 'router.gr.dart';
   routes: <AutoRoute>[
     AutoRoute(page: LoginScreen, initial: true),
     AutoRoute(page: NavScreen),
+    AutoRoute(page: ProfileScreen),
   ],
 )
 class $FlutterRouter {}

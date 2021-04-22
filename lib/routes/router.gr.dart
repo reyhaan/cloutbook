@@ -24,13 +24,21 @@ class FlutterRouter extends _i1.RootStackRouter {
           entry.routeData.argsAs<NavRouteArgs>(orElse: () => NavRouteArgs());
       return _i1.AdaptivePage(
           entry: entry, child: _i2.NavScreen(key: args.key));
+    },
+    ProfileRoute.name: (entry) {
+      var args = entry.routeData
+          .argsAs<ProfileRouteArgs>(orElse: () => ProfileRouteArgs());
+      return _i1.AdaptivePage(
+          entry: entry,
+          child: _i2.ProfileScreen(key: args.key, username: args.username));
     }
   };
 
   @override
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(LoginRoute.name, path: '/'),
-        _i1.RouteConfig(NavRoute.name, path: '/nav-screen')
+        _i1.RouteConfig(NavRoute.name, path: '/nav-screen'),
+        _i1.RouteConfig(ProfileRoute.name, path: '/profile-screen')
       ];
 }
 
@@ -58,4 +66,21 @@ class NavRouteArgs {
   const NavRouteArgs({this.key});
 
   final _i3.Key? key;
+}
+
+class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
+  ProfileRoute({_i3.Key? key, String username = ''})
+      : super(name,
+            path: '/profile-screen',
+            args: ProfileRouteArgs(key: key, username: username));
+
+  static const String name = 'ProfileRoute';
+}
+
+class ProfileRouteArgs {
+  const ProfileRouteArgs({this.key, this.username = ''});
+
+  final _i3.Key? key;
+
+  final String username;
 }

@@ -51,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(width: 8.0),
                       Expanded(
                         child: TextField(
+                          style: TextStyle(color: Colors.white),
                           decoration: InputDecoration.collapsed(
                               hintText: 'username or public key',
                               hintStyle: TextStyle(

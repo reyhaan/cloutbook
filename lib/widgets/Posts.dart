@@ -215,7 +215,18 @@ class PostItem extends StatelessWidget {
                           fontSize: 15,
                         ),
                         onTap: (url) {
-                          print(url);
+                          launchURL(url);
+                          // print(url);
+                        },
+                      ),
+                      MatchText(
+                        type: ParsedType.EMAIL,
+                        style: TextStyle(
+                          color: Palette.primary3,
+                          fontSize: 15,
+                        ),
+                        onTap: (email) {
+                          print(email);
                         },
                       ),
                     ],

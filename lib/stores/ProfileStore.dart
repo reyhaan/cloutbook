@@ -113,17 +113,17 @@ abstract class _ProfileStore with Store {
   }
 
   @action
-  Future<void> getUserProfile() async {
+  Future<void> getUserProfile({username}) async {
     try {
       isLoading = true;
       final profile = await _profileRepository.getUserProfile(payload: {
         "PublicKeyBase58Check": "",
-        "Username": "CloutbookApp",
+        "Username": username,
       });
       setUserProfile(profile);
 
       final followers = await _profileRepository.getFollowers(payload: {
-        "username": "cloutbookapp",
+        "username": username,
         "PublicKeyBase58Check": "",
         "GetEntriesFollowingUsername": true,
         "LastPublicKeyBase58Check": "",
@@ -134,9 +134,8 @@ abstract class _ProfileStore with Store {
 
       final posts = await _profileRepository.getPostsForPublicKey(payload: {
         "PublicKeyBase58Check": "",
-        "Username": "CloutbookApp",
-        "ReaderPublicKeyBase58Check":
-            "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
+        "Username": username,
+        "ReaderPublicKeyBase58Check": profile.publicKeyBase58Check,
         "LastPostHashHex": "",
         "NumToFetch": 50
       }, profile: profile);
