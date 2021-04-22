@@ -4,15 +4,16 @@ import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/routes/router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 
-class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key}) : super(key: key);
+import '../stores/ProfileStore.dart';
 
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
+final TextEditingController? _usernameController = TextEditingController();
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreen extends HookWidget {
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,11 +52,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(width: 8.0),
                       Expanded(
                         child: TextField(
+                          controller: _usernameController,
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration.collapsed(
                               hintText: 'username or public key',
-                              hintStyle: TextStyle(
-                                  color: Palette.hintColor, fontSize: 14.0)),
+                              hintStyle: TextStyle(color: Palette.hintColor, fontSize: 14.0)),
                         ),
                       ),
                     ],
@@ -63,21 +64,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    _profileStore.loggedInProfile = _usernameController!.text;
                     AutoRouter.of(context).replace(NavRoute());
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(12),
                     margin: EdgeInsets.only(left: 30, right: 30),
-                    decoration: BoxDecoration(
-                        color: Palette.primary,
-                        borderRadius: BorderRadius.circular(5)),
+                    decoration: BoxDecoration(color: Palette.primary, borderRadius: BorderRadius.circular(5)),
                     child: Text.rich(
                       TextSpan(
                         children: [
                           WidgetSpan(
-                            child: Icon(CupertinoIcons.add,
-                                size: 19.0, color: Colors.white),
+                            child: Icon(CupertinoIcons.add, size: 19.0, color: Colors.white),
                           ),
                           TextSpan(
                             text: '  Add profile',
@@ -94,8 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
+                  padding: const EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
                   child: Text(
                     'Start by adding your profile by username or public key, please do not enter your pass phrase!',
                     style: TextStyle(color: Palette.hintColor),

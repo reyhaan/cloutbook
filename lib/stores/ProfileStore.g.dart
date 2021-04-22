@@ -75,6 +75,21 @@ mixin _$ProfileStore on _ProfileStore, Store {
     });
   }
 
+  final _$loggedInProfileAtom = Atom(name: '_ProfileStore.loggedInProfile');
+
+  @override
+  String get loggedInProfile {
+    _$loggedInProfileAtom.reportRead();
+    return super.loggedInProfile;
+  }
+
+  @override
+  set loggedInProfile(String value) {
+    _$loggedInProfileAtom.reportWrite(value, super.loggedInProfile, () {
+      super.loggedInProfile = value;
+    });
+  }
+
   final _$isLoadingAtom = Atom(name: '_ProfileStore.isLoading');
 
   @override
@@ -158,6 +173,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
     return '''
 userProfile: ${userProfile},
 userFollowers: ${userFollowers},
+loggedInProfile: ${loggedInProfile},
 isLoading: ${isLoading},
 inCirculation: ${inCirculation},
 coinPrice: ${coinPrice},

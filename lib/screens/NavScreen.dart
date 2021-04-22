@@ -1,40 +1,41 @@
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get_it/get_it.dart';
 
-class NavScreen extends StatefulWidget {
-  NavScreen({Key? key}) : super(key: key);
+import '../stores/ProfileStore.dart';
 
-  @override
-  _NavScreenState createState() => _NavScreenState();
-}
+final ProfileStore _profileStore = GetIt.I<ProfileStore>();
 
-class _NavScreenState extends State<NavScreen> {
+class NavScreen extends HookWidget {
   final List<Widget> _screens = [
     HomeScreen(),
-    ProfileScreen(),
+    ProfileScreen(
+      username: _profileStore.loggedInProfile,
+    ),
     ExploreScreen(),
     SettingsScreen()
   ];
-  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final _currentIndex = useState(0);
     return Container(
       color: Palette.background,
       child: SafeArea(
         child: Scaffold(
-          body: _screens[_currentIndex],
+          body: _screens[_currentIndex.value],
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor: Palette.foreground,
-            currentIndex: _currentIndex,
+            currentIndex: _currentIndex.value,
             selectedItemColor: Palette.primary4,
             selectedFontSize: 11.0,
             unselectedIconTheme: const IconThemeData(color: Colors.white30),
             unselectedItemColor: Colors.white30,
             unselectedFontSize: 11.0,
-            onTap: (index) => setState(() => _currentIndex = index),
+            onTap: (index) => _currentIndex.value = index,
             items: [
               BottomNavigationBarItem(
                 icon: new Icon(Icons.home),

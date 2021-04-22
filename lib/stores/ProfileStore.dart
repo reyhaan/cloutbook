@@ -21,10 +21,12 @@ abstract class _ProfileStore with Store {
   @observable
   String userFollowers = '-';
 
+  @observable
+  String loggedInProfile = '';
+
   @computed
   String get inCirculation {
-    return (userProfile.coinEntry!.coinsInCirculationNanos! / 1000000000)
-        .toStringAsFixed(4);
+    return (userProfile.coinEntry!.coinsInCirculationNanos! / 1000000000).toStringAsFixed(4);
   }
 
   @computed
@@ -35,13 +37,9 @@ abstract class _ProfileStore with Store {
         _exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate != null) {
       double? bitcoinInUSD = _exchangeStore.ticker.usd?.current;
       double? bitCoinsPerBitClout =
-          (_exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate! /
-                  100000000)
-              .toDouble();
+          (_exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate! / 100000000).toDouble();
       double? bitCloutPrice = (bitcoinInUSD! * bitCoinsPerBitClout);
-      return ((userProfile.coinPriceBitCloutNanos! / 1000000000) *
-              bitCloutPrice)
-          .toStringAsFixed(2);
+      return ((userProfile.coinPriceBitCloutNanos! / 1000000000) * bitCloutPrice).toStringAsFixed(2);
     }
     return '0';
   }
@@ -54,13 +52,9 @@ abstract class _ProfileStore with Store {
         _exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate != null) {
       double? bitcoinInUSD = _exchangeStore.ticker.usd?.current;
       double? bitCoinsPerBitClout =
-          (_exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate! /
-                  100000000)
-              .toDouble();
+          (_exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate! / 100000000).toDouble();
       double? bitCloutPrice = (bitcoinInUSD! * bitCoinsPerBitClout);
-      return ((userProfile.coinEntry!.bitCloutLockedNanos! / 1000000000) *
-              bitCloutPrice)
-          .toStringAsFixed(2);
+      return ((userProfile.coinEntry!.bitCloutLockedNanos! / 1000000000) * bitCloutPrice).toStringAsFixed(2);
     }
     return '0';
   }
@@ -68,13 +62,10 @@ abstract class _ProfileStore with Store {
   @computed
   String get bitCloutPrice {
     final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
-    if (_exchangeStore.ticker.usd != null &&
-        _exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate != null) {
+    if (_exchangeStore.ticker.usd != null && _exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate != null) {
       double? bitcoinInUSD = _exchangeStore.ticker.usd?.current;
       double? bitCoinsPerBitClout =
-          (_exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate! /
-                  100000000)
-              .toDouble();
+          (_exchangeStore.exchangeRate.satoshisPerBitCloutExchangeRate! / 100000000).toDouble();
       return (bitcoinInUSD! * bitCoinsPerBitClout).toStringAsFixed(2);
     }
     return '0';
@@ -82,8 +73,7 @@ abstract class _ProfileStore with Store {
 
   @computed
   String get totalUSDMarketCap {
-    return (double.parse(coinPrice) * double.parse(inCirculation))
-        .toStringAsFixed(2);
+    return (double.parse(coinPrice) * double.parse(inCirculation)).toStringAsFixed(2);
   }
 
   @observable
