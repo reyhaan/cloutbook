@@ -7,6 +7,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import '../config/palette.dart';
+
 class SettingsList extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
 
@@ -16,40 +18,40 @@ class SettingsList extends HookWidget {
       child: Scaffold(
         body: Observer(
           builder: (_) {
-            final avatar =
-                processDataImage(_profileStore.userProfile.profilePic ?? '');
+            final avatar = processDataImage(_profileStore.userProfile.profilePic ?? '');
             return ListView(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 24.0, bottom: 16.0),
+                  padding: const EdgeInsets.only(top: 24.0, bottom: 0.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        height: 60,
-                        width: 60,
+                        height: 48,
+                        width: 48,
                         margin: EdgeInsets.fromLTRB(20.0, 0.0, 8.0, 0.0),
                         decoration: BoxDecoration(
                           color: Colors.grey,
-                          shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(7),
                           border: Border.all(color: Colors.white, width: 1),
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(8),
                           child: Visibility(
-                            visible:
-                                _profileStore.userProfile.profilePic != null,
+                            visible: _profileStore.userProfile.profilePic != null,
                             child: Image.memory(avatar),
                           ),
                         ),
                       ),
                       Container(
-                        margin:
-                            EdgeInsets.only(left: 14, top: 4.0, bottom: 16.0),
+                        margin: EdgeInsets.only(left: 4, top: 4.0, bottom: 16.0),
                         child: Text(
                           '@${_profileStore.userProfile.username}',
                           style: TextStyle(
-                              fontWeight: FontWeight.w900, fontSize: 16),
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -59,9 +61,8 @@ class SettingsList extends HookWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(8, 8, 16, 0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0)),
+                      margin: EdgeInsets.fromLTRB(8, 8, 0, 0),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
                       child: Row(
                         children: [
                           Container(
@@ -82,10 +83,8 @@ class SettingsList extends HookWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 8, 16, 0),
-                      decoration: BoxDecoration(
-                          color: Palette.foreground,
-                          borderRadius: BorderRadius.circular(5.0)),
+                      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      decoration: BoxDecoration(color: Palette.foreground, borderRadius: BorderRadius.circular(5.0)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -106,9 +105,8 @@ class SettingsList extends HookWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(8, 20, 16, 0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0)),
+                      margin: EdgeInsets.fromLTRB(8, 8, 16, 0),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
                       child: Row(
                         children: [
                           Container(
@@ -129,10 +127,14 @@ class SettingsList extends HookWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
                       decoration: BoxDecoration(
-                          color: Palette.foreground,
-                          borderRadius: BorderRadius.circular(5.0)),
+                        color: Palette.foreground,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          topRight: Radius.circular(5),
+                        ),
+                      ),
                       child: Row(
                         children: [
                           Container(
@@ -147,10 +149,10 @@ class SettingsList extends HookWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      margin: EdgeInsets.fromLTRB(16, 1, 16, 0),
                       decoration: BoxDecoration(
-                          color: Palette.foreground,
-                          borderRadius: BorderRadius.circular(5.0)),
+                        color: Palette.foreground,
+                      ),
                       child: Row(
                         children: [
                           Container(
@@ -165,10 +167,14 @@ class SettingsList extends HookWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      margin: EdgeInsets.fromLTRB(16, 1, 16, 0),
                       decoration: BoxDecoration(
-                          color: Palette.foreground,
-                          borderRadius: BorderRadius.circular(5.0)),
+                        color: Palette.foreground,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(5),
+                          bottomRight: Radius.circular(5),
+                        ),
+                      ),
                       child: Row(
                         children: [
                           Container(

@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 class ExchangeRate extends Equatable {
-  final int? nanosSold;
-  final int? satoshisPerBitCloutExchangeRate;
-  final int? usdCentsPerBitcoinExchangeRate;
+  final double? nanosSold;
+  final double? satoshisPerBitCloutExchangeRate;
+  final double? usdCentsPerBitcoinExchangeRate;
 
   ExchangeRate({
     this.nanosSold,
