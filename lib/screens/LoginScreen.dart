@@ -64,8 +64,10 @@ class LoginScreen extends HookWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    _profileStore.loggedInProfile = _usernameController!.text;
-                    AutoRouter.of(context).replace(NavRoute());
+                    if (_usernameController!.text.isNotEmpty) {
+                      _profileStore.loggedInProfile = _usernameController!.text;
+                      AutoRouter.of(context).replace(NavRoute());
+                    }
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,

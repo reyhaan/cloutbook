@@ -19,22 +19,26 @@ class ProfileHeader extends HookWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 100,
-            width: 100,
-            margin: EdgeInsets.fromLTRB(14.0, 32.0, 8.0, 12.0),
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              border: Border.all(color: Colors.white60, width: 2),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Visibility(
-                visible: _profileStore.userProfile.profilePic != null,
-                child: Image.memory(avatar),
+          Row(
+            children: [
+              Container(
+                height: 100,
+                width: 100,
+                margin: EdgeInsets.fromLTRB(14.0, 32.0, 8.0, 12.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  border: Border.all(color: Colors.white60, width: 2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Visibility(
+                    visible: _profileStore.userProfile.profilePic != null,
+                    child: Image.memory(avatar),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
           Container(
             margin: EdgeInsets.only(left: 14, top: 0.0, bottom: 16.0),
@@ -45,9 +49,9 @@ class ProfileHeader extends HookWidget {
           ),
           Container(
             padding: EdgeInsets.only(left: 14, right: 40),
-            margin: EdgeInsets.only(bottom: 5.0),
+            margin: EdgeInsets.only(bottom: 24.0),
             child: ParsedText(
-              text: '${_profileStore.userProfile.description}',
+              text: '${_profileStore.userProfile.description}'.trimRight(),
               alignment: TextAlign.start,
               style: TextStyle(fontSize: 14, color: Colors.white, height: 1.4),
               parse: <MatchText>[
