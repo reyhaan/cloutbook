@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/PostModel.dart';
+import 'package:cloutbook/routes/router.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
@@ -178,7 +180,7 @@ class PostItem extends HookWidget {
                         WidgetSpan(
                           child: Icon(
                             CupertinoIcons.arrow_2_squarepath,
-                            size: 18.0,
+                            size: 16.0,
                             color: Colors.white60,
                           ),
                         ),
@@ -212,12 +214,18 @@ class PostItem extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Text(
-                        '@${_post?.profileEntryResponse?.username}',
-                        style: TextStyle(
-                          color: Palette.primary4,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                      child: GestureDetector(
+                        onTap: () {
+                          String? username = _post?.profileEntryResponse?.username!;
+                          AutoRouter.of(context).push(ProfileRoute(username: username!));
+                        },
+                        child: Text(
+                          '@${_post?.profileEntryResponse?.username}',
+                          style: TextStyle(
+                            color: Palette.primary4,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
@@ -245,6 +253,7 @@ class PostItem extends HookWidget {
                               fontSize: 15,
                             ),
                             onTap: (name) {
+                              AutoRouter.of(context).push(ProfileRoute(username: name));
                               print(name);
                             },
                           ),
@@ -283,14 +292,19 @@ class PostItem extends HookWidget {
                           padding: const EdgeInsets.only(right: 16.0),
                           child: ConstrainedBox(
                             constraints: BoxConstraints(maxHeight: 200),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    imageUrl,
+                            child: GestureDetector(
+                              onTap: () {
+                                AutoRouter.of(context).push(ImageViewerRoute(imageUrl: imageUrl));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      imageUrl,
+                                    ),
+                                    fit: BoxFit.fitWidth,
                                   ),
-                                  fit: BoxFit.fitWidth,
                                 ),
                               ),
                             ),
