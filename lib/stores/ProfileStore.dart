@@ -4,6 +4,8 @@ import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
+import '../models/ProfileModel.dart';
+
 part 'ProfileStore.g.dart';
 
 class ProfileStore extends _ProfileStore with _$ProfileStore {
@@ -134,6 +136,21 @@ abstract class _ProfileStore with Store {
 
       isLoading = false;
     } catch (e) {}
+  }
+
+  @action
+  Future<ProfileEntryResponse> getPosterProfile({publicKey}) async {
+    try {
+      isLoading = true;
+      final profile = await _profileRepository.getUserProfile(payload: {
+        "PublicKeyBase58Check": publicKey,
+        "Username": "",
+      });
+      isLoading = false;
+      return profile;
+    } catch (e) {
+      throw e;
+    }
   }
 
   @action

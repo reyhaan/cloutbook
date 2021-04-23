@@ -114,6 +114,15 @@ mixin _$ProfileStore on _ProfileStore, Store {
         .run(() => super.getUserProfile(username: username));
   }
 
+  final _$getPosterProfileAsyncAction =
+      AsyncAction('_ProfileStore.getPosterProfile');
+
+  @override
+  Future<ProfileEntryResponse> getPosterProfile({dynamic publicKey}) {
+    return _$getPosterProfileAsyncAction
+        .run(() => super.getPosterProfile(publicKey: publicKey));
+  }
+
   final _$getFollowersAsyncAction = AsyncAction('_ProfileStore.getFollowers');
 
   @override

@@ -16,6 +16,7 @@ class Post extends Equatable {
   final String? posterPublicKeyBase58Check;
   final ProfileEntryResponse? profileEntryResponse;
   final int? recloutCount;
+  final Post? recloutedPostEntryResponse;
   final int? stakeMultipleBasisPoints;
   final int timestampNanos;
 
@@ -34,6 +35,7 @@ class Post extends Equatable {
     this.posterPublicKeyBase58Check,
     this.profileEntryResponse,
     this.recloutCount,
+    this.recloutedPostEntryResponse,
     this.stakeMultipleBasisPoints,
     required this.timestampNanos,
   });
@@ -53,16 +55,21 @@ class Post extends Equatable {
         posterPublicKeyBase58Check,
         profileEntryResponse,
         recloutCount,
+        recloutedPostEntryResponse,
         stakeMultipleBasisPoints,
         timestampNanos,
       ];
 
   factory Post.fromMap(Map<String, dynamic> map) {
-    ProfileEntryResponse profileEntryResponse = ProfileEntryResponse(posts: []);
+    ProfileEntryResponse? profileEntryResponse;
+    Post? recloutedPostEntryResponse;
 
     if (map['ProfileEntryResponse'] != null) {
-      profileEntryResponse =
-          ProfileEntryResponse.fromMap(map['ProfileEntryResponse']);
+      profileEntryResponse = ProfileEntryResponse.fromMap(map['ProfileEntryResponse']);
+    }
+
+    if (map['RecloutedPostEntryResponse'] != null) {
+      recloutedPostEntryResponse = Post.fromMap(map['RecloutedPostEntryResponse']);
     }
 
     return Post(
@@ -80,6 +87,7 @@ class Post extends Equatable {
       posterPublicKeyBase58Check: map['PosterPublicKeyBase58Check'] ?? '',
       profileEntryResponse: profileEntryResponse,
       recloutCount: map['RecloutCount'] ?? 0,
+      recloutedPostEntryResponse: recloutedPostEntryResponse,
       stakeMultipleBasisPoints: map['StakeMultipleBasisPoints'] ?? 0,
       timestampNanos: map['TimestampNanos'],
     );
@@ -100,6 +108,7 @@ class Post extends Equatable {
         "PosterPublicKeyBase58Check": this.posterPublicKeyBase58Check,
         "ProfileEntryResponse": this.profileEntryResponse,
         "RecloutCount": this.recloutCount,
+        "RecloutedPostEntryResponse": this.recloutedPostEntryResponse,
         "StakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
         "TimestampNanos": this.timestampNanos,
       };
