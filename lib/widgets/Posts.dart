@@ -178,7 +178,7 @@ class PostItem extends HookWidget {
                         WidgetSpan(
                           child: Icon(
                             CupertinoIcons.arrow_2_squarepath,
-                            size: 18.0,
+                            size: 16.0,
                             color: Colors.white60,
                           ),
                         ),
