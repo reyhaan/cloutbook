@@ -5,50 +5,62 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i1;
+import 'package:cloutbook/screens/screens.dart' as _i2;
 import 'package:flutter/widgets.dart' as _i3;
 
-import '../screens/screens.dart' as _i2;
-
-class AppRouter extends _i1.RootStackRouter {
-  AppRouter();
+class FlutterRouter extends _i1.RootStackRouter {
+  FlutterRouter();
 
   @override
   final Map<String, _i1.PageFactory> pagesMap = {
-    HomeScreen.name: (entry) {
-      return _i1.MaterialPageX(entry: entry, child: _i2.HomeScreen());
+    LoginRoute.name: (entry) {
+      return _i1.AdaptivePage(entry: entry, child: _i2.LoginScreen());
     },
-    LoginScreen.name: (entry) {
+    NavRoute.name: (entry) {
+      return _i1.AdaptivePage(entry: entry, child: _i2.NavScreen());
+    },
+    ProfileRoute.name: (entry) {
       var args = entry.routeData
-          .argsAs<LoginScreenArgs>(orElse: () => LoginScreenArgs());
-      return _i1.MaterialPageX(
-          entry: entry, child: _i2.LoginScreen(key: args.key));
+          .argsAs<ProfileRouteArgs>(orElse: () => ProfileRouteArgs());
+      return _i1.AdaptivePage(
+          entry: entry,
+          child: _i2.ProfileScreen(key: args.key, username: args.username));
     }
   };
 
   @override
   List<_i1.RouteConfig> get routes => [
-        _i1.RouteConfig(HomeScreen.name, path: '/'),
-        _i1.RouteConfig(LoginScreen.name, path: '/login'),
-        _i1.RouteConfig('*#redirect',
-            path: '*', redirectTo: '/', fullMatch: true)
+        _i1.RouteConfig(LoginRoute.name, path: '/'),
+        _i1.RouteConfig(NavRoute.name, path: '/nav-screen'),
+        _i1.RouteConfig(ProfileRoute.name, path: '/profile-screen')
       ];
 }
 
-class HomeScreen extends _i1.PageRouteInfo {
-  const HomeScreen() : super(name, path: '/');
+class LoginRoute extends _i1.PageRouteInfo {
+  const LoginRoute() : super(name, path: '/');
 
-  static const String name = 'HomeScreen';
+  static const String name = 'LoginRoute';
 }
 
-class LoginScreen extends _i1.PageRouteInfo<LoginScreenArgs> {
-  LoginScreen({_i3.Key? key})
-      : super(name, path: '/login', args: LoginScreenArgs(key: key));
+class NavRoute extends _i1.PageRouteInfo {
+  const NavRoute() : super(name, path: '/nav-screen');
 
-  static const String name = 'LoginScreen';
+  static const String name = 'NavRoute';
 }
 
-class LoginScreenArgs {
-  const LoginScreenArgs({this.key});
+class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
+  ProfileRoute({_i3.Key? key, String username = ''})
+      : super(name,
+            path: '/profile-screen',
+            args: ProfileRouteArgs(key: key, username: username));
+
+  static const String name = 'ProfileRoute';
+}
+
+class ProfileRouteArgs {
+  const ProfileRouteArgs({this.key, this.username = ''});
 
   final _i3.Key? key;
+
+  final String username;
 }

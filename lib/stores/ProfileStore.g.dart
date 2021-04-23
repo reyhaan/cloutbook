@@ -75,6 +75,21 @@ mixin _$ProfileStore on _ProfileStore, Store {
     });
   }
 
+  final _$loggedInProfileAtom = Atom(name: '_ProfileStore.loggedInProfile');
+
+  @override
+  String get loggedInProfile {
+    _$loggedInProfileAtom.reportRead();
+    return super.loggedInProfile;
+  }
+
+  @override
+  set loggedInProfile(String value) {
+    _$loggedInProfileAtom.reportWrite(value, super.loggedInProfile, () {
+      super.loggedInProfile = value;
+    });
+  }
+
   final _$isLoadingAtom = Atom(name: '_ProfileStore.isLoading');
 
   @override
@@ -94,8 +109,18 @@ mixin _$ProfileStore on _ProfileStore, Store {
       AsyncAction('_ProfileStore.getUserProfile');
 
   @override
-  Future<void> getUserProfile() {
-    return _$getUserProfileAsyncAction.run(() => super.getUserProfile());
+  Future<void> getUserProfile({dynamic username}) {
+    return _$getUserProfileAsyncAction
+        .run(() => super.getUserProfile(username: username));
+  }
+
+  final _$getPosterProfileAsyncAction =
+      AsyncAction('_ProfileStore.getPosterProfile');
+
+  @override
+  Future<ProfileEntryResponse> getPosterProfile({dynamic publicKey}) {
+    return _$getPosterProfileAsyncAction
+        .run(() => super.getPosterProfile(publicKey: publicKey));
   }
 
   final _$getFollowersAsyncAction = AsyncAction('_ProfileStore.getFollowers');
@@ -157,6 +182,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
     return '''
 userProfile: ${userProfile},
 userFollowers: ${userFollowers},
+loggedInProfile: ${loggedInProfile},
 isLoading: ${isLoading},
 inCirculation: ${inCirculation},
 coinPrice: ${coinPrice},

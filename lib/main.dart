@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/api_client/api_client.dart';
 import 'package:cloutbook/models/HiveWatchlistModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
@@ -76,34 +77,16 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final FlutterRouter _flutterRouter = FlutterRouter();
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
-      child: MaterialApp(
-        builder: (_, navigator) => (Theme(
-          child: navigator!,
-          data: ThemeData(
-            appBarTheme: const AppBarTheme(backgroundColor: Palette.foreground),
-            scaffoldBackgroundColor: Palette.background,
-            primaryColor: Palette.primary,
-            accentColor: Palette.primary,
-            iconTheme: const IconThemeData(color: Colors.white),
-            fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
-            textTheme: GoogleFonts.ibmPlexSansTextTheme(
-              TextTheme(
-                bodyText1: TextStyle(color: Colors.white),
-                bodyText2: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        )),
+      child: MaterialApp.router(
+        routerDelegate: _flutterRouter.delegate(),
+        routeInformationParser: _flutterRouter.defaultRouteParser(),
         title: 'Cloutbook',
         debugShowCheckedModeBanner: false,
-        routes: {
-          '/': (context) => NavScreen(),
-          '/home': (context) => NavScreen(),
-        },
         theme: ThemeData(
           appBarTheme: const AppBarTheme(backgroundColor: Palette.foreground),
           scaffoldBackgroundColor: Palette.background,

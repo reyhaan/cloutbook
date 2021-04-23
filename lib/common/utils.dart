@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
 
+import 'package:url_launcher/url_launcher.dart';
+
 class Debouncer {
   int? milliseconds = 0;
   VoidCallback? action;
@@ -58,3 +60,6 @@ class NumberFormatter {
     }
   }
 }
+
+void launchURL(url) async =>
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';

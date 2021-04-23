@@ -10,7 +10,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:photo_view/photo_view.dart';
+import '../stores/ProfileStore.dart';
 
 class Posts extends HookWidget {
   final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
@@ -108,29 +108,45 @@ class Posts extends HookWidget {
   }
 }
 
-class PostItem extends StatelessWidget {
+class PostItem extends HookWidget {
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final Post? post;
 
-  const PostItem({
+  PostItem({
     Key? key,
     this.post,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final avatar = processDataImage(post?.profileEntryResponse?.profilePic);
+    Post? _post = post;
+    bool isReclouted = false;
+    String? posterName = _profileStore.userProfile.username;
 
+    useEffect(() {
+      // check if the post is a reclouted post
+      if (post?.recloutedPostEntryResponse != null) {
+        _post = post?.recloutedPostEntryResponse;
+        isReclouted = true;
+
+        // get profile of the person who reclouted this post
+        posterName = post?.profileEntryResponse?.username;
+      }
+    }, []);
+
+    // get avatar
+    final avatar = processDataImage(_post?.profileEntryResponse?.profilePic);
+
+    // get image urls for this post
     var imageUrl = '';
-
-    if (post?.imageUrls != null) {
-      var l = post?.imageUrls?.length;
-
+    if (_post?.imageUrls != null) {
+      var l = _post?.imageUrls?.length;
       if (l! > 0) {
-        imageUrl = post?.imageUrls?[0];
+        imageUrl = _post?.imageUrls?[0];
       }
     }
 
-    final int given = post?.timestampNanos as int;
+    final int given = _post?.timestampNanos as int;
     final diff = (given / 1000000000).floor();
     final utc = Jiffy.unix(diff).utc();
     final fromNow = Jiffy(utc).fromNow();
@@ -147,172 +163,209 @@ class PostItem extends StatelessWidget {
           ),
         ),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          Container(
-            height: 48,
-            width: 48,
-            margin: EdgeInsets.fromLTRB(12.0, 0.0, 14.0, 8.0),
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 2),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(21),
-              child: Image.memory(avatar),
-            ),
-          ),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Visibility(
+            visible: isReclouted,
+            child: Row(
               children: [
-                Container(
-                  child: Text(
-                    '@${post?.profileEntryResponse?.username}',
-                    style: TextStyle(
-                      color: Palette.primary4,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 2, bottom: 6),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0, left: 14.0),
                   child: Text.rich(
                     TextSpan(
+                      style: TextStyle(color: Colors.white60),
                       children: [
-                        TextSpan(
-                            text: '$timeElapsed',
-                            style: TextStyle(color: Colors.grey, fontSize: 12)),
+                        WidgetSpan(
+                          child: Icon(
+                            CupertinoIcons.arrow_2_squarepath,
+                            size: 18.0,
+                            color: Colors.white60,
+                          ),
+                        ),
+                        TextSpan(text: '  @$posterName reclouted'),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 5.0),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: ParsedText(
-                    text: post?.body ?? '',
-                    style: TextStyle(
-                        color: Colors.white, fontSize: 14, height: 1.3),
-                    parse: <MatchText>[
-                      MatchText(
-                        pattern: r"(?<![A-Za-z])@[A-Za-z]\w+",
+              ],
+            ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 48,
+                width: 48,
+                margin: EdgeInsets.fromLTRB(12.0, 0.0, 14.0, 8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 2),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(21),
+                  child: Image.memory(avatar),
+                ),
+              ),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text(
+                        '@${_post?.profileEntryResponse?.username}',
                         style: TextStyle(
-                          color: Palette.primary3,
+                          color: Palette.primary4,
+                          fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
-                        onTap: (name) {
-                          print(name);
-                        },
                       ),
-                      MatchText(
-                        type: ParsedType.URL,
-                        style: TextStyle(
-                          color: Palette.primary3,
-                          fontSize: 15,
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 2, bottom: 6),
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(text: '$timeElapsed', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                          ],
                         ),
-                        onTap: (url) {
-                          print(url);
-                        },
                       ),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: post?.body != '',
-                  child: SizedBox(height: 14),
-                ),
-                Visibility(
-                  visible: imageUrl != '',
-                  child: Center(
-                    child: Padding(
+                    ),
+                    SizedBox(height: 5.0),
+                    Padding(
                       padding: const EdgeInsets.only(right: 16.0),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxHeight: 200),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                imageUrl,
+                      child: ParsedText(
+                        text: _post?.body ?? '',
+                        style: TextStyle(color: Colors.white, fontSize: 14, height: 1.3),
+                        parse: <MatchText>[
+                          MatchText(
+                            pattern: r"(?<![A-Za-z])@[A-Za-z]\w+",
+                            style: TextStyle(
+                              color: Palette.primary3,
+                              fontSize: 15,
+                            ),
+                            onTap: (name) {
+                              print(name);
+                            },
+                          ),
+                          MatchText(
+                            type: ParsedType.URL,
+                            style: TextStyle(
+                              color: Palette.primary3,
+                              fontSize: 15,
+                            ),
+                            onTap: (url) {
+                              launchURL(url);
+                              // print(url);
+                            },
+                          ),
+                          MatchText(
+                            type: ParsedType.EMAIL,
+                            style: TextStyle(
+                              color: Palette.primary3,
+                              fontSize: 15,
+                            ),
+                            onTap: (email) {
+                              print(email);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: _post?.body != '',
+                      child: SizedBox(height: 14),
+                    ),
+                    Visibility(
+                      visible: imageUrl != '',
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxHeight: 200),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    imageUrl,
+                                  ),
+                                  fit: BoxFit.fitWidth,
+                                ),
                               ),
-                              fit: BoxFit.fitWidth,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Visibility(
-                  visible: imageUrl != '',
-                  child: SizedBox(height: 20),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                          style: TextStyle(color: Colors.white60),
-                          children: [
-                            WidgetSpan(
-                              child: Icon(
-                                CupertinoIcons.bubble_left,
-                                size: 18.0,
-                                color: Colors.white60,
-                              ),
+                    Visibility(
+                      visible: imageUrl != '',
+                      child: SizedBox(height: 20),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4, right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              style: TextStyle(color: Colors.white60),
+                              children: [
+                                WidgetSpan(
+                                  child: Icon(
+                                    CupertinoIcons.bubble_left,
+                                    size: 18.0,
+                                    color: Colors.white60,
+                                  ),
+                                ),
+                                TextSpan(text: '  ${_post?.commentCount}'),
+                              ],
                             ),
-                            TextSpan(text: '  ${post?.commentCount}'),
-                          ],
-                        ),
-                      ),
-                      Text.rich(
-                        TextSpan(
-                          style: TextStyle(color: Colors.white60),
-                          children: [
-                            WidgetSpan(
-                              child: Icon(
-                                CupertinoIcons.arrow_2_squarepath,
-                                size: 18.0,
-                                color: Colors.white60,
-                              ),
+                          ),
+                          Text.rich(
+                            TextSpan(
+                              style: TextStyle(color: Colors.white60),
+                              children: [
+                                WidgetSpan(
+                                  child: Icon(
+                                    CupertinoIcons.arrow_2_squarepath,
+                                    size: 18.0,
+                                    color: Colors.white60,
+                                  ),
+                                ),
+                                TextSpan(text: '  ${_post?.recloutCount}'),
+                              ],
                             ),
-                            TextSpan(text: '  ${post?.recloutCount}'),
-                          ],
-                        ),
-                      ),
-                      Text.rich(
-                        TextSpan(
-                          style: TextStyle(color: Colors.white60),
-                          children: [
-                            WidgetSpan(
-                              child: Icon(
-                                CupertinoIcons.heart,
-                                size: 18.0,
-                                color: Colors.white60,
-                              ),
+                          ),
+                          Text.rich(
+                            TextSpan(
+                              style: TextStyle(color: Colors.white60),
+                              children: [
+                                WidgetSpan(
+                                  child: Icon(
+                                    CupertinoIcons.heart,
+                                    size: 18.0,
+                                    color: Colors.white60,
+                                  ),
+                                ),
+                                TextSpan(text: '  ${_post?.likeCount}'),
+                              ],
                             ),
-                            TextSpan(text: '  ${post?.likeCount}'),
-                          ],
-                        ),
+                          ),
+                          Text.rich(
+                            TextSpan(
+                              style: TextStyle(color: Colors.white60),
+                              children: [],
+                            ),
+                          ),
+                        ],
                       ),
-                      Text.rich(
-                        TextSpan(
-                          style: TextStyle(color: Colors.white60),
-                          children: [],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
+              )
+            ],
+          ),
         ],
       ),
     );

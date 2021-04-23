@@ -37,7 +37,7 @@ class ProfileMetadata extends HookWidget {
               children: [
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(14),
                     margin: EdgeInsets.only(left: 12, right: 7),
                     decoration: BoxDecoration(
                       color: Palette.foreground,
@@ -50,7 +50,7 @@ class ProfileMetadata extends HookWidget {
                           return Text(
                             followers,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           );
@@ -66,7 +66,7 @@ class ProfileMetadata extends HookWidget {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(14),
                     margin: EdgeInsets.only(left: 7, right: 12),
                     decoration: BoxDecoration(
                       color: Palette.foreground,
@@ -79,7 +79,7 @@ class ProfileMetadata extends HookWidget {
                             '\$${_profileStore.coinPrice}',
                             textAlign: TextAlign.end,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           );
@@ -170,7 +170,7 @@ class ProfileMetadata extends HookWidget {
           //   }),
           // ),
           Container(
-            padding: const EdgeInsets.fromLTRB(18, 16, 10, 16),
+            padding: const EdgeInsets.fromLTRB(18, 14, 10, 16),
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               border: Border(

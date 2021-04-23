@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/routes/router.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -81,22 +83,28 @@ class SettingsList extends HookWidget {
                 ),
                 Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      decoration: BoxDecoration(color: Palette.foreground, borderRadius: BorderRadius.circular(5.0)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text('Sign Out'),
-                          ),
-                          Icon(
-                            Icons.logout,
-                            size: 18.0,
-                            color: Palette.hintColor,
-                          ),
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        _profileStore.loggedInProfile = '';
+                        AutoRouter.of(context).replace(LoginRoute());
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                        decoration: BoxDecoration(color: Palette.foreground, borderRadius: BorderRadius.circular(5.0)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Text('Sign Out'),
+                            ),
+                            Icon(
+                              Icons.logout,
+                              size: 18.0,
+                              color: Palette.hintColor,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
