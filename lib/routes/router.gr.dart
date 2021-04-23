@@ -25,6 +25,13 @@ class FlutterRouter extends _i1.RootStackRouter {
       return _i1.AdaptivePage(
           entry: entry,
           child: _i2.ProfileScreen(key: args.key, username: args.username));
+    },
+    ImageViewerRoute.name: (entry) {
+      var args = entry.routeData
+          .argsAs<ImageViewerRouteArgs>(orElse: () => ImageViewerRouteArgs());
+      return _i1.AdaptivePage(
+          entry: entry,
+          child: _i2.ImageViewerScreen(key: args.key, imageUrl: args.imageUrl));
     }
   };
 
@@ -32,7 +39,8 @@ class FlutterRouter extends _i1.RootStackRouter {
   List<_i1.RouteConfig> get routes => [
         _i1.RouteConfig(LoginRoute.name, path: '/'),
         _i1.RouteConfig(NavRoute.name, path: '/nav-screen'),
-        _i1.RouteConfig(ProfileRoute.name, path: '/profile-screen')
+        _i1.RouteConfig(ProfileRoute.name, path: '/profile-screen'),
+        _i1.RouteConfig(ImageViewerRoute.name, path: '/image-viewer-screen')
       ];
 }
 
@@ -63,4 +71,21 @@ class ProfileRouteArgs {
   final _i3.Key? key;
 
   final String username;
+}
+
+class ImageViewerRoute extends _i1.PageRouteInfo<ImageViewerRouteArgs> {
+  ImageViewerRoute({_i3.Key? key, dynamic imageUrl})
+      : super(name,
+            path: '/image-viewer-screen',
+            args: ImageViewerRouteArgs(key: key, imageUrl: imageUrl));
+
+  static const String name = 'ImageViewerRoute';
+}
+
+class ImageViewerRouteArgs {
+  const ImageViewerRouteArgs({this.key, this.imageUrl});
+
+  final _i3.Key? key;
+
+  final dynamic imageUrl;
 }

@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/PostModel.dart';
+import 'package:cloutbook/routes/router.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/widgets/ProfileHeader.dart';
 import 'package:cloutbook/widgets/ProfileMetadata.dart';
@@ -283,14 +285,19 @@ class PostItem extends HookWidget {
                           padding: const EdgeInsets.only(right: 16.0),
                           child: ConstrainedBox(
                             constraints: BoxConstraints(maxHeight: 200),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    imageUrl,
+                            child: GestureDetector(
+                              onTap: () {
+                                AutoRouter.of(context).push(ImageViewerRoute(imageUrl: imageUrl));
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      imageUrl,
+                                    ),
+                                    fit: BoxFit.fitWidth,
                                   ),
-                                  fit: BoxFit.fitWidth,
                                 ),
                               ),
                             ),
