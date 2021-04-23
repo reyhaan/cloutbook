@@ -62,14 +62,15 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final avatar = processDataImage(profile?.profilePic);
     final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter.format(double.parse(_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
+    final coinPrice = formatter.format(double.parse(
+        _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
     return Container(
-      margin: EdgeInsets.fromLTRB(11, 0, 11, 0),
+      margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
       padding: EdgeInsets.fromLTRB(10, 10, 8, 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        color: Palette.background,
+        color: Palette.foreground,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,7 +101,8 @@ class ListItem extends StatelessWidget {
                       Container(
                         child: Text(
                           '@${profile?.username}',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w600),
                         ),
                       ),
                       SizedBox(height: 5.0),
@@ -145,7 +147,7 @@ class ListItem extends StatelessWidget {
                   await _exploreStore.removeFromWatchlist(profile);
                 },
                 child: Container(
-                  color: Palette.background,
+                  color: Palette.foreground,
                   padding: EdgeInsets.all(4),
                   child: Icon(
                     Icons.delete_outline,
