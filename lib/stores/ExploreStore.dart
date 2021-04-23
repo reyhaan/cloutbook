@@ -61,7 +61,7 @@ abstract class _ExploreStore with Store {
         "UsernamePrefix": searchKey ?? "",
         "Description": "",
         "OrderBy": "",
-        "NumToFetch": 20,
+        "NumToFetch": 10,
         "ReaderPublicKeyBase58Check":
             "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
         "ModerationType": "",

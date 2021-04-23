@@ -216,8 +216,10 @@ class PostItem extends HookWidget {
                     Container(
                       child: GestureDetector(
                         onTap: () {
-                          String? username = _post?.profileEntryResponse?.username!;
-                          AutoRouter.of(context).push(ProfileRoute(username: username!));
+                          String? username =
+                              _post?.profileEntryResponse?.username!;
+                          AutoRouter.of(context)
+                              .push(ProfileRoute(username: username!));
                         },
                         child: Text(
                           '@${_post?.profileEntryResponse?.username}',
@@ -225,6 +227,7 @@ class PostItem extends HookWidget {
                             color: Palette.primary4,
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
+                            letterSpacing: 0.3,
                           ),
                         ),
                       ),
@@ -234,7 +237,10 @@ class PostItem extends HookWidget {
                       child: Text.rich(
                         TextSpan(
                           children: [
-                            TextSpan(text: '$timeElapsed', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                            TextSpan(
+                                text: '$timeElapsed',
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 12)),
                           ],
                         ),
                       ),
@@ -244,7 +250,12 @@ class PostItem extends HookWidget {
                       padding: const EdgeInsets.only(right: 16.0),
                       child: ParsedText(
                         text: _post?.body ?? '',
-                        style: TextStyle(color: Colors.white, fontSize: 13, height: 1.3),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          height: 1.3,
+                          wordSpacing: 0.2,
+                        ),
                         parse: <MatchText>[
                           MatchText(
                             pattern: r"(?<![A-Za-z])@[A-Za-z]\w+",
@@ -252,8 +263,9 @@ class PostItem extends HookWidget {
                               color: Palette.primary3,
                               fontSize: 15,
                             ),
-                            onTap: (name) {
-                              AutoRouter.of(context).push(ProfileRoute(username: name));
+                            onTap: (String name) {
+                              AutoRouter.of(context).push(
+                                  ProfileRoute(username: name.substring(1)));
                               print(name);
                             },
                           ),
@@ -294,7 +306,8 @@ class PostItem extends HookWidget {
                             constraints: BoxConstraints(maxHeight: 200),
                             child: GestureDetector(
                               onTap: () {
-                                AutoRouter.of(context).push(ImageViewerRoute(imageUrl: imageUrl));
+                                AutoRouter.of(context)
+                                    .push(ImageViewerRoute(imageUrl: imageUrl));
                               },
                               child: Container(
                                 decoration: BoxDecoration(

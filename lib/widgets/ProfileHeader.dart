@@ -81,17 +81,19 @@ class ProfileHeader extends HookWidget {
                 Container(
                   margin: EdgeInsets.only(left: 14, top: 0.0, bottom: 16.0),
                   child: Text(
-                    '@${_profileStore.userProfile.username}',
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                    '@ ${_profileStore.userProfile.username}',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 14, right: 40),
                   margin: EdgeInsets.only(bottom: 24.0),
                   child: ParsedText(
-                    text: '${_profileStore.userProfile.description}'.trimRight(),
+                    text:
+                        '${_profileStore.userProfile.description}'.trimRight(),
                     alignment: TextAlign.start,
-                    style: TextStyle(fontSize: 14, color: Colors.white, height: 1.4),
+                    style: TextStyle(
+                        fontSize: 13, color: Colors.white, height: 1.4),
                     parse: <MatchText>[
                       MatchText(
                         type: ParsedType.URL,
