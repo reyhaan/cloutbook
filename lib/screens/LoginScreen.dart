@@ -56,7 +56,8 @@ class LoginScreen extends HookWidget {
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration.collapsed(
                               hintText: 'username or public key',
-                              hintStyle: TextStyle(color: Palette.hintColor, fontSize: 14.0)),
+                              hintStyle: TextStyle(
+                                  color: Palette.hintColor, fontSize: 14.0)),
                         ),
                       ),
                     ],
@@ -73,12 +74,15 @@ class LoginScreen extends HookWidget {
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(12),
                     margin: EdgeInsets.only(left: 30, right: 30),
-                    decoration: BoxDecoration(color: Palette.primary, borderRadius: BorderRadius.circular(5)),
+                    decoration: BoxDecoration(
+                        color: Palette.primary,
+                        borderRadius: BorderRadius.circular(5)),
                     child: Text.rich(
                       TextSpan(
                         children: [
                           WidgetSpan(
-                            child: Icon(CupertinoIcons.add, size: 19.0, color: Colors.white),
+                            child: Icon(CupertinoIcons.add,
+                                size: 19.0, color: Colors.white),
                           ),
                           TextSpan(
                             text: '  Add profile',
@@ -95,7 +99,8 @@ class LoginScreen extends HookWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
+                  padding:
+                      const EdgeInsets.only(top: 30.0, left: 30.0, right: 30.0),
                   child: Text(
                     'Start by adding your profile by username or public key, please do not enter your pass phrase!',
                     style: TextStyle(color: Palette.hintColor),

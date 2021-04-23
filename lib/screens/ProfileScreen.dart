@@ -11,17 +11,24 @@ import '../config/palette.dart';
 
 class ProfileScreen extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
-  final String username;
+  final String? username;
 
   ProfileScreen({
     Key? key,
-    this.username = '',
+    this.username,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      _profileStore.getUserProfile(username: username);
+      if (username == null) {
+        return;
+      }
+      if (username != null) {
+        _profileStore.getUserProfile(
+            username:
+                username!.isEmpty ? _profileStore.loggedInProfile : username);
+      }
     }, []);
 
     return Scaffold(

@@ -6,20 +6,18 @@ import 'package:get_it/get_it.dart';
 
 import '../stores/ProfileStore.dart';
 
-final ProfileStore _profileStore = GetIt.I<ProfileStore>();
-
 class NavScreen extends HookWidget {
-  final List<Widget> _screens = [
-    HomeScreen(),
-    ProfileScreen(
-      username: _profileStore.loggedInProfile,
-    ),
-    ExploreScreen(),
-    SettingsScreen()
-  ];
-
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _screens = [
+      HomeScreen(),
+      ProfileScreen(
+        username: _profileStore.loggedInProfile,
+      ),
+      ExploreScreen(),
+      SettingsScreen()
+    ];
     final _currentIndex = useState(0);
     return Container(
       color: Palette.background,

@@ -19,7 +19,7 @@ class HomeScreen extends HookWidget {
     useEffect(() {
       _exchangeStore.updateExchange();
       _globalFeedStore.getGlobalFeed();
-      _profileStore.getUserProfile();
+      _profileStore.getUserProfile(username: _profileStore.loggedInProfile);
 
       // reset store when unmounted
       return _globalFeedStore.reset;
@@ -68,7 +68,8 @@ SliverAppBar createHomeSilverAppBar() {
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -77,7 +78,10 @@ SliverAppBar createHomeSilverAppBar() {
             padding: EdgeInsets.all(20),
             child: Text(
               'Global',
-              style: Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6!
+                  .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
         ),
