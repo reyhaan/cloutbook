@@ -57,7 +57,7 @@ class NavRoute extends _i1.PageRouteInfo {
 }
 
 class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
-  ProfileRoute({_i3.Key? key, String username = ''})
+  ProfileRoute({_i3.Key? key, String? username})
       : super(name,
             path: '/profile-screen',
             args: ProfileRouteArgs(key: key, username: username));
@@ -66,11 +66,11 @@ class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
 }
 
 class ProfileRouteArgs {
-  const ProfileRouteArgs({this.key, this.username = ''});
+  const ProfileRouteArgs({this.key, this.username});
 
   final _i3.Key? key;
 
-  final String username;
+  final String? username;
 }
 
 class ImageViewerRoute extends _i1.PageRouteInfo<ImageViewerRouteArgs> {
