@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
@@ -20,41 +22,70 @@ class SettingsList extends HookWidget {
       child: Scaffold(
         body: Observer(
           builder: (_) {
-            final avatar = processDataImage(_profileStore.userProfile.profilePic ?? '');
+            final avatar =
+                processDataImage(_profileStore.userProfile.profilePic ?? '');
             return ListView(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 24.0, bottom: 0.0),
-                  child: Row(
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 0.0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 48,
-                        width: 48,
-                        margin: EdgeInsets.fromLTRB(20.0, 0.0, 8.0, 0.0),
+                        height: 100,
+                        width: 100,
                         decoration: BoxDecoration(
                           color: Colors.grey,
-                          borderRadius: BorderRadius.circular(7),
+                          borderRadius: BorderRadius.circular(50),
                           border: Border.all(color: Colors.white, width: 1),
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(50),
                           child: Visibility(
-                            visible: _profileStore.userProfile.profilePic != null,
+                            visible:
+                                _profileStore.userProfile.profilePic != null,
                             child: Image.memory(avatar),
                           ),
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 4, top: 4.0, bottom: 16.0),
+                        margin: EdgeInsets.only(left: 0, top: 8.0, bottom: 6.0),
                         child: Text(
                           '@${_profileStore.userProfile.username}',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
                             color: Colors.white,
                           ),
                         ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Transform.rotate(
+                            angle: 90,
+                            child: Icon(
+                              Icons.vpn_key_rounded,
+                              size: 16.0,
+                              color: Colors.white60,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 180.0,
+                            child: Text(
+                              '${_profileStore.userProfile.publicKeyBase58Check}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -64,7 +95,8 @@ class SettingsList extends HookWidget {
                     Container(
                       padding: EdgeInsets.all(16),
                       margin: EdgeInsets.fromLTRB(8, 8, 0, 0),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0)),
                       child: Row(
                         children: [
                           Container(
@@ -84,14 +116,16 @@ class SettingsList extends HookWidget {
                 Column(
                   children: [
                     GestureDetector(
-                      onTap: () {
+                      onTap: Feedback.wrapForTap(() {
                         _profileStore.loggedInProfile = '';
                         AutoRouter.of(context).replace(LoginRoute());
-                      },
+                      }, context),
                       child: Container(
                         padding: EdgeInsets.all(16),
                         margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                        decoration: BoxDecoration(color: Palette.foreground, borderRadius: BorderRadius.circular(5.0)),
+                        decoration: BoxDecoration(
+                            color: Palette.foreground,
+                            borderRadius: BorderRadius.circular(5.0)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -114,7 +148,8 @@ class SettingsList extends HookWidget {
                     Container(
                       padding: EdgeInsets.all(16),
                       margin: EdgeInsets.fromLTRB(8, 8, 16, 0),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0)),
                       child: Row(
                         children: [
                           Container(
@@ -133,62 +168,83 @@ class SettingsList extends HookWidget {
                 ),
                 Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      decoration: BoxDecoration(
-                        color: Palette.foreground,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            child: Text('Contact developer'),
+                    GestureDetector(
+                      onTap: Feedback.wrapForTap(() {
+                        const url =
+                            'mailto:hi@rehaan.ca?subject=Cloutbook: Bug Report&body=-via%20Habbit';
+                        launchURL(url);
+                      }, context),
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                        decoration: BoxDecoration(
+                          color: Palette.foreground,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5),
+                            topRight: Radius.circular(5),
                           ),
-                        ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Text('Report bugs'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
                 Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 1, 16, 0),
-                      decoration: BoxDecoration(
-                        color: Palette.foreground,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            child: Text('Provide feedback'),
-                          ),
-                        ],
+                    GestureDetector(
+                      onTap: Feedback.wrapForTap(() {
+                        const url =
+                            'mailto:hi@rehaan.ca?subject=Cloutbook: Feedback&body=-via%20Habbit';
+                        launchURL(url);
+                      }, context),
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        margin: EdgeInsets.fromLTRB(16, 1, 16, 0),
+                        decoration: BoxDecoration(
+                          color: Palette.foreground,
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Text('Provide feedback'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
                 Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      margin: EdgeInsets.fromLTRB(16, 1, 16, 0),
-                      decoration: BoxDecoration(
-                        color: Palette.foreground,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(5),
-                          bottomRight: Radius.circular(5),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            child: Text('Request feature'),
+                    GestureDetector(
+                      onTap: Feedback.wrapForTap(() {
+                        const url =
+                            'mailto:hi@rehaan.ca?subject=Cloutbook: Feature Request&body=-via%20Habbit';
+                        launchURL(url);
+                      }, context),
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        margin: EdgeInsets.fromLTRB(16, 1, 16, 0),
+                        decoration: BoxDecoration(
+                          color: Palette.foreground,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(5),
+                            bottomRight: Radius.circular(5),
                           ),
-                        ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Text('Request a new feature'),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

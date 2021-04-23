@@ -24,6 +24,7 @@ class ImageViewerScreen extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: PhotoView(
+                  filterQuality: FilterQuality.high,
                   imageProvider: NetworkImage(imageUrl),
                 ),
               ),

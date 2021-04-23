@@ -18,6 +18,7 @@ class ProfileEntryResponse extends Equatable {
   final int? stakeMultipleBasisPoints;
   final String? username;
   final dynamic? usersThatHODL;
+  final History? history;
 
   ProfileEntryResponse({
     this.coinEntry,
@@ -34,6 +35,7 @@ class ProfileEntryResponse extends Equatable {
     this.stakeMultipleBasisPoints,
     this.username,
     this.usersThatHODL,
+    this.history,
   });
 
   List<dynamic> get props => [
@@ -51,11 +53,13 @@ class ProfileEntryResponse extends Equatable {
         stakeMultipleBasisPoints,
         username,
         usersThatHODL,
+        history,
       ];
 
   factory ProfileEntryResponse.fromMap(Map<String, dynamic> map) {
     CoinEntry coinEntry = CoinEntry.fromMap({});
     StakeEntryStats stakeEntryStats = StakeEntryStats.fromMap({});
+    History history = History.fromMap({});
     List<Post> posts = [];
 
     if (map['CoinEntry'] != null) {
@@ -68,6 +72,10 @@ class ProfileEntryResponse extends Equatable {
           Map<String, dynamic>.from(map['StakeEntryStats']));
     }
 
+    if (map['history'] != null) {
+      history = History.fromMap(Map<String, dynamic>.from(map['history']));
+    }
+
     if (map['Posts'] != null) {
       List<dynamic> allPosts = map['Posts'];
 
@@ -77,21 +85,21 @@ class ProfileEntryResponse extends Equatable {
     }
 
     return ProfileEntryResponse(
-      coinEntry: coinEntry,
-      coinPriceBitCloutNanos: map['CoinPriceBitCloutNanos'],
-      comments: map['Comments'],
-      description: map['Description'],
-      isHidden: map['IsHidden'],
-      isReserved: map['IsReserved'],
-      isVerified: map['IsVerified'],
-      posts: posts,
-      profilePic: map['ProfilePic'],
-      publicKeyBase58Check: map['PublicKeyBase58Check'],
-      stakeEntryStats: stakeEntryStats,
-      stakeMultipleBasisPoints: map['StakeMultipleBasisPoints'],
-      username: map['Username'],
-      usersThatHODL: map['UsersThatHODL'],
-    );
+        coinEntry: coinEntry,
+        coinPriceBitCloutNanos: map['CoinPriceBitCloutNanos'],
+        comments: map['Comments'],
+        description: map['Description'],
+        isHidden: map['IsHidden'],
+        isReserved: map['IsReserved'],
+        isVerified: map['IsVerified'],
+        posts: posts,
+        profilePic: map['ProfilePic'],
+        publicKeyBase58Check: map['PublicKeyBase58Check'],
+        stakeEntryStats: stakeEntryStats,
+        stakeMultipleBasisPoints: map['StakeMultipleBasisPoints'],
+        username: map['Username'],
+        usersThatHODL: map['UsersThatHODL'],
+        history: history);
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +123,39 @@ class ProfileEntryResponse extends Equatable {
       "StakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
       "Username": this.username,
       "UsersThatHODL": this.usersThatHODL,
+      "history": this.history?.toJson(),
     };
   }
+}
+
+class History extends Equatable {
+  final String? change1h;
+  final String? change1d;
+  final String? change1w;
+
+  History({
+    this.change1h,
+    this.change1d,
+    this.change1w,
+  });
+
+  List<dynamic> get props => [
+        change1h,
+        change1d,
+        change1w,
+      ];
+
+  factory History.fromMap(Map<String, dynamic> map) {
+    return History(
+      change1h: map['change1h'],
+      change1d: map['change1d'],
+      change1w: map['change1w'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "change1h": this.change1h,
+        "change1d": this.change1d,
+        "change1w": this.change1w,
+      };
 }

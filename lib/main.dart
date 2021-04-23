@@ -93,12 +93,12 @@ class MyApp extends StatelessWidget {
           primaryColor: Palette.primary,
           accentColor: Palette.primary,
           iconTheme: const IconThemeData(color: Colors.white),
-          fontFamily: GoogleFonts.ibmPlexSans().fontFamily,
-          textTheme: GoogleFonts.ibmPlexSansTextTheme(
-            TextTheme(
-              bodyText1: TextStyle(color: Colors.white),
-              bodyText2: TextStyle(color: Colors.white),
-            ),
+          fontFamily: 'SFProDisplay',
+          textTheme: TextTheme(
+            bodyText1:
+                TextStyle(color: Colors.white, fontFamily: 'SFProDisplay'),
+            bodyText2:
+                TextStyle(color: Colors.white, fontFamily: 'SFProDisplay'),
           ),
         ),
       ),

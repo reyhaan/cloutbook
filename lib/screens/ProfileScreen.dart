@@ -53,24 +53,6 @@ class ProfileScreen extends HookWidget {
                   ),
                 ),
               ),
-              Positioned(
-                top: 40,
-                left: 20,
-                child: GestureDetector(
-                  onTap: () {
-                    AutoRouter.of(context).popUntilRoot();
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(12),
-                    color: Palette.foreground,
-                    child: Icon(
-                      CupertinoIcons.back,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ),
-                ),
-              ),
             ],
           );
         },
