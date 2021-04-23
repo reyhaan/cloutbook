@@ -214,12 +214,18 @@ class PostItem extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Text(
-                        '@${_post?.profileEntryResponse?.username}',
-                        style: TextStyle(
-                          color: Palette.primary4,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                      child: GestureDetector(
+                        onTap: () {
+                          String? username = _post?.profileEntryResponse?.username!;
+                          AutoRouter.of(context).push(ProfileRoute(username: username!));
+                        },
+                        child: Text(
+                          '@${_post?.profileEntryResponse?.username}',
+                          style: TextStyle(
+                            color: Palette.primary4,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
                     ),
@@ -247,6 +253,7 @@ class PostItem extends HookWidget {
                               fontSize: 15,
                             ),
                             onTap: (name) {
+                              AutoRouter.of(context).push(ProfileRoute(username: name));
                               print(name);
                             },
                           ),
