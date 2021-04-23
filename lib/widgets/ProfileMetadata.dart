@@ -46,7 +46,9 @@ class ProfileMetadata extends HookWidget {
                     child: Column(
                       children: [
                         Observer(builder: (_) {
-                          String followers = _profileStore.userFollowers;
+                          final formatter = new NumberFormat("#,###");
+                          String followers = formatter
+                              .format(int.parse(_profileStore.userFollowers));
                           return Text(
                             followers,
                             style: TextStyle(
@@ -75,8 +77,11 @@ class ProfileMetadata extends HookWidget {
                     child: Column(
                       children: [
                         Observer(builder: (_) {
+                          final formatter = new NumberFormat("#,###.##");
+                          final coinPrice = formatter
+                              .format(double.parse(_profileStore.coinPrice));
                           return Text(
-                            '\$${_profileStore.coinPrice}',
+                            '\$$coinPrice',
                             textAlign: TextAlign.end,
                             style: TextStyle(
                               fontSize: 16,

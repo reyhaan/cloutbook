@@ -28,7 +28,7 @@ class ProfileHeader extends HookWidget {
                   child: Container(
                     margin: EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                      color: Palette.foreground,
+                      color: Color(0xFF0A0A0A),
                     ),
                     child: SizedBox(
                       height: 100,
@@ -48,7 +48,7 @@ class ProfileHeader extends HookWidget {
                       child: Container(
                         margin: EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(
-                          color: Palette.foreground,
+                          color: Color(0xFF0A0A0A),
                         ),
                         child: SizedBox(
                           height: 50,
@@ -142,7 +142,7 @@ class ProfileHeader extends HookWidget {
                 },
                 child: Container(
                   padding: EdgeInsets.all(12),
-                  color: Palette.foreground,
+                  color: Color(0xFF0A0A0A),
                   child: Icon(
                     Icons.arrow_back,
                     color: Colors.white,

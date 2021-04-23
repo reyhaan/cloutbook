@@ -43,5 +43,15 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  fonts:
+    - family: SFProDisplay
+      fonts:
+        - asset: assets/fonts/SFProDisplay-Light.ttf
+        - asset: assets/fonts/SFProDisplay-Regular.ttf
+        - asset: assets/fonts/SFProDisplay-Medium.ttf
+        - asset: assets/fonts/SFProDisplay-Semibold.ttf
+        - asset: assets/fonts/SFProDisplay-Heavy.ttf
+        - asset: assets/fonts/SFProDisplay-Black.ttf
+
   assets:
     - assets/images/
