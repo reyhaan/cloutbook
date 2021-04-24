@@ -58,6 +58,7 @@ class SettingsList extends HookWidget {
                             fontWeight: FontWeight.w700,
                             fontSize: 20,
                             color: Colors.white,
+                            letterSpacing: 0.3,
                           ),
                         ),
                       ),

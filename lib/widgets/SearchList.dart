@@ -70,11 +70,11 @@ class ListItem extends HookWidget {
         _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
     return Container(
-      margin: EdgeInsets.fromLTRB(11, 0, 11, 0),
-      padding: EdgeInsets.fromLTRB(10, 12, 8, 12),
+      margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
+      padding: EdgeInsets.fromLTRB(10, 10, 8, 14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: Palette.background,
+        borderRadius: BorderRadius.circular(7),
+        color: Palette.foreground,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,7 +120,7 @@ class ListItem extends HookWidget {
           Row(
             children: [
               Text(
-                '~\$$coinPrice',
+                '\$$coinPrice',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -144,14 +144,27 @@ class ListItem extends HookWidget {
                   rerender.value = !rerender.value!;
                 },
                 child: Container(
-                  color: Palette.background,
+                  color: Palette.foreground,
                   padding: EdgeInsets.all(4),
-                  child: Icon(
-                    _exploreStore.isInWatchlist(profile)
-                        ? Icons.star
-                        : Icons.star_outline,
-                    size: 22.0,
-                    color: Palette.hintColor,
+                  child: Stack(
+                    children: [
+                      Visibility(
+                        visible: _exploreStore.isInWatchlist(profile),
+                        child: Icon(
+                          Icons.star,
+                          size: 22.0,
+                          color: Palette.primary4,
+                        ),
+                      ),
+                      Visibility(
+                        visible: !_exploreStore.isInWatchlist(profile),
+                        child: Icon(
+                          Icons.star_outline,
+                          size: 22.0,
+                          color: Palette.hintColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
