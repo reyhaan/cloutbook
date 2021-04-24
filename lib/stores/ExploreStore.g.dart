@@ -57,8 +57,9 @@ mixin _$ExploreStore on _ExploreStore, Store {
   final _$getProfilesAsyncAction = AsyncAction('_ExploreStore.getProfiles');
 
   @override
-  Future<void> getProfiles(dynamic searchKey) {
-    return _$getProfilesAsyncAction.run(() => super.getProfiles(searchKey));
+  Future<void> getProfiles(dynamic searchKey, dynamic publicKey) {
+    return _$getProfilesAsyncAction
+        .run(() => super.getProfiles(searchKey, publicKey));
   }
 
   final _$getWatchlistAsyncAction = AsyncAction('_ExploreStore.getWatchlist');
@@ -83,6 +84,13 @@ mixin _$ExploreStore on _ExploreStore, Store {
   Future<void> removeFromWatchlist(dynamic profile) {
     return _$removeFromWatchlistAsyncAction
         .run(() => super.removeFromWatchlist(profile));
+  }
+
+  final _$getWalletAsyncAction = AsyncAction('_ExploreStore.getWallet');
+
+  @override
+  Future<void> getWallet(dynamic publicKey) {
+    return _$getWalletAsyncAction.run(() => super.getWallet(publicKey));
   }
 
   final _$_ExploreStoreActionController =

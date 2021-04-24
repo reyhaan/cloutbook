@@ -54,7 +54,7 @@ abstract class _ExploreStore with Store {
   }
 
   @action
-  Future<void> getProfiles(searchKey) async {
+  Future<void> getProfiles(searchKey, publicKey) async {
     try {
       isLoading = true;
       final response = await _exploreRepository.getProfiles(payload: {
@@ -64,8 +64,7 @@ abstract class _ExploreStore with Store {
         "Description": "",
         "OrderBy": "",
         "NumToFetch": 10,
-        "ReaderPublicKeyBase58Check":
-            "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
+        "ReaderPublicKeyBase58Check": publicKey,
         "ModerationType": "",
         "FetchUsersThatHODL": false,
         "AddGlobalFeedBool": false
@@ -126,5 +125,15 @@ abstract class _ExploreStore with Store {
     } catch (e) {
       throw e;
     }
+  }
+
+  @action
+  Future<void> getWallet(publicKey) async {
+    try {
+      final userList = {
+        "PublicKeysBase58Check": [publicKey]
+      };
+      final response = await _exploreRepository.getWallet(payload: userList);
+    } catch (e) {}
   }
 }

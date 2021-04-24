@@ -28,9 +28,8 @@ class ExploreScreen extends HookWidget {
                 createSilverAppBar2(),
               ];
             },
-            body: (_exploreStore.savedProfiles.length > 0)
-                ? FavoriteList()
-                : Center(child: Text('Nothing to show here')),
+            body:
+                (_exploreStore.savedProfiles.length > 0) ? FavoriteList() : Center(child: Text('Nothing to show here')),
           );
         },
       ),
@@ -44,8 +43,7 @@ SliverAppBar createSilverAppBar1() {
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -57,8 +55,8 @@ SliverAppBar createSilverAppBar1() {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Explore',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                  style:
+                      Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
@@ -95,12 +93,40 @@ SliverAppBar createSilverAppBar2() {
     backgroundColor: Palette.background,
     pinned: true,
     collapsedHeight: 85,
-    title: Text(
-      '\$4,567.17',
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w700,
-      ),
+    expandedHeight: 85,
+    flexibleSpace: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 14,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '\$4,567.17',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  'Wallet Balance',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
     ),
   );
 }

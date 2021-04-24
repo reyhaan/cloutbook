@@ -44,12 +44,37 @@ class ExploreRepository extends BaseExploreRepository {
 
       if (response.statusCode == 200) {
         final data = Map<String, dynamic>.from(response.data);
-        final results =
-            List<Map<String, dynamic>>.from(data['ProfilesFound'] ?? []);
+        final results = List<Map<String, dynamic>>.from(data['ProfilesFound'] ?? []);
 
         if (results.isNotEmpty) {
           return results.map((e) => ProfileEntryResponse.fromMap(e)).toList();
         }
+      }
+      return [];
+    } on DioError catch (err) {
+      print(err);
+      throw Failure(message: err.response?.statusMessage);
+    } on SocketException catch (err) {
+      print(err);
+      throw Failure(message: 'Please check your connection.');
+    }
+  }
+
+  @override
+  Future<List<ProfileEntryResponse>> getWallet({
+    @required Map<String, dynamic>? payload,
+  }) async {
+    try {
+      final queryParams = payload;
+
+      final response = await api.post(
+        '/get-users-stateless',
+        queryParams,
+      );
+
+      if (response.statusCode == 200) {
+        final data = Map<String, dynamic>.from(response.data);
+        final results = List<Map<String, dynamic>>.from(data['UserList'] ?? []);
       }
       return [];
     } on DioError catch (err) {
@@ -70,8 +95,7 @@ class ExploreRepository extends BaseExploreRepository {
       final list = box.values.toList();
       for (var i = 0; i < list.length; i++) {
         final data = list[i];
-        savedProfiles.add(ProfileEntryResponse.fromMap(
-            data.profile!.cast<String, dynamic>()));
+        savedProfiles.add(ProfileEntryResponse.fromMap(data.profile!.cast<String, dynamic>()));
       }
       return Future.value(savedProfiles);
     } catch (e) {

@@ -8,15 +8,18 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import '../stores/ProfileStore.dart';
+
 final TextEditingController? _textInputController = TextEditingController();
 
 class SearchBar extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final _debouncer = Debouncer(milliseconds: 500);
 
-  void handleSearchChange(searchKey) {
+  void handleSearchChange(searchKey, publicKey) {
     if (searchKey.length > 0) {
-      _debouncer.run(() => _exploreStore.getProfiles(searchKey));
+      _debouncer.run(() => _exploreStore.getProfiles(searchKey, publicKey));
     }
   }
 
@@ -48,12 +51,12 @@ class SearchBar extends HookWidget {
                       restorationId: '123',
                       controller: _textInputController,
                       cursorColor: Colors.white,
-                      onChanged: handleSearchChange,
+                      onChanged: (searchKey) =>
+                          handleSearchChange(searchKey, _profileStore.userProfile.publicKeyBase58Check),
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration.collapsed(
                         hintText: 'Seach',
-                        hintStyle:
-                            TextStyle(color: Palette.hintColor, fontSize: 14.0),
+                        hintStyle: TextStyle(color: Palette.hintColor, fontSize: 14.0),
                       ),
                     ),
                   ),
@@ -68,8 +71,7 @@ class SearchBar extends HookWidget {
                           _exploreStore.profiles = [];
                         },
                         child: Container(
-                          padding:
-                              EdgeInsets.only(bottom: 2, left: 8, right: 0),
+                          padding: EdgeInsets.only(bottom: 2, left: 8, right: 0),
                           color: Palette.secondaryForeground,
                           child: Icon(
                             CupertinoIcons.xmark,
