@@ -41,7 +41,9 @@ abstract class _ExploreStore with Store {
 
   @action
   void updateSavedProfiles(newProfiles) {
-    savedProfiles.addAll(newProfiles);
+    List<ProfileEntryResponse> oldProfiles = savedProfiles;
+    oldProfiles.addAll(newProfiles);
+    savedProfiles = oldProfiles;
   }
 
   @action

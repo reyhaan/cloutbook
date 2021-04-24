@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/api_client/api_client.dart';
 import 'package:cloutbook/models/HiveWatchlistModel.dart';
-import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:cloutbook/repository/HomeRepository.dart';
 import 'package:cloutbook/repository/ProfileRepository.dart';
-import 'package:cloutbook/routes/authGuard.dart';
 import 'package:cloutbook/routes/router.gr.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
@@ -19,9 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:cloutbook/config/palette.dart';
-import 'package:cloutbook/screens/screens.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

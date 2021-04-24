@@ -6,7 +6,8 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:cloutbook/screens/screens.dart' as _i2;
-import 'package:flutter/widgets.dart' as _i3;
+import 'package:cloutbook/screens/SearchScreen.dart' as _i3;
+import 'package:flutter/material.dart' as _i4;
 
 class FlutterRouter extends _i1.RootStackRouter {
   FlutterRouter();
@@ -32,6 +33,12 @@ class FlutterRouter extends _i1.RootStackRouter {
       return _i1.AdaptivePage(
           entry: entry,
           child: _i2.ImageViewerScreen(key: args.key, imageUrl: args.imageUrl));
+    },
+    SearchRoute.name: (entry) {
+      var args = entry.routeData
+          .argsAs<SearchRouteArgs>(orElse: () => SearchRouteArgs());
+      return _i1.AdaptivePage(
+          entry: entry, child: _i3.SearchScreen(key: args.key));
     }
   };
 
@@ -40,7 +47,8 @@ class FlutterRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(LoginRoute.name, path: '/'),
         _i1.RouteConfig(NavRoute.name, path: '/nav-screen'),
         _i1.RouteConfig(ProfileRoute.name, path: '/profile-screen'),
-        _i1.RouteConfig(ImageViewerRoute.name, path: '/image-viewer-screen')
+        _i1.RouteConfig(ImageViewerRoute.name, path: '/image-viewer-screen'),
+        _i1.RouteConfig(SearchRoute.name, path: '/search-screen')
       ];
 }
 
@@ -57,7 +65,7 @@ class NavRoute extends _i1.PageRouteInfo {
 }
 
 class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
-  ProfileRoute({_i3.Key? key, String? username})
+  ProfileRoute({_i4.Key? key, String? username})
       : super(name,
             path: '/profile-screen',
             args: ProfileRouteArgs(key: key, username: username));
@@ -68,13 +76,13 @@ class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
 class ProfileRouteArgs {
   const ProfileRouteArgs({this.key, this.username});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
   final String? username;
 }
 
 class ImageViewerRoute extends _i1.PageRouteInfo<ImageViewerRouteArgs> {
-  ImageViewerRoute({_i3.Key? key, dynamic imageUrl})
+  ImageViewerRoute({_i4.Key? key, dynamic imageUrl})
       : super(name,
             path: '/image-viewer-screen',
             args: ImageViewerRouteArgs(key: key, imageUrl: imageUrl));
@@ -85,7 +93,20 @@ class ImageViewerRoute extends _i1.PageRouteInfo<ImageViewerRouteArgs> {
 class ImageViewerRouteArgs {
   const ImageViewerRouteArgs({this.key, this.imageUrl});
 
-  final _i3.Key? key;
+  final _i4.Key? key;
 
   final dynamic imageUrl;
+}
+
+class SearchRoute extends _i1.PageRouteInfo<SearchRouteArgs> {
+  SearchRoute({_i4.Key? key})
+      : super(name, path: '/search-screen', args: SearchRouteArgs(key: key));
+
+  static const String name = 'SearchRoute';
+}
+
+class SearchRouteArgs {
+  const SearchRouteArgs({this.key});
+
+  final _i4.Key? key;
 }

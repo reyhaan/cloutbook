@@ -69,7 +69,7 @@ class ListItem extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
       padding: EdgeInsets.fromLTRB(10, 10, 8, 14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(7),
         color: Palette.foreground,
       ),
       child: Row(

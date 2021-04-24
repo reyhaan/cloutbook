@@ -59,12 +59,15 @@ class ListItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var _profilePic = profile?.profilePic;
-    var urlPattern = r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
-    var match = new RegExp(urlPattern, caseSensitive: false).firstMatch(_profilePic.toString());
+    var urlPattern =
+        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    var match = new RegExp(urlPattern, caseSensitive: false)
+        .firstMatch(_profilePic.toString());
 
     final rerender = useState(render);
     final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter.format(double.parse(_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
+    final coinPrice = formatter.format(double.parse(
+        _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
     return Container(
       margin: EdgeInsets.fromLTRB(11, 0, 11, 0),
@@ -92,8 +95,9 @@ class ListItem extends HookWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(21),
-                      child:
-                          match != null ? Image.network('$_profilePic') : Image.memory(processDataImage(_profilePic)),
+                      child: match != null
+                          ? Image.network('$_profilePic')
+                          : Image.memory(processDataImage(_profilePic)),
                     ),
                   ),
                   Column(
@@ -103,7 +107,8 @@ class ListItem extends HookWidget {
                       Container(
                         child: Text(
                           '@${profile?.username}',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -127,6 +132,8 @@ class ListItem extends HookWidget {
                   // save item to watchlist
                   final bool inList = _exploreStore.isInWatchlist(profile);
 
+                  _exchangeStore.getHistory();
+
                   if (inList) {
                     // remove this item from watch list
                     await _exploreStore.removeFromWatchlist(profile);
@@ -140,7 +147,9 @@ class ListItem extends HookWidget {
                   color: Palette.background,
                   padding: EdgeInsets.all(4),
                   child: Icon(
-                    _exploreStore.isInWatchlist(profile) ? Icons.star : Icons.star_outline,
+                    _exploreStore.isInWatchlist(profile)
+                        ? Icons.star
+                        : Icons.star_outline,
                     size: 22.0,
                     color: Palette.hintColor,
                   ),

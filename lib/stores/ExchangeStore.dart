@@ -24,9 +24,18 @@ abstract class _ExchangeStore with Store {
   @observable
   bool isLoading = true;
 
+  @observable
+  String history = '';
+
   @action
   void reset() {
     isLoading = false;
+  }
+
+  @action
+  void setHistory(newHistory) {
+    print(newHistory);
+    history = newHistory;
   }
 
   @action
@@ -69,6 +78,15 @@ abstract class _ExchangeStore with Store {
   Future<void> updateExchange() async {
     await getExchangeRate();
     await getTicker();
+  }
+
+  @action
+  Future<void> getHistory({publicKey}) async {
+    try {
+      await _exchangeRepository.getHistory(publicKey: publicKey);
+    } catch (e) {
+      throw e;
+    }
   }
 
   @action
