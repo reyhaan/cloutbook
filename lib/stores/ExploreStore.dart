@@ -41,12 +41,11 @@ abstract class _ExploreStore with Store {
     List<Wallet> oldWallet = wallet;
     oldWallet = newWallet;
     wallet = oldWallet;
-    double total = 0;
-    wallet.first.usersYouHODL!.forEach((user) {
-      total = total + user.balanceNanos!;
-    });
-    balance = total;
+    balance = double.parse(wallet.first.balanceNanos.toString());
   }
+
+  @action
+  List<Map<String, dynamic>> getHoldings() {}
 
   @action
   void setProfiles(newProfiles) {

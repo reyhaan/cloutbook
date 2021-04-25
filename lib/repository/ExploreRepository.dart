@@ -18,6 +18,9 @@ abstract class BaseExploreRepository {
   Future<List<Wallet>> getWallet({
     Map<String, dynamic>? payload,
   });
+  Future<List<Wallet>> getBitCloutListWallet({
+    String? payload,
+  });
   Future<List<ProfileEntryResponse>> getWatchlist();
   Future<String> addToWatchlist({
     ProfileEntryResponse? payload,
@@ -48,8 +51,7 @@ class ExploreRepository extends BaseExploreRepository {
 
       if (response.statusCode == 200) {
         final data = Map<String, dynamic>.from(response.data);
-        final results =
-            List<Map<String, dynamic>>.from(data['ProfilesFound'] ?? []);
+        final results = List<Map<String, dynamic>>.from(data['ProfilesFound'] ?? []);
 
         if (results.isNotEmpty) {
           return results.map((e) => ProfileEntryResponse.fromMap(e)).toList();
@@ -80,8 +82,40 @@ class ExploreRepository extends BaseExploreRepository {
       if (response.statusCode == 200) {
         List<Wallet> wallets = [];
         final data = Map<String, dynamic>.from(response.data);
-        final _wallets =
-            List<Map<String, dynamic>>.from(data['UserList'] ?? []);
+        final _wallets = List<Map<String, dynamic>>.from(data['UserList'] ?? []);
+
+        _wallets.forEach((wallet) {
+          wallets.add(Wallet.fromMap(wallet));
+        });
+
+        return wallets;
+      }
+      return [];
+    } on DioError catch (err) {
+      print(err);
+      throw Failure(message: err.response?.statusMessage);
+    } on SocketException catch (err) {
+      print(err);
+      throw Failure(message: 'Please check your connection.');
+    } on Error catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  @override
+  Future<List<Wallet>> getBitCloutListWallet({
+    @required String? payload,
+  }) async {
+    try {
+      final response = await api.get(
+        'https://bitcloutlistback.azurewebsites.net/explorer/getholdings/$payload',
+      );
+
+      if (response.statusCode == 200) {
+        List<Wallet> wallets = [];
+        final data = Map<String, dynamic>.from(response.data);
+        final _wallets = List<Map<String, dynamic>>.from(data['UserList'] ?? []);
 
         _wallets.forEach((wallet) {
           wallets.add(Wallet.fromMap(wallet));
@@ -111,8 +145,7 @@ class ExploreRepository extends BaseExploreRepository {
       final list = box.values.toList();
       for (var i = 0; i < list.length; i++) {
         final data = list[i];
-        savedProfiles.add(ProfileEntryResponse.fromMap(
-            data.profile!.cast<String, dynamic>()));
+        savedProfiles.add(ProfileEntryResponse.fromMap(data.profile!.cast<String, dynamic>()));
       }
       return Future.value(savedProfiles);
     } catch (e) {

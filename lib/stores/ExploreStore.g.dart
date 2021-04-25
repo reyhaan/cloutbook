@@ -149,6 +149,17 @@ mixin _$ExploreStore on _ExploreStore, Store {
   }
 
   @override
+  List<Map<String, dynamic>> getHoldings() {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.getHoldings');
+    try {
+      return super.getHoldings();
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setProfiles(dynamic newProfiles) {
     final _$actionInfo = _$_ExploreStoreActionController.startAction(
         name: '_ExploreStore.setProfiles');

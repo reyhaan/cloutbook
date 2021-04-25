@@ -1,4 +1,5 @@
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/screens/WalletScreen.dart';
 import 'package:cloutbook/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,6 +17,7 @@ class NavScreen extends HookWidget {
         username: _profileStore.loggedInProfile,
       ),
       ExploreScreen(),
+      WalletScreen(),
       SettingsScreen()
     ];
     final _currentIndex = useState(0);
@@ -46,6 +48,10 @@ class NavScreen extends HookWidget {
               BottomNavigationBarItem(
                 icon: new Icon(Icons.trending_up),
                 label: 'Explore',
+              ),
+              BottomNavigationBarItem(
+                icon: new Icon(Icons.account_balance_wallet_rounded),
+                label: 'Wallet',
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.settings),
