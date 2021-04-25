@@ -65,9 +65,6 @@ class ListItem extends StatelessWidget {
     } else {
       avatar = null;
     }
-    final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter.format(profile?.price);
-
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
         AutoRouter.of(context).push(ProfileRoute(username: profile?.username));
@@ -124,7 +121,7 @@ class ListItem extends StatelessWidget {
                         ),
                         SizedBox(height: 5.0),
                         Text(
-                          profile?.percentShare.toStringAsFixed(2) ?? '',
+                          '${profile?.percentShare.toStringAsFixed(1)}%',
                           textAlign: TextAlign.left,
                           style: TextStyle(color: Colors.grey, fontSize: 12.0),
                         ),
@@ -142,7 +139,7 @@ class ListItem extends StatelessWidget {
                   children: [
                     Container(
                       child: Text(
-                        '\$$coinPrice',
+                        '\$${numberFormat(profile?.marketValue)}',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

@@ -3,6 +3,7 @@ import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/models/WalletModel.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
+import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
@@ -89,9 +90,15 @@ abstract class _ExploreStore with Store {
     });
 
     for (var i = 0; i < tempHoldings.length; i++) {
-      tempHoldings[i].percentShare =
-          (marketValue / tempHoldings[i].marketValue) * 100;
+      if (tempHoldings[i].marketValue == 0) {
+        tempHoldings[i].percentShare = 0;
+      } else {
+        tempHoldings[i].percentShare =
+            (tempHoldings[i].marketValue / marketValue) * 100;
+      }
     }
+
+    tempHoldings.sort((a, b) => b.percentShare.compareTo(a.percentShare));
 
     holdings = tempHoldings;
   }
@@ -99,6 +106,7 @@ abstract class _ExploreStore with Store {
   @action
   void getHodlers() {
     final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+    final ProfileStore _profileStore = GetIt.I<ProfileStore>();
     Map<String, dynamic> _holding = {};
     List<Holding> tempHoldings = [];
 
@@ -106,7 +114,7 @@ abstract class _ExploreStore with Store {
       // set amount of coins
       _holding['Amount'] = user.balanceNanos! / 1000000000;
       _holding['Price'] = double.parse(_exchangeStore
-          .getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
+          .getCoinPrice(_profileStore.userProfile.coinPriceBitCloutNanos));
       _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
       _holding['Username'] = user.profileEntryResponse?.username ??
           user.hodlerPublicKeyBase58Check;
@@ -124,9 +132,11 @@ abstract class _ExploreStore with Store {
         tempHoldings[i].percentShare = 0;
       } else {
         tempHoldings[i].percentShare =
-            (marketCap / tempHoldings[i].marketValue) * 100;
+            (tempHoldings[i].marketValue / marketCap) * 100;
       }
     }
+
+    tempHoldings.sort((a, b) => b.percentShare.compareTo(a.percentShare));
 
     hodlers = tempHoldings;
   }

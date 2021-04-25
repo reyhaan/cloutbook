@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 
 import '../config/palette.dart';
 
@@ -101,6 +102,8 @@ SliverAppBar createSilverAppBar1() {
 }
 
 SliverAppBar createSilverAppBar2() {
+  final formatter = new NumberFormat("#,###.##");
+  final marketValue = formatter.format(_exploreStore.marketValue);
   return SliverAppBar(
     backgroundColor: Palette.background,
     pinned: true,
@@ -122,7 +125,7 @@ SliverAppBar createSilverAppBar2() {
               children: [
                 Observer(builder: (_) {
                   return Text(
-                    '\$' + _exploreStore.marketValue.toStringAsFixed(2),
+                    '\$' + marketValue,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
