@@ -54,6 +54,21 @@ mixin _$ExploreStore on _ExploreStore, Store {
     });
   }
 
+  final _$balanceAtom = Atom(name: '_ExploreStore.balance');
+
+  @override
+  double get balance {
+    _$balanceAtom.reportRead();
+    return super.balance;
+  }
+
+  @override
+  set balance(double value) {
+    _$balanceAtom.reportWrite(value, super.balance, () {
+      super.balance = value;
+    });
+  }
+
   final _$savedProfilesAtom = Atom(name: '_ExploreStore.savedProfiles');
 
   @override
@@ -194,6 +209,7 @@ mixin _$ExploreStore on _ExploreStore, Store {
 isLoading: ${isLoading},
 profiles: ${profiles},
 wallet: ${wallet},
+balance: ${balance},
 savedProfiles: ${savedProfiles}
     ''';
   }

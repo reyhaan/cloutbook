@@ -2,14 +2,14 @@ import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:equatable/equatable.dart';
 
 class Wallet extends Equatable {
-  final double? balanceNanos;
+  final int? balanceNanos;
   final bool? canCreateProfile;
   final bool? hasPhoneNumber;
   final bool? isAdmin;
   final ProfileEntryResponse? profileEntryResponse;
   final String? publicKeyBase58Check;
   final List<String>? publicKeysBase58CheckFollowedByUser;
-  final double? unminedBalanceNanos;
+  final int? unminedBalanceNanos;
   final List<HODLer>? usersWhoHODLYou;
   final List<HODLer>? usersYouHODL;
 
@@ -41,6 +41,9 @@ class Wallet extends Equatable {
 
   factory Wallet.fromMap(Map<String, dynamic> map) {
     List<String> follows = [];
+    List<HODLer> usersWhoHODLYou = [];
+    List<HODLer> usersYouHODL = [];
+
     if (map['PublicKeysBase58CheckFollowedByUser'] != null) {
       List<dynamic> _follows = map['PublicKeysBase58CheckFollowedByUser'];
       _follows.forEach((publicKey) {
@@ -48,18 +51,32 @@ class Wallet extends Equatable {
       });
     }
 
+    if (map['UsersWhoHODLYou'] != null) {
+      List<dynamic> _usersWhoHODLYou = map['UsersWhoHODLYou'];
+      _usersWhoHODLYou.forEach((hodler) {
+        usersWhoHODLYou.add((HODLer.fromMap(hodler)));
+      });
+    }
+
+    if (map['UsersYouHODL'] != null) {
+      List<dynamic> _usersYouHODL = map['UsersYouHODL'];
+      _usersYouHODL.forEach((hodler) {
+        usersYouHODL.add((HODLer.fromMap(hodler)));
+      });
+    }
+
     return Wallet(
       balanceNanos: map['BalanceNanos'],
-      canCreateProfile: map['CanCreateProfile'],
-      hasPhoneNumber: map['HasPhoneNumber'],
-      isAdmin: map['IsAdmin'],
+      canCreateProfile: map['CanCreateProfile'] ?? null,
+      hasPhoneNumber: map['HasPhoneNumber'] ?? null,
+      isAdmin: map['IsAdmin'] ?? null,
       profileEntryResponse: ProfileEntryResponse.fromMap(
           map['ProfileEntryResponse'].cast<String, dynamic>() ?? {}),
       publicKeyBase58Check: map['PublicKeyBase58Check'],
       publicKeysBase58CheckFollowedByUser: follows,
       unminedBalanceNanos: map['UnminedBalanceNanos'],
-      usersWhoHODLYou: map['UsersWhoHODLYou'],
-      usersYouHODL: map['UsersYouHODL'],
+      usersWhoHODLYou: usersWhoHODLYou,
+      usersYouHODL: usersYouHODL,
     );
   }
 
@@ -81,10 +98,10 @@ class Wallet extends Equatable {
 }
 
 class HODLer extends Equatable {
-  final double? balanceNanos;
+  final int? balanceNanos;
   final String? creatorPublicKeyBase58Check;
   final String? hodlerPublicKeyBase58Check;
-  final double? netBalanceInMempool;
+  final int? netBalanceInMempool;
   final ProfileEntryResponse? profileEntryResponse;
 
   HODLer({
@@ -104,12 +121,20 @@ class HODLer extends Equatable {
       ];
 
   factory HODLer.fromMap(Map<String, dynamic> map) {
+    ProfileEntryResponse? _profileEntryResponse =
+        ProfileEntryResponse(posts: []);
+
+    if (map['ProfileEntryResponse'] != null) {
+      _profileEntryResponse =
+          ProfileEntryResponse.fromMap(map['ProfileEntryResponse']);
+    }
+
     return HODLer(
       balanceNanos: map['BalanceNanos'],
       creatorPublicKeyBase58Check: map['CreatorPublicKeyBase58Check'],
       hodlerPublicKeyBase58Check: map['HODLerPublicKeyBase58Check'],
       netBalanceInMempool: map['NetBalanceInMempool'],
-      profileEntryResponse: map['ProfileEntryResponse'],
+      profileEntryResponse: _profileEntryResponse,
     );
   }
 

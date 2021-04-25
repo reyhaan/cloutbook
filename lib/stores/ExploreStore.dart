@@ -24,6 +24,9 @@ abstract class _ExploreStore with Store {
   List<Wallet> wallet = [];
 
   @observable
+  double balance = 0;
+
+  @observable
   List<ProfileEntryResponse> savedProfiles = [];
 
   @action
@@ -35,7 +38,14 @@ abstract class _ExploreStore with Store {
 
   @action
   void setWallet(newWallet) {
-    wallet = newWallet;
+    List<Wallet> oldWallet = wallet;
+    oldWallet = newWallet;
+    wallet = oldWallet;
+    double total = 0;
+    wallet.first.usersYouHODL!.forEach((user) {
+      total = total + user.balanceNanos!;
+    });
+    balance = total;
   }
 
   @action

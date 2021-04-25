@@ -99,7 +99,7 @@ abstract class _ExchangeStore with Store {
           (exchangeRate.satoshisPerBitCloutExchangeRate! / 100000000)
               .toDouble();
       double? bitCloutPrice = (bitcoinInUSD! * bitCoinsPerBitClout);
-      return ((bitCloutNanos! / 1000000000) * bitCloutPrice).toStringAsFixed(2);
+      return ((bitCloutNanos / 1000000000) * bitCloutPrice).toStringAsFixed(2);
     }
     return '0';
   }

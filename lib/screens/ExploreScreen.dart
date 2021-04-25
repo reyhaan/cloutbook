@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:cloutbook/widgets/FavoriteList.dart';
@@ -94,6 +95,8 @@ SliverAppBar createSilverAppBar1() {
 }
 
 SliverAppBar createSilverAppBar2() {
+  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
   return SliverAppBar(
     backgroundColor: Palette.background,
     pinned: true,
@@ -112,13 +115,18 @@ SliverAppBar createSilverAppBar2() {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '\$4,567.17',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                Observer(builder: (_) {
+                  return Text(
+                    '\$' +
+                        _exchangeStore
+                            .getCoinPrice(_exploreStore.balance)
+                            .toString(),
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  );
+                }),
                 SizedBox(height: 6),
                 Text(
                   'Wallet Balance',

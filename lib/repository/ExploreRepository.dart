@@ -96,6 +96,9 @@ class ExploreRepository extends BaseExploreRepository {
     } on SocketException catch (err) {
       print(err);
       throw Failure(message: 'Please check your connection.');
+    } on Error catch (err) {
+      print(err);
+      throw err;
     }
   }
 
