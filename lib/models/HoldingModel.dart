@@ -9,6 +9,10 @@ class Holding extends Equatable {
   final double marketValue;
   double percentShare;
 
+  set setPercentShare(newValue) {
+    percentShare = newValue;
+  }
+
   Holding({
     required this.username,
     required this.profilePic,

@@ -36,6 +36,9 @@ abstract class _ExploreStore with Store {
   double marketValue = 0;
 
   @observable
+  double marketCap = 0;
+
+  @observable
   double balance = 0;
 
   @observable
@@ -85,10 +88,10 @@ abstract class _ExploreStore with Store {
       marketValue = marketValue + holding.marketValue;
     });
 
-    tempHoldings.map((holding) {
-      holding.percentShare = marketValue / holding.marketValue;
-      return holding;
-    });
+    for (var i = 0; i < tempHoldings.length; i++) {
+      tempHoldings[i].percentShare =
+          (marketValue / tempHoldings[i].marketValue) * 100;
+    }
 
     holdings = tempHoldings;
   }
@@ -112,10 +115,18 @@ abstract class _ExploreStore with Store {
       tempHoldings.add(Holding.fromMap(_holding));
     });
 
-    tempHoldings.map((holding) {
-      holding.percentShare = marketValue / holding.marketValue;
-      return holding;
+    tempHoldings.forEach((holding) {
+      marketCap = marketCap + holding.marketValue;
     });
+
+    for (var i = 0; i < tempHoldings.length; i++) {
+      if (tempHoldings[i].marketValue == 0) {
+        tempHoldings[i].percentShare = 0;
+      } else {
+        tempHoldings[i].percentShare =
+            (marketCap / tempHoldings[i].marketValue) * 100;
+      }
+    }
 
     hodlers = tempHoldings;
   }
