@@ -25,7 +25,10 @@ class FlutterRouter extends _i1.RootStackRouter {
           .argsAs<ProfileRouteArgs>(orElse: () => ProfileRouteArgs());
       return _i1.AdaptivePage(
           entry: entry,
-          child: _i2.ProfileScreen(key: args.key, username: args.username));
+          child: _i2.ProfileScreen(
+              key: args.key,
+              username: args.username,
+              shouldGoBackToRoot: args.shouldGoBackToRoot));
     },
     ImageViewerRoute.name: (entry) {
       var args = entry.routeData
@@ -65,20 +68,25 @@ class NavRoute extends _i1.PageRouteInfo {
 }
 
 class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
-  ProfileRoute({_i4.Key? key, String? username})
+  ProfileRoute({_i4.Key? key, String? username, bool? shouldGoBackToRoot})
       : super(name,
             path: '/profile-screen',
-            args: ProfileRouteArgs(key: key, username: username));
+            args: ProfileRouteArgs(
+                key: key,
+                username: username,
+                shouldGoBackToRoot: shouldGoBackToRoot));
 
   static const String name = 'ProfileRoute';
 }
 
 class ProfileRouteArgs {
-  const ProfileRouteArgs({this.key, this.username});
+  const ProfileRouteArgs({this.key, this.username, this.shouldGoBackToRoot});
 
   final _i4.Key? key;
 
   final String? username;
+
+  final bool? shouldGoBackToRoot;
 }
 
 class ImageViewerRoute extends _i1.PageRouteInfo<ImageViewerRouteArgs> {

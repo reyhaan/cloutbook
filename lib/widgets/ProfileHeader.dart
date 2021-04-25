@@ -131,27 +131,6 @@ class ProfileHeader extends HookWidget {
               ],
             ),
           ),
-          Positioned(
-            top: 10,
-            left: 20,
-            child: Visibility(
-              visible: AutoRouter.of(context).current?.name != 'NavRoute',
-              child: GestureDetector(
-                onTap: () {
-                  AutoRouter.of(context).popUntilRoot();
-                },
-                child: Container(
-                  padding: EdgeInsets.all(12),
-                  color: Color(0xFF0A0A0A),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

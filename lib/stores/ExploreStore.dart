@@ -85,7 +85,7 @@ abstract class _ExploreStore with Store {
         "NumToFetch": 10,
         "ReaderPublicKeyBase58Check": publicKey,
         "ModerationType": "",
-        "FetchUsersThatHODL": false,
+        "FetchUsersThatHODL": true,
         "AddGlobalFeedBool": false
       });
       isLoading = false;

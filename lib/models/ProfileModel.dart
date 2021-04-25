@@ -68,13 +68,16 @@ class ProfileEntryResponse extends Equatable {
     StakeEntryStats stakeEntryStats = StakeEntryStats.fromMap({});
     History history = History.fromMap({});
     List<Post> posts = [];
+    List<String> usersThatHODL = [];
 
     if (map['CoinEntry'] != null) {
-      coinEntry = CoinEntry.fromMap(Map<String, dynamic>.from(map['CoinEntry']));
+      coinEntry =
+          CoinEntry.fromMap(Map<String, dynamic>.from(map['CoinEntry']));
     }
 
     if (map['StakeEntryStats'] != null) {
-      stakeEntryStats = StakeEntryStats.fromMap(Map<String, dynamic>.from(map['StakeEntryStats']));
+      stakeEntryStats = StakeEntryStats.fromMap(
+          Map<String, dynamic>.from(map['StakeEntryStats']));
     }
 
     if (map['history'] != null) {
@@ -86,6 +89,14 @@ class ProfileEntryResponse extends Equatable {
 
       allPosts.forEach((post) {
         posts.add(Post.fromMap(post.cast<String, dynamic>()));
+      });
+    }
+
+    if (map['UsersThatHODL'] != null) {
+      List<dynamic> allHodlers = map['UsersThatHODL'];
+
+      allHodlers.forEach((user) {
+        usersThatHODL.add(user);
       });
     }
 
@@ -103,7 +114,7 @@ class ProfileEntryResponse extends Equatable {
       stakeEntryStats: stakeEntryStats,
       stakeMultipleBasisPoints: map['StakeMultipleBasisPoints'],
       username: map['Username'],
-      usersThatHODL: map['UsersThatHODL'],
+      usersThatHODL: usersThatHODL,
       history: history,
       followers: map['Followers'],
     );

@@ -73,7 +73,8 @@ class ListItem extends HookWidget {
 
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
-        AutoRouter.of(context).push(ProfileRoute(username: profile?.username));
+        AutoRouter.of(context).push(ProfileRoute(
+            username: profile?.username, shouldGoBackToRoot: false));
       }, context),
       child: Container(
         margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
@@ -158,7 +159,7 @@ class ListItem extends HookWidget {
                         Visibility(
                           visible: _exploreStore.isInWatchlist(profile),
                           child: Icon(
-                            Icons.star,
+                            CupertinoIcons.checkmark_alt_circle_fill,
                             size: 22.0,
                             color: Palette.primary4,
                           ),
@@ -166,7 +167,7 @@ class ListItem extends HookWidget {
                         Visibility(
                           visible: !_exploreStore.isInWatchlist(profile),
                           child: Icon(
-                            Icons.star_outline,
+                            CupertinoIcons.plus_circle,
                             size: 22.0,
                             color: Palette.hintColor,
                           ),

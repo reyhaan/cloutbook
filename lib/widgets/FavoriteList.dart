@@ -157,7 +157,7 @@ class ListItem extends StatelessWidget {
                     color: Palette.foreground,
                     padding: EdgeInsets.all(4),
                     child: Icon(
-                      Icons.delete_outline,
+                      CupertinoIcons.minus_circle,
                       size: 18.0,
                       color: Palette.hintColor,
                     ),

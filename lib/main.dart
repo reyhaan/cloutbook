@@ -27,6 +27,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(WatchProfileAdapter());
   await Hive.openBox<WatchProfile>('watchProfile');
+  await Hive.openBox<WatchProfile>('users');
   // await Hive.box<WatchProfile>('watchProfile').clear();
 
   // stuff needed for flutter inapp_webview
