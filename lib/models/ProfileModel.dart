@@ -19,6 +19,11 @@ class ProfileEntryResponse extends Equatable {
   final String? username;
   final dynamic? usersThatHODL;
   final History? history;
+  String? followers = '-';
+
+  set setFollowers(String? _followers) {
+    followers = _followers;
+  }
 
   ProfileEntryResponse({
     this.coinEntry,
@@ -36,6 +41,7 @@ class ProfileEntryResponse extends Equatable {
     this.username,
     this.usersThatHODL,
     this.history,
+    this.followers,
   });
 
   List<dynamic> get props => [
@@ -54,6 +60,7 @@ class ProfileEntryResponse extends Equatable {
         username,
         usersThatHODL,
         history,
+        followers,
       ];
 
   factory ProfileEntryResponse.fromMap(Map<String, dynamic> map) {
@@ -63,13 +70,11 @@ class ProfileEntryResponse extends Equatable {
     List<Post> posts = [];
 
     if (map['CoinEntry'] != null) {
-      coinEntry =
-          CoinEntry.fromMap(Map<String, dynamic>.from(map['CoinEntry']));
+      coinEntry = CoinEntry.fromMap(Map<String, dynamic>.from(map['CoinEntry']));
     }
 
     if (map['StakeEntryStats'] != null) {
-      stakeEntryStats = StakeEntryStats.fromMap(
-          Map<String, dynamic>.from(map['StakeEntryStats']));
+      stakeEntryStats = StakeEntryStats.fromMap(Map<String, dynamic>.from(map['StakeEntryStats']));
     }
 
     if (map['history'] != null) {
@@ -85,21 +90,23 @@ class ProfileEntryResponse extends Equatable {
     }
 
     return ProfileEntryResponse(
-        coinEntry: coinEntry,
-        coinPriceBitCloutNanos: map['CoinPriceBitCloutNanos'],
-        comments: map['Comments'],
-        description: map['Description'],
-        isHidden: map['IsHidden'],
-        isReserved: map['IsReserved'],
-        isVerified: map['IsVerified'],
-        posts: posts,
-        profilePic: map['ProfilePic'],
-        publicKeyBase58Check: map['PublicKeyBase58Check'],
-        stakeEntryStats: stakeEntryStats,
-        stakeMultipleBasisPoints: map['StakeMultipleBasisPoints'],
-        username: map['Username'],
-        usersThatHODL: map['UsersThatHODL'],
-        history: history);
+      coinEntry: coinEntry,
+      coinPriceBitCloutNanos: map['CoinPriceBitCloutNanos'],
+      comments: map['Comments'],
+      description: map['Description'],
+      isHidden: map['IsHidden'],
+      isReserved: map['IsReserved'],
+      isVerified: map['IsVerified'],
+      posts: posts,
+      profilePic: map['ProfilePic'],
+      publicKeyBase58Check: map['PublicKeyBase58Check'],
+      stakeEntryStats: stakeEntryStats,
+      stakeMultipleBasisPoints: map['StakeMultipleBasisPoints'],
+      username: map['Username'],
+      usersThatHODL: map['UsersThatHODL'],
+      history: history,
+      followers: map['Followers'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -124,6 +131,7 @@ class ProfileEntryResponse extends Equatable {
       "Username": this.username,
       "UsersThatHODL": this.usersThatHODL,
       "history": this.history?.toJson(),
+      "followers": this.followers,
     };
   }
 }
