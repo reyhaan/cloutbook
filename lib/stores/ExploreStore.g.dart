@@ -54,6 +54,51 @@ mixin _$ExploreStore on _ExploreStore, Store {
     });
   }
 
+  final _$holdingsAtom = Atom(name: '_ExploreStore.holdings');
+
+  @override
+  List<Holding> get holdings {
+    _$holdingsAtom.reportRead();
+    return super.holdings;
+  }
+
+  @override
+  set holdings(List<Holding> value) {
+    _$holdingsAtom.reportWrite(value, super.holdings, () {
+      super.holdings = value;
+    });
+  }
+
+  final _$hodlersAtom = Atom(name: '_ExploreStore.hodlers');
+
+  @override
+  List<Holding> get hodlers {
+    _$hodlersAtom.reportRead();
+    return super.hodlers;
+  }
+
+  @override
+  set hodlers(List<Holding> value) {
+    _$hodlersAtom.reportWrite(value, super.hodlers, () {
+      super.hodlers = value;
+    });
+  }
+
+  final _$marketValueAtom = Atom(name: '_ExploreStore.marketValue');
+
+  @override
+  double get marketValue {
+    _$marketValueAtom.reportRead();
+    return super.marketValue;
+  }
+
+  @override
+  set marketValue(double value) {
+    _$marketValueAtom.reportWrite(value, super.marketValue, () {
+      super.marketValue = value;
+    });
+  }
+
   final _$balanceAtom = Atom(name: '_ExploreStore.balance');
 
   @override
@@ -66,6 +111,21 @@ mixin _$ExploreStore on _ExploreStore, Store {
   set balance(double value) {
     _$balanceAtom.reportWrite(value, super.balance, () {
       super.balance = value;
+    });
+  }
+
+  final _$didSelectHoldingsAtom = Atom(name: '_ExploreStore.didSelectHoldings');
+
+  @override
+  bool get didSelectHoldings {
+    _$didSelectHoldingsAtom.reportRead();
+    return super.didSelectHoldings;
+  }
+
+  @override
+  set didSelectHoldings(bool value) {
+    _$didSelectHoldingsAtom.reportWrite(value, super.didSelectHoldings, () {
+      super.didSelectHoldings = value;
     });
   }
 
@@ -149,11 +209,22 @@ mixin _$ExploreStore on _ExploreStore, Store {
   }
 
   @override
-  List<Map<String, dynamic>> getHoldings() {
+  void getHoldings() {
     final _$actionInfo = _$_ExploreStoreActionController.startAction(
         name: '_ExploreStore.getHoldings');
     try {
       return super.getHoldings();
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getHodlers() {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.getHodlers');
+    try {
+      return super.getHodlers();
     } finally {
       _$_ExploreStoreActionController.endAction(_$actionInfo);
     }
@@ -220,7 +291,11 @@ mixin _$ExploreStore on _ExploreStore, Store {
 isLoading: ${isLoading},
 profiles: ${profiles},
 wallet: ${wallet},
+holdings: ${holdings},
+hodlers: ${hodlers},
+marketValue: ${marketValue},
 balance: ${balance},
+didSelectHoldings: ${didSelectHoldings},
 savedProfiles: ${savedProfiles}
     ''';
   }

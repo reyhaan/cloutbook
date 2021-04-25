@@ -11,14 +11,17 @@ import 'package:get_it/get_it.dart';
 
 import '../config/palette.dart';
 
-class WalletScreen extends HookWidget {
-  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
-  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
+final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+final ProfileStore _profileStore = GetIt.I<ProfileStore>();
+final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
 
+class WalletScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
       _exploreStore.getWallet(_profileStore.userProfile.publicKeyBase58Check);
+      _exploreStore.getHoldings();
+      _exploreStore.getHodlers();
       return _exploreStore.reset;
     }, []);
 
@@ -41,14 +44,13 @@ class WalletScreen extends HookWidget {
 }
 
 SliverAppBar createSilverAppBar1() {
-  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
-  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
   return SliverAppBar(
     backgroundColor: Colors.transparent,
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -60,12 +62,12 @@ SliverAppBar createSilverAppBar1() {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Wallet',
-                  style:
-                      Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(6),
+                padding: EdgeInsets.fromLTRB(6, 10, 6, 6),
                 margin: EdgeInsets.only(right: 6),
                 child: Container(
                   padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
@@ -79,10 +81,12 @@ SliverAppBar createSilverAppBar1() {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('\$${_exchangeStore.getCoinPrice(_exploreStore.balance)}',
+                        Text(
+                            '\$${_exchangeStore.getCoinPrice(_exploreStore.balance)}',
                             style: TextStyle(fontWeight: FontWeight.w600)),
                         SizedBox(height: 2),
-                        Text('Balance', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        Text('Balance',
+                            style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ],
                     );
                   }),
@@ -97,8 +101,6 @@ SliverAppBar createSilverAppBar1() {
 }
 
 SliverAppBar createSilverAppBar2() {
-  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
-  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
   return SliverAppBar(
     backgroundColor: Palette.background,
     pinned: true,
@@ -120,7 +122,7 @@ SliverAppBar createSilverAppBar2() {
               children: [
                 Observer(builder: (_) {
                   return Text(
-                    '\$' + _exchangeStore.getCoinPrice(_exploreStore.balance).toString(),
+                    '\$' + _exploreStore.marketValue.toStringAsFixed(2),
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
@@ -129,7 +131,7 @@ SliverAppBar createSilverAppBar2() {
                 }),
                 SizedBox(height: 6),
                 Text(
-                  'Your Portfolio',
+                  'Market Value',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 12,
@@ -172,6 +174,11 @@ class WalletTabs extends HookWidget {
                   children: myTabs,
                   onValueChanged: (int? i) {
                     segmentedControlGroupValue.value = i!;
+                    if (i == 0) {
+                      _exploreStore.didSelectHoldings = true;
+                    } else {
+                      _exploreStore.didSelectHoldings = false;
+                    }
                   },
                 ),
               ],

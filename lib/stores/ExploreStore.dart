@@ -1,6 +1,9 @@
+import 'package:cloutbook/models/HoldingModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/models/WalletModel.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
+import 'package:cloutbook/stores/ExchangeStore.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 part 'ExploreStore.g.dart';
@@ -24,7 +27,19 @@ abstract class _ExploreStore with Store {
   List<Wallet> wallet = [];
 
   @observable
+  List<Holding> holdings = [];
+
+  @observable
+  List<Holding> hodlers = [];
+
+  @observable
+  double marketValue = 0;
+
+  @observable
   double balance = 0;
+
+  @observable
+  bool didSelectHoldings = true;
 
   @observable
   List<ProfileEntryResponse> savedProfiles = [];
@@ -34,6 +49,9 @@ abstract class _ExploreStore with Store {
     isLoading = false;
     profiles = [];
     savedProfiles = [];
+    marketValue = 0;
+    hodlers = [];
+    holdings = [];
   }
 
   @action
@@ -45,7 +63,51 @@ abstract class _ExploreStore with Store {
   }
 
   @action
-  List<Map<String, dynamic>> getHoldings() {}
+  void getHoldings() {
+    final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+    Map<String, dynamic> _holding = {};
+    List<Holding> tempHoldings = [];
+
+    wallet.first.usersYouHODL?.forEach((user) {
+      // set amount of coins
+      _holding['Amount'] = user.balanceNanos! / 1000000000;
+      _holding['Price'] = double.parse(_exchangeStore
+          .getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
+      _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
+      _holding['Username'] = user.profileEntryResponse?.username;
+      _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
+      _holding['ProfilePic'] = user.profileEntryResponse?.profilePic;
+      tempHoldings.add(Holding.fromMap(_holding));
+    });
+
+    tempHoldings.forEach((holding) {
+      marketValue = marketValue + holding.marketValue;
+    });
+
+    holdings = tempHoldings;
+  }
+
+  @action
+  void getHodlers() {
+    final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+    Map<String, dynamic> _holding = {};
+    List<Holding> tempHoldings = [];
+
+    wallet.first.usersWhoHODLYou?.forEach((user) {
+      // set amount of coins
+      _holding['Amount'] = user.balanceNanos! / 1000000000;
+      _holding['Price'] = double.parse(_exchangeStore
+          .getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
+      _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
+      _holding['Username'] = user.profileEntryResponse?.username ??
+          user.hodlerPublicKeyBase58Check;
+      _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
+      _holding['ProfilePic'] = user.profileEntryResponse?.profilePic ?? '';
+      tempHoldings.add(Holding.fromMap(_holding));
+    });
+
+    hodlers = tempHoldings;
+  }
 
   @action
   void setProfiles(newProfiles) {

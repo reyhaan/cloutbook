@@ -1,13 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
-import 'package:cloutbook/models/ProfileModel.dart';
-import 'package:cloutbook/models/WalletModel.dart';
+import 'package:cloutbook/models/HoldingModel.dart';
 import 'package:cloutbook/routes/router.dart';
-import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
@@ -24,9 +25,11 @@ class HoldingList extends HookWidget {
 
     return Container(
       child: Observer(builder: (_) {
-        final watchlist = _exploreStore.wallet[0].usersYouHODL;
+        final watchlist = _exploreStore.didSelectHoldings
+            ? _exploreStore.holdings
+            : _exploreStore.hodlers;
         return ListView.builder(
-          itemCount: watchlist?.length,
+          itemCount: watchlist.length,
           itemBuilder: (context, index) {
             if (index == 0) {
               return Column(
@@ -34,11 +37,11 @@ class HoldingList extends HookWidget {
                   Row(
                     children: [SizedBox(height: 10)],
                   ),
-                  ListItem(profile: watchlist![index])
+                  ListItem(profile: watchlist[index])
                 ],
               );
             }
-            return ListItem(profile: watchlist![index]);
+            return ListItem(profile: watchlist[index]);
           },
         );
       }),
@@ -47,9 +50,7 @@ class HoldingList extends HookWidget {
 }
 
 class ListItem extends StatelessWidget {
-  final HODLer? profile;
-  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
-  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+  final Holding? profile;
 
   ListItem({
     Key? key,
@@ -58,14 +59,18 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatar = processDataImage(profile?.profileEntryResponse?.profilePic);
+    Uint8List? avatar;
+    if (profile?.profilePic != '') {
+      avatar = processDataImage(profile?.profilePic);
+    } else {
+      avatar = null;
+    }
     final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter
-        .format(double.parse(_exchangeStore.getCoinPrice(profile?.profileEntryResponse?.coinPriceBitCloutNanos)));
+    final coinPrice = formatter.format(profile?.price);
 
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
-        AutoRouter.of(context).push(ProfileRoute(username: profile?.profileEntryResponse?.username));
+        AutoRouter.of(context).push(ProfileRoute(username: profile?.username));
       }, context),
       child: Container(
         margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
@@ -93,7 +98,12 @@ class ListItem extends StatelessWidget {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(21),
-                        child: Image.memory(avatar),
+                        child: avatar == null
+                            ? CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: Text('U'),
+                              )
+                            : Image.memory(avatar),
                       ),
                     ),
                     Column(
@@ -101,9 +111,15 @@ class ListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  (MediaQuery.of(context).size.width / 2) - 40),
                           child: Text(
-                            '@${profile?.profileEntryResponse?.username}',
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                            '@${profile?.username}',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
                         SizedBox(height: 5.0),
@@ -134,13 +150,14 @@ class ListItem extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 5.0),
-                    Text(
-                      '-2.30%',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.green, fontSize: 12.0),
-                    ),
+                    // Text(
+                    //   '-2.30%',
+                    //   textAlign: TextAlign.left,
+                    //   style: TextStyle(color: Colors.green, fontSize: 12.0),
+                    // ),
                   ],
                 ),
+                SizedBox(width: 12.0),
               ],
             )
           ],
