@@ -129,7 +129,7 @@ SliverAppBar createSilverAppBar2() {
                 }),
                 SizedBox(height: 6),
                 Text(
-                  'Wallet Balance',
+                  'Total Holdings',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 12,

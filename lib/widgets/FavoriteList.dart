@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
+import 'package:cloutbook/routes/router.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:flutter/cupertino.dart';
@@ -65,100 +67,106 @@ class ListItem extends StatelessWidget {
     final coinPrice = formatter.format(double.parse(
         _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
-    return Container(
-      margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
-      padding: EdgeInsets.fromLTRB(10, 10, 8, 14),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(7),
-        color: Palette.foreground,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    height: 46,
-                    width: 46,
-                    margin: EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
+    return GestureDetector(
+      onTap: Feedback.wrapForTap(() {
+        AutoRouter.of(context).push(ProfileRoute(username: profile?.username));
+      }, context),
+      child: Container(
+        margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
+        padding: EdgeInsets.fromLTRB(10, 10, 8, 14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(7),
+          color: Palette.foreground,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: 46,
+                      width: 46,
+                      margin: EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(21),
+                        child: Image.memory(avatar),
+                      ),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(21),
-                      child: Image.memory(avatar),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Text(
+                            '@${profile?.username}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        SizedBox(height: 5.0),
+                        Text(
+                          '243 Followers',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                        ),
+                      ],
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Text(
-                          '@${profile?.username}',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.w600),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Text(
+                        '\$$coinPrice',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 5.0),
-                      Text(
-                        '243 Followers',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Text(
-                      '\$$coinPrice',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      '-2.30%',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.green, fontSize: 12.0),
+                    ),
+                  ],
+                ),
+                SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () async {
+                    // save item to watchlist
+                    await _exploreStore.removeFromWatchlist(profile);
+                  },
+                  child: Container(
+                    color: Palette.foreground,
+                    padding: EdgeInsets.all(4),
+                    child: Icon(
+                      Icons.delete_outline,
+                      size: 18.0,
+                      color: Palette.hintColor,
                     ),
                   ),
-                  SizedBox(height: 5.0),
-                  Text(
-                    '-2.30%',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.green, fontSize: 12.0),
-                  ),
-                ],
-              ),
-              SizedBox(width: 20),
-              GestureDetector(
-                onTap: () async {
-                  // save item to watchlist
-                  await _exploreStore.removeFromWatchlist(profile);
-                },
-                child: Container(
-                  color: Palette.foreground,
-                  padding: EdgeInsets.all(4),
-                  child: Icon(
-                    Icons.delete_outline,
-                    size: 18.0,
-                    color: Palette.hintColor,
-                  ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
