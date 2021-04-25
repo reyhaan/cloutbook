@@ -1,4 +1,5 @@
 import 'package:cloutbook/models/ProfileModel.dart';
+import 'package:cloutbook/models/WalletModel.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:mobx/mobx.dart';
 
@@ -20,6 +21,9 @@ abstract class _ExploreStore with Store {
   List<ProfileEntryResponse> profiles = [];
 
   @observable
+  List<Wallet> wallet = [];
+
+  @observable
   List<ProfileEntryResponse> savedProfiles = [];
 
   @action
@@ -27,6 +31,11 @@ abstract class _ExploreStore with Store {
     isLoading = false;
     profiles = [];
     savedProfiles = [];
+  }
+
+  @action
+  void setWallet(newWallet) {
+    wallet = newWallet;
   }
 
   @action
@@ -133,7 +142,8 @@ abstract class _ExploreStore with Store {
       final userList = {
         "PublicKeysBase58Check": [publicKey]
       };
-      final response = await _exploreRepository.getWallet(payload: userList);
+      final wallet = await _exploreRepository.getWallet(payload: userList);
+      setWallet(wallet);
     } catch (e) {}
   }
 }

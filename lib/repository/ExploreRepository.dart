@@ -5,6 +5,7 @@ import 'package:cloutbook/common/boxes.dart';
 import 'package:cloutbook/models/FailureModel.dart';
 import 'package:cloutbook/models/HiveWatchlistModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
+import 'package:cloutbook/models/WalletModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -12,6 +13,9 @@ import 'package:injectable/injectable.dart';
 
 abstract class BaseExploreRepository {
   Future<List<ProfileEntryResponse>> getProfiles({
+    Map<String, dynamic>? payload,
+  });
+  Future<List<Wallet>> getWallet({
     Map<String, dynamic>? payload,
   });
   Future<List<ProfileEntryResponse>> getWatchlist();
@@ -44,7 +48,8 @@ class ExploreRepository extends BaseExploreRepository {
 
       if (response.statusCode == 200) {
         final data = Map<String, dynamic>.from(response.data);
-        final results = List<Map<String, dynamic>>.from(data['ProfilesFound'] ?? []);
+        final results =
+            List<Map<String, dynamic>>.from(data['ProfilesFound'] ?? []);
 
         if (results.isNotEmpty) {
           return results.map((e) => ProfileEntryResponse.fromMap(e)).toList();
@@ -61,7 +66,7 @@ class ExploreRepository extends BaseExploreRepository {
   }
 
   @override
-  Future<List<ProfileEntryResponse>> getWallet({
+  Future<List<Wallet>> getWallet({
     @required Map<String, dynamic>? payload,
   }) async {
     try {
@@ -73,8 +78,16 @@ class ExploreRepository extends BaseExploreRepository {
       );
 
       if (response.statusCode == 200) {
+        List<Wallet> wallets = [];
         final data = Map<String, dynamic>.from(response.data);
-        final results = List<Map<String, dynamic>>.from(data['UserList'] ?? []);
+        final _wallets =
+            List<Map<String, dynamic>>.from(data['UserList'] ?? []);
+
+        _wallets.forEach((wallet) {
+          wallets.add(Wallet.fromMap(wallet));
+        });
+
+        return wallets;
       }
       return [];
     } on DioError catch (err) {
@@ -95,7 +108,8 @@ class ExploreRepository extends BaseExploreRepository {
       final list = box.values.toList();
       for (var i = 0; i < list.length; i++) {
         final data = list[i];
-        savedProfiles.add(ProfileEntryResponse.fromMap(data.profile!.cast<String, dynamic>()));
+        savedProfiles.add(ProfileEntryResponse.fromMap(
+            data.profile!.cast<String, dynamic>()));
       }
       return Future.value(savedProfiles);
     } catch (e) {

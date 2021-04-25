@@ -39,6 +39,21 @@ mixin _$ExploreStore on _ExploreStore, Store {
     });
   }
 
+  final _$walletAtom = Atom(name: '_ExploreStore.wallet');
+
+  @override
+  List<Wallet> get wallet {
+    _$walletAtom.reportRead();
+    return super.wallet;
+  }
+
+  @override
+  set wallet(List<Wallet> value) {
+    _$walletAtom.reportWrite(value, super.wallet, () {
+      super.wallet = value;
+    });
+  }
+
   final _$savedProfilesAtom = Atom(name: '_ExploreStore.savedProfiles');
 
   @override
@@ -108,6 +123,17 @@ mixin _$ExploreStore on _ExploreStore, Store {
   }
 
   @override
+  void setWallet(dynamic newWallet) {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.setWallet');
+    try {
+      return super.setWallet(newWallet);
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setProfiles(dynamic newProfiles) {
     final _$actionInfo = _$_ExploreStoreActionController.startAction(
         name: '_ExploreStore.setProfiles');
@@ -167,6 +193,7 @@ mixin _$ExploreStore on _ExploreStore, Store {
     return '''
 isLoading: ${isLoading},
 profiles: ${profiles},
+wallet: ${wallet},
 savedProfiles: ${savedProfiles}
     ''';
   }

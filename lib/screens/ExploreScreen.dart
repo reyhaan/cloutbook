@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
+import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:cloutbook/widgets/FavoriteList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,13 @@ import 'package:get_it/get_it.dart';
 
 class ExploreScreen extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
       _exploreStore.getWatchlist();
+      _exploreStore.getWallet(_profileStore.userProfile.publicKeyBase58Check);
       return _exploreStore.reset;
     }, []);
 
@@ -28,8 +31,9 @@ class ExploreScreen extends HookWidget {
                 createSilverAppBar2(),
               ];
             },
-            body:
-                (_exploreStore.savedProfiles.length > 0) ? FavoriteList() : Center(child: Text('Nothing to show here')),
+            body: (_exploreStore.savedProfiles.length > 0)
+                ? FavoriteList()
+                : Center(child: Text('Nothing to show here')),
           );
         },
       ),
@@ -43,7 +47,8 @@ SliverAppBar createSilverAppBar1() {
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -55,8 +60,8 @@ SliverAppBar createSilverAppBar1() {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Explore',
-                  style:
-                      Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
