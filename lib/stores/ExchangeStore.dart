@@ -24,9 +24,18 @@ abstract class _ExchangeStore with Store {
   @observable
   bool isLoading = true;
 
+  @observable
+  String history = '';
+
   @action
   void reset() {
     isLoading = false;
+  }
+
+  @action
+  void setHistory(newHistory) {
+    print(newHistory);
+    history = newHistory;
   }
 
   @action
@@ -72,6 +81,15 @@ abstract class _ExchangeStore with Store {
   }
 
   @action
+  Future<void> getHistory({publicKey}) async {
+    try {
+      await _exchangeRepository.getHistory(publicKey: publicKey);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
   String getCoinPrice(bitCloutNanos) {
     if (ticker.usd != null &&
         bitCloutNanos != null &&
@@ -81,7 +99,7 @@ abstract class _ExchangeStore with Store {
           (exchangeRate.satoshisPerBitCloutExchangeRate! / 100000000)
               .toDouble();
       double? bitCloutPrice = (bitcoinInUSD! * bitCoinsPerBitClout);
-      return ((bitCloutNanos! / 1000000000) * bitCloutPrice).toStringAsFixed(2);
+      return ((bitCloutNanos / 1000000000) * bitCloutPrice).toStringAsFixed(2);
     }
     return '0';
   }

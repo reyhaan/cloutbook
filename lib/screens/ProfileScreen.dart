@@ -7,15 +7,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
-import '../config/palette.dart';
-
 class ProfileScreen extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final String? username;
+  final bool? shouldGoBackToRoot;
 
   ProfileScreen({
     Key? key,
     this.username,
+    this.shouldGoBackToRoot,
   }) : super(key: key);
 
   @override
@@ -50,6 +50,31 @@ class ProfileScreen extends HookWidget {
                   child: Posts(
                     posts: _profileStore.userProfile.posts,
                     isProfile: true,
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 30,
+                left: 20,
+                child: Visibility(
+                  visible: AutoRouter.of(context).current?.name != 'NavRoute',
+                  child: GestureDetector(
+                    onTap: () {
+                      if (shouldGoBackToRoot == false) {
+                        AutoRouter.of(context).pop();
+                      } else {
+                        AutoRouter.of(context).popUntilRoot();
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      color: Color(0xFF0A0A0A),
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
                   ),
                 ),
               ),

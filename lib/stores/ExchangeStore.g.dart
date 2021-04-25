@@ -54,6 +54,21 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
     });
   }
 
+  final _$historyAtom = Atom(name: '_ExchangeStore.history');
+
+  @override
+  String get history {
+    _$historyAtom.reportRead();
+    return super.history;
+  }
+
+  @override
+  set history(String value) {
+    _$historyAtom.reportWrite(value, super.history, () {
+      super.history = value;
+    });
+  }
+
   final _$disposeWebViewsAsyncAction =
       AsyncAction('_ExchangeStore.disposeWebViews');
 
@@ -85,6 +100,14 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
     return _$updateExchangeAsyncAction.run(() => super.updateExchange());
   }
 
+  final _$getHistoryAsyncAction = AsyncAction('_ExchangeStore.getHistory');
+
+  @override
+  Future<void> getHistory({dynamic publicKey}) {
+    return _$getHistoryAsyncAction
+        .run(() => super.getHistory(publicKey: publicKey));
+  }
+
   final _$_ExchangeStoreActionController =
       ActionController(name: '_ExchangeStore');
 
@@ -94,6 +117,17 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
         name: '_ExchangeStore.reset');
     try {
       return super.reset();
+    } finally {
+      _$_ExchangeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setHistory(dynamic newHistory) {
+    final _$actionInfo = _$_ExchangeStoreActionController.startAction(
+        name: '_ExchangeStore.setHistory');
+    try {
+      return super.setHistory(newHistory);
     } finally {
       _$_ExchangeStoreActionController.endAction(_$actionInfo);
     }
@@ -137,7 +171,8 @@ mixin _$ExchangeStore on _ExchangeStore, Store {
     return '''
 exchangeRate: ${exchangeRate},
 ticker: ${ticker},
-isLoading: ${isLoading}
+isLoading: ${isLoading},
+history: ${history}
     ''';
   }
 }

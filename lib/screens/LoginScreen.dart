@@ -23,10 +23,19 @@ class LoginScreen extends HookWidget {
             Column(
               children: [
                 Container(
+                  height: 75,
+                  margin: EdgeInsets.fromLTRB(8.0, 120.0, 8.0, 10.0),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(Assets.logoRound),
+                    ),
+                  ),
+                ),
+                Container(
                   height: 25,
                   margin: EdgeInsets.fromLTRB(
                     8.0,
-                    120.0,
+                    20.0,
                     8.0,
                     40.0,
                   ),

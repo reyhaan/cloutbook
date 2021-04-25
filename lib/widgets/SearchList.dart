@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
+import 'package:cloutbook/routes/router.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,96 +61,125 @@ class ListItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     var _profilePic = profile?.profilePic;
-    var urlPattern = r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
-    var match = new RegExp(urlPattern, caseSensitive: false).firstMatch(_profilePic.toString());
+    var urlPattern =
+        r"(https?|http)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+    var match = new RegExp(urlPattern, caseSensitive: false)
+        .firstMatch(_profilePic.toString());
 
     final rerender = useState(render);
-    final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter.format(double.parse(_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
+    final formatter = new NumberFormat("#,###.##");
+    final coinPrice = formatter.format(double.parse(
+        _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
-    return Container(
-      margin: EdgeInsets.fromLTRB(11, 0, 11, 0),
-      padding: EdgeInsets.fromLTRB(10, 12, 8, 12),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: Palette.background,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    height: 46,
-                    width: 46,
-                    margin: EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(21),
-                      child:
-                          match != null ? Image.network('$_profilePic') : Image.memory(processDataImage(_profilePic)),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Text(
-                          '@${profile?.username}',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                        ),
+    return GestureDetector(
+      onTap: Feedback.wrapForTap(() {
+        AutoRouter.of(context).push(ProfileRoute(
+            username: profile?.username, shouldGoBackToRoot: false));
+      }, context),
+      child: Container(
+        margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
+        padding: EdgeInsets.fromLTRB(10, 10, 8, 14),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(7),
+          color: Palette.foreground,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      height: 46,
+                      width: 46,
+                      margin: EdgeInsets.only(right: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                '~\$$coinPrice',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(21),
+                        child: match != null
+                            ? Image.network('$_profilePic')
+                            : Image.memory(processDataImage(_profilePic)),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Text(
+                            '@${profile?.username}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(width: 20),
-              GestureDetector(
-                onTap: () async {
-                  // save item to watchlist
-                  final bool inList = _exploreStore.isInWatchlist(profile);
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  '\$$coinPrice',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () async {
+                    // save item to watchlist
+                    final bool inList = _exploreStore.isInWatchlist(profile);
 
-                  if (inList) {
-                    // remove this item from watch list
-                    await _exploreStore.removeFromWatchlist(profile);
-                  } else {
-                    // add this item to watch list
-                    await _exploreStore.addToWatchlist(profile!);
-                  }
-                  rerender.value = !rerender.value!;
-                },
-                child: Container(
-                  color: Palette.background,
-                  padding: EdgeInsets.all(4),
-                  child: Icon(
-                    _exploreStore.isInWatchlist(profile) ? Icons.star : Icons.star_outline,
-                    size: 22.0,
-                    color: Palette.hintColor,
+                    _exchangeStore.getHistory();
+
+                    if (inList) {
+                      // remove this item from watch list
+                      await _exploreStore.removeFromWatchlist(profile);
+                    } else {
+                      // add this item to watch list
+                      await _exploreStore.addToWatchlist(profile!);
+                    }
+                    rerender.value = !rerender.value!;
+                  },
+                  child: Container(
+                    color: Palette.foreground,
+                    padding: EdgeInsets.all(4),
+                    child: Stack(
+                      children: [
+                        Visibility(
+                          visible: _exploreStore.isInWatchlist(profile),
+                          child: Icon(
+                            CupertinoIcons.checkmark_alt_circle_fill,
+                            size: 22.0,
+                            color: Palette.primary4,
+                          ),
+                        ),
+                        Visibility(
+                          visible: !_exploreStore.isInWatchlist(profile),
+                          child: Icon(
+                            CupertinoIcons.plus_circle,
+                            size: 22.0,
+                            color: Palette.hintColor,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

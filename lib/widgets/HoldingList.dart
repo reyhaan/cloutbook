@@ -1,18 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
-import 'package:cloutbook/models/ProfileModel.dart';
+import 'package:cloutbook/models/HoldingModel.dart';
 import 'package:cloutbook/routes/router.dart';
-import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
-class FavoriteList extends HookWidget {
+class HoldingList extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
 
   @override
@@ -23,7 +25,9 @@ class FavoriteList extends HookWidget {
 
     return Container(
       child: Observer(builder: (_) {
-        final watchlist = _exploreStore.savedProfiles;
+        final watchlist = _exploreStore.didSelectHoldings
+            ? _exploreStore.holdings
+            : _exploreStore.hodlers;
         return ListView.builder(
           itemCount: watchlist.length,
           itemBuilder: (context, index) {
@@ -31,12 +35,7 @@ class FavoriteList extends HookWidget {
               return Column(
                 children: [
                   Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 14, 10, 10),
-                        child: Text('Watchlist'),
-                      ),
-                    ],
+                    children: [SizedBox(height: 10)],
                   ),
                   ListItem(profile: watchlist[index])
                 ],
@@ -51,9 +50,7 @@ class FavoriteList extends HookWidget {
 }
 
 class ListItem extends StatelessWidget {
-  final ProfileEntryResponse? profile;
-  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
-  final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+  final Holding? profile;
 
   ListItem({
     Key? key,
@@ -62,10 +59,14 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatar = processDataImage(profile?.profilePic);
+    Uint8List? avatar;
+    if (profile?.profilePic != '') {
+      avatar = processDataImage(profile?.profilePic);
+    } else {
+      avatar = null;
+    }
     final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter.format(double.parse(
-        _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
+    final coinPrice = formatter.format(profile?.price);
 
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
@@ -97,7 +98,12 @@ class ListItem extends StatelessWidget {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(21),
-                        child: Image.memory(avatar),
+                        child: avatar == null
+                            ? CircleAvatar(
+                                backgroundColor: Colors.white,
+                                child: Text('U'),
+                              )
+                            : Image.memory(avatar),
                       ),
                     ),
                     Column(
@@ -105,8 +111,12 @@ class ListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  (MediaQuery.of(context).size.width / 2) - 40),
                           child: Text(
                             '@${profile?.username}',
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600),
@@ -114,7 +124,7 @@ class ListItem extends StatelessWidget {
                         ),
                         SizedBox(height: 5.0),
                         Text(
-                          '243 Followers',
+                          profile?.percentShare.toStringAsFixed(2) ?? '',
                           textAlign: TextAlign.left,
                           style: TextStyle(color: Colors.grey, fontSize: 12.0),
                         ),
@@ -140,29 +150,14 @@ class ListItem extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 5.0),
-                    Text(
-                      '-2.30%',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.green, fontSize: 12.0),
-                    ),
+                    // Text(
+                    //   '-2.30%',
+                    //   textAlign: TextAlign.left,
+                    //   style: TextStyle(color: Colors.green, fontSize: 12.0),
+                    // ),
                   ],
                 ),
-                SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () async {
-                    // save item to watchlist
-                    await _exploreStore.removeFromWatchlist(profile);
-                  },
-                  child: Container(
-                    color: Palette.foreground,
-                    padding: EdgeInsets.all(4),
-                    child: Icon(
-                      CupertinoIcons.minus_circle,
-                      size: 18.0,
-                      color: Palette.hintColor,
-                    ),
-                  ),
-                ),
+                SizedBox(width: 12.0),
               ],
             )
           ],

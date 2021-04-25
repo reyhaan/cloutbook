@@ -1,5 +1,9 @@
+import 'package:cloutbook/models/HoldingModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
+import 'package:cloutbook/models/WalletModel.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
+import 'package:cloutbook/stores/ExchangeStore.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
 part 'ExploreStore.g.dart';
@@ -20,6 +24,24 @@ abstract class _ExploreStore with Store {
   List<ProfileEntryResponse> profiles = [];
 
   @observable
+  List<Wallet> wallet = [];
+
+  @observable
+  List<Holding> holdings = [];
+
+  @observable
+  List<Holding> hodlers = [];
+
+  @observable
+  double marketValue = 0;
+
+  @observable
+  double balance = 0;
+
+  @observable
+  bool didSelectHoldings = true;
+
+  @observable
   List<ProfileEntryResponse> savedProfiles = [];
 
   @action
@@ -27,6 +49,75 @@ abstract class _ExploreStore with Store {
     isLoading = false;
     profiles = [];
     savedProfiles = [];
+    marketValue = 0;
+    hodlers = [];
+    holdings = [];
+    didSelectHoldings = true;
+  }
+
+  @action
+  void setWallet(newWallet) {
+    List<Wallet> oldWallet = wallet;
+    oldWallet = newWallet;
+    wallet = oldWallet;
+    balance = double.parse(wallet.first.balanceNanos.toString());
+  }
+
+  @action
+  void getHoldings() {
+    final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+    Map<String, dynamic> _holding = {};
+    List<Holding> tempHoldings = [];
+
+    wallet.first.usersYouHODL?.forEach((user) {
+      // set amount of coins
+      _holding['Amount'] = user.balanceNanos! / 1000000000;
+      _holding['Price'] = double.parse(_exchangeStore
+          .getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
+      _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
+      _holding['Username'] = user.profileEntryResponse?.username;
+      _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
+      _holding['ProfilePic'] = user.profileEntryResponse?.profilePic;
+      tempHoldings.add(Holding.fromMap(_holding));
+    });
+
+    tempHoldings.forEach((holding) {
+      marketValue = marketValue + holding.marketValue;
+    });
+
+    tempHoldings.map((holding) {
+      holding.percentShare = marketValue / holding.marketValue;
+      return holding;
+    });
+
+    holdings = tempHoldings;
+  }
+
+  @action
+  void getHodlers() {
+    final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
+    Map<String, dynamic> _holding = {};
+    List<Holding> tempHoldings = [];
+
+    wallet.first.usersWhoHODLYou?.forEach((user) {
+      // set amount of coins
+      _holding['Amount'] = user.balanceNanos! / 1000000000;
+      _holding['Price'] = double.parse(_exchangeStore
+          .getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
+      _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
+      _holding['Username'] = user.profileEntryResponse?.username ??
+          user.hodlerPublicKeyBase58Check;
+      _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
+      _holding['ProfilePic'] = user.profileEntryResponse?.profilePic ?? '';
+      tempHoldings.add(Holding.fromMap(_holding));
+    });
+
+    tempHoldings.map((holding) {
+      holding.percentShare = marketValue / holding.marketValue;
+      return holding;
+    });
+
+    hodlers = tempHoldings;
   }
 
   @action
@@ -41,7 +132,9 @@ abstract class _ExploreStore with Store {
 
   @action
   void updateSavedProfiles(newProfiles) {
-    savedProfiles.addAll(newProfiles);
+    List<ProfileEntryResponse> oldProfiles = savedProfiles;
+    oldProfiles.addAll(newProfiles);
+    savedProfiles = oldProfiles;
   }
 
   @action
@@ -52,7 +145,7 @@ abstract class _ExploreStore with Store {
   }
 
   @action
-  Future<void> getProfiles(searchKey) async {
+  Future<void> getProfiles(searchKey, publicKey) async {
     try {
       isLoading = true;
       final response = await _exploreRepository.getProfiles(payload: {
@@ -62,10 +155,9 @@ abstract class _ExploreStore with Store {
         "Description": "",
         "OrderBy": "",
         "NumToFetch": 10,
-        "ReaderPublicKeyBase58Check":
-            "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
+        "ReaderPublicKeyBase58Check": publicKey,
         "ModerationType": "",
-        "FetchUsersThatHODL": false,
+        "FetchUsersThatHODL": true,
         "AddGlobalFeedBool": false
       });
       isLoading = false;
@@ -124,5 +216,16 @@ abstract class _ExploreStore with Store {
     } catch (e) {
       throw e;
     }
+  }
+
+  @action
+  Future<void> getWallet(publicKey) async {
+    try {
+      final userList = {
+        "PublicKeysBase58Check": [publicKey]
+      };
+      final wallet = await _exploreRepository.getWallet(payload: userList);
+      setWallet(wallet);
+    } catch (e) {}
   }
 }

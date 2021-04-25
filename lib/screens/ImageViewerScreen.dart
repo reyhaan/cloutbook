@@ -32,9 +32,9 @@ class ImageViewerScreen extends StatelessWidget {
                 top: 18,
                 right: 18,
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: Feedback.wrapForTap(() {
                     AutoRouter.of(context).pop();
-                  },
+                  }, context),
                   child: Container(
                     padding: EdgeInsets.all(14),
                     decoration: BoxDecoration(

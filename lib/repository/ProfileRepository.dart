@@ -70,7 +70,7 @@ class ProfileRepository extends BaseProfileRepository {
       if (response.statusCode == 200) {
         final data = Map<String, dynamic>.from(response.data);
         List<Map<String, dynamic>> posts =
-            List<Map<String, dynamic>>.from(data['Posts']);
+            List<Map<String, dynamic>>.from(data['Posts'] ?? []);
         List<Post> result = [];
 
         posts.forEach((post) {
@@ -87,6 +87,9 @@ class ProfileRepository extends BaseProfileRepository {
     } on SocketException catch (err) {
       print(err);
       throw Failure(message: 'Please check your connection.');
+    } on Error catch (err) {
+      print(err);
+      throw err;
     }
   }
 

@@ -39,6 +39,96 @@ mixin _$ExploreStore on _ExploreStore, Store {
     });
   }
 
+  final _$walletAtom = Atom(name: '_ExploreStore.wallet');
+
+  @override
+  List<Wallet> get wallet {
+    _$walletAtom.reportRead();
+    return super.wallet;
+  }
+
+  @override
+  set wallet(List<Wallet> value) {
+    _$walletAtom.reportWrite(value, super.wallet, () {
+      super.wallet = value;
+    });
+  }
+
+  final _$holdingsAtom = Atom(name: '_ExploreStore.holdings');
+
+  @override
+  List<Holding> get holdings {
+    _$holdingsAtom.reportRead();
+    return super.holdings;
+  }
+
+  @override
+  set holdings(List<Holding> value) {
+    _$holdingsAtom.reportWrite(value, super.holdings, () {
+      super.holdings = value;
+    });
+  }
+
+  final _$hodlersAtom = Atom(name: '_ExploreStore.hodlers');
+
+  @override
+  List<Holding> get hodlers {
+    _$hodlersAtom.reportRead();
+    return super.hodlers;
+  }
+
+  @override
+  set hodlers(List<Holding> value) {
+    _$hodlersAtom.reportWrite(value, super.hodlers, () {
+      super.hodlers = value;
+    });
+  }
+
+  final _$marketValueAtom = Atom(name: '_ExploreStore.marketValue');
+
+  @override
+  double get marketValue {
+    _$marketValueAtom.reportRead();
+    return super.marketValue;
+  }
+
+  @override
+  set marketValue(double value) {
+    _$marketValueAtom.reportWrite(value, super.marketValue, () {
+      super.marketValue = value;
+    });
+  }
+
+  final _$balanceAtom = Atom(name: '_ExploreStore.balance');
+
+  @override
+  double get balance {
+    _$balanceAtom.reportRead();
+    return super.balance;
+  }
+
+  @override
+  set balance(double value) {
+    _$balanceAtom.reportWrite(value, super.balance, () {
+      super.balance = value;
+    });
+  }
+
+  final _$didSelectHoldingsAtom = Atom(name: '_ExploreStore.didSelectHoldings');
+
+  @override
+  bool get didSelectHoldings {
+    _$didSelectHoldingsAtom.reportRead();
+    return super.didSelectHoldings;
+  }
+
+  @override
+  set didSelectHoldings(bool value) {
+    _$didSelectHoldingsAtom.reportWrite(value, super.didSelectHoldings, () {
+      super.didSelectHoldings = value;
+    });
+  }
+
   final _$savedProfilesAtom = Atom(name: '_ExploreStore.savedProfiles');
 
   @override
@@ -57,8 +147,9 @@ mixin _$ExploreStore on _ExploreStore, Store {
   final _$getProfilesAsyncAction = AsyncAction('_ExploreStore.getProfiles');
 
   @override
-  Future<void> getProfiles(dynamic searchKey) {
-    return _$getProfilesAsyncAction.run(() => super.getProfiles(searchKey));
+  Future<void> getProfiles(dynamic searchKey, dynamic publicKey) {
+    return _$getProfilesAsyncAction
+        .run(() => super.getProfiles(searchKey, publicKey));
   }
 
   final _$getWatchlistAsyncAction = AsyncAction('_ExploreStore.getWatchlist');
@@ -85,6 +176,13 @@ mixin _$ExploreStore on _ExploreStore, Store {
         .run(() => super.removeFromWatchlist(profile));
   }
 
+  final _$getWalletAsyncAction = AsyncAction('_ExploreStore.getWallet');
+
+  @override
+  Future<void> getWallet(dynamic publicKey) {
+    return _$getWalletAsyncAction.run(() => super.getWallet(publicKey));
+  }
+
   final _$_ExploreStoreActionController =
       ActionController(name: '_ExploreStore');
 
@@ -94,6 +192,39 @@ mixin _$ExploreStore on _ExploreStore, Store {
         name: '_ExploreStore.reset');
     try {
       return super.reset();
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setWallet(dynamic newWallet) {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.setWallet');
+    try {
+      return super.setWallet(newWallet);
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getHoldings() {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.getHoldings');
+    try {
+      return super.getHoldings();
+    } finally {
+      _$_ExploreStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getHodlers() {
+    final _$actionInfo = _$_ExploreStoreActionController.startAction(
+        name: '_ExploreStore.getHodlers');
+    try {
+      return super.getHodlers();
     } finally {
       _$_ExploreStoreActionController.endAction(_$actionInfo);
     }
@@ -159,6 +290,12 @@ mixin _$ExploreStore on _ExploreStore, Store {
     return '''
 isLoading: ${isLoading},
 profiles: ${profiles},
+wallet: ${wallet},
+holdings: ${holdings},
+hodlers: ${hodlers},
+marketValue: ${marketValue},
+balance: ${balance},
+didSelectHoldings: ${didSelectHoldings},
 savedProfiles: ${savedProfiles}
     ''';
   }

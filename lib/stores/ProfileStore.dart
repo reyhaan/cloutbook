@@ -90,6 +90,7 @@ abstract class _ProfileStore with Store {
   void setUserFollowers(followers) {
     userFollowers = '';
     userFollowers = followers.toString();
+    userProfile.followers = userFollowers;
   }
 
   @action
@@ -112,7 +113,6 @@ abstract class _ProfileStore with Store {
         "PublicKeyBase58Check": "",
         "Username": username,
       });
-      setUserProfile(profile);
 
       final followers = await _profileRepository.getFollowers(payload: {
         "username": username,
@@ -122,6 +122,8 @@ abstract class _ProfileStore with Store {
         "NumToFetch": 50
       });
 
+      profile.setFollowers = followers.toString();
+      setUserProfile(profile);
       setUserFollowers(followers);
 
       final posts = await _profileRepository.getPostsForPublicKey(payload: {
