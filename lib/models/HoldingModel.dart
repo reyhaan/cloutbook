@@ -7,7 +7,7 @@ class Holding extends Equatable {
   final double price;
   final double amount;
   final double marketValue;
-  final double percentShare;
+  double percentShare;
 
   Holding({
     required this.username,

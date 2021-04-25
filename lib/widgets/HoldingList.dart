@@ -124,7 +124,7 @@ class ListItem extends StatelessWidget {
                         ),
                         SizedBox(height: 5.0),
                         Text(
-                          '243 Followers',
+                          profile?.percentShare.toStringAsFixed(2) ?? '',
                           textAlign: TextAlign.left,
                           style: TextStyle(color: Colors.grey, fontSize: 12.0),
                         ),

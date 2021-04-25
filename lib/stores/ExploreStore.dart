@@ -52,6 +52,7 @@ abstract class _ExploreStore with Store {
     marketValue = 0;
     hodlers = [];
     holdings = [];
+    didSelectHoldings = true;
   }
 
   @action
@@ -84,6 +85,11 @@ abstract class _ExploreStore with Store {
       marketValue = marketValue + holding.marketValue;
     });
 
+    tempHoldings.map((holding) {
+      holding.percentShare = marketValue / holding.marketValue;
+      return holding;
+    });
+
     holdings = tempHoldings;
   }
 
@@ -104,6 +110,11 @@ abstract class _ExploreStore with Store {
       _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
       _holding['ProfilePic'] = user.profileEntryResponse?.profilePic ?? '';
       tempHoldings.add(Holding.fromMap(_holding));
+    });
+
+    tempHoldings.map((holding) {
+      holding.percentShare = marketValue / holding.marketValue;
+      return holding;
     });
 
     hodlers = tempHoldings;
