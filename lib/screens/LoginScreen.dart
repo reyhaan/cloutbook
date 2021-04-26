@@ -158,7 +158,7 @@ class LoginScreen extends HookWidget {
                     padding: const EdgeInsets.only(
                         top: 30.0, left: 30.0, right: 30.0),
                     child: Text(
-                      'Start by adding your profile by username or public key, please do not enter your seed phrase!',
+                      'Start by adding a profile by username, please do not enter your seed phrase!',
                       style: TextStyle(color: Palette.hintColor),
                       textAlign: TextAlign.center,
                     ),
