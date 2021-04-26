@@ -54,6 +54,7 @@ abstract class _ExploreStore with Store {
     profiles = [];
     savedProfiles = [];
     marketValue = 0;
+    marketCap = 0;
     hodlers = [];
     holdings = [];
     didSelectHoldings = true;
@@ -76,8 +77,7 @@ abstract class _ExploreStore with Store {
     wallet.first.usersYouHODL?.forEach((user) {
       // set amount of coins
       _holding['Amount'] = user.balanceNanos! / 1000000000;
-      _holding['Price'] = double.parse(_exchangeStore
-          .getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
+      _holding['Price'] = double.parse(_exchangeStore.getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
       _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
       _holding['Username'] = user.profileEntryResponse?.username;
       _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
@@ -93,8 +93,7 @@ abstract class _ExploreStore with Store {
       if (tempHoldings[i].marketValue == 0) {
         tempHoldings[i].percentShare = 0;
       } else {
-        tempHoldings[i].percentShare =
-            (tempHoldings[i].marketValue / marketValue) * 100;
+        tempHoldings[i].percentShare = (tempHoldings[i].marketValue / marketValue) * 100;
       }
     }
 
@@ -113,11 +112,9 @@ abstract class _ExploreStore with Store {
     wallet.first.usersWhoHODLYou?.forEach((user) {
       // set amount of coins
       _holding['Amount'] = user.balanceNanos! / 1000000000;
-      _holding['Price'] = double.parse(_exchangeStore
-          .getCoinPrice(_profileStore.userProfile.coinPriceBitCloutNanos));
+      _holding['Price'] = double.parse(_exchangeStore.getCoinPrice(_profileStore.userProfile.coinPriceBitCloutNanos));
       _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
-      _holding['Username'] = user.profileEntryResponse?.username ??
-          user.hodlerPublicKeyBase58Check;
+      _holding['Username'] = user.profileEntryResponse?.username ?? user.hodlerPublicKeyBase58Check;
       _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
       _holding['ProfilePic'] = user.profileEntryResponse?.profilePic ?? '';
       tempHoldings.add(Holding.fromMap(_holding));
@@ -131,8 +128,7 @@ abstract class _ExploreStore with Store {
       if (tempHoldings[i].marketValue == 0) {
         tempHoldings[i].percentShare = 0;
       } else {
-        tempHoldings[i].percentShare =
-            (tempHoldings[i].marketValue / marketCap) * 100;
+        tempHoldings[i].percentShare = (tempHoldings[i].marketValue / marketCap) * 100;
       }
     }
 

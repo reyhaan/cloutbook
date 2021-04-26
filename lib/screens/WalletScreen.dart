@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 
+import '../common/utils.dart';
 import '../config/palette.dart';
 
 final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
@@ -50,8 +50,7 @@ SliverAppBar createSilverAppBar1() {
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -63,8 +62,8 @@ SliverAppBar createSilverAppBar1() {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Wallet',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                  style:
+                      Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
@@ -82,12 +81,10 @@ SliverAppBar createSilverAppBar1() {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                            '\$${_exchangeStore.getCoinPrice(_exploreStore.balance)}',
+                        Text('\$${_exchangeStore.getCoinPrice(_exploreStore.balance)}',
                             style: TextStyle(fontWeight: FontWeight.w600)),
                         SizedBox(height: 2),
-                        Text('Balance',
-                            style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        Text('Balance', style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ],
                     );
                   }),
@@ -102,8 +99,8 @@ SliverAppBar createSilverAppBar1() {
 }
 
 SliverAppBar createSilverAppBar2() {
-  final formatter = new NumberFormat("#,###.##");
-  final marketValue = formatter.format(_exploreStore.marketValue);
+  final marketValue = numberFormat(_exploreStore.marketValue);
+  final marketCap = numberFormat(_exploreStore.marketCap);
   return SliverAppBar(
     backgroundColor: Palette.background,
     pinned: true,
@@ -120,31 +117,31 @@ SliverAppBar createSilverAppBar2() {
             SizedBox(
               width: 14,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Observer(builder: (_) {
-                  return Text(
-                    '\$' + marketValue,
+            Observer(builder: (_) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _exploreStore.didSelectHoldings ? '\$' + marketValue : '\$' + marketCap,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                     ),
-                  );
-                }),
-                SizedBox(height: 6),
-                Text(
-                  'Market Value',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
                   ),
-                ),
-                SizedBox(height: 20),
-                SizedBox(child: WalletTabs())
-              ],
-            ),
+                  SizedBox(height: 6),
+                  Text(
+                    _exploreStore.didSelectHoldings ? 'Market Value' : 'Market Cap',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  SizedBox(child: WalletTabs())
+                ],
+              );
+            }),
           ],
         ),
       ],
