@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 import 'dart:async';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -63,3 +64,5 @@ class NumberFormatter {
 
 void launchURL(url) async =>
     await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+
+String numberFormat(string) => NumberFormat('#,###.##').format(string);

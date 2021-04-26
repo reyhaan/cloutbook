@@ -12,7 +12,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:intl/intl.dart';
 
 class HoldingList extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
@@ -25,9 +24,7 @@ class HoldingList extends HookWidget {
 
     return Container(
       child: Observer(builder: (_) {
-        final watchlist = _exploreStore.didSelectHoldings
-            ? _exploreStore.holdings
-            : _exploreStore.hodlers;
+        final watchlist = _exploreStore.didSelectHoldings ? _exploreStore.holdings : _exploreStore.hodlers;
         return ListView.builder(
           itemCount: watchlist.length,
           itemBuilder: (context, index) {
@@ -65,9 +62,6 @@ class ListItem extends StatelessWidget {
     } else {
       avatar = null;
     }
-    final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter.format(profile?.price);
-
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
         AutoRouter.of(context).push(ProfileRoute(username: profile?.username));
@@ -111,20 +105,16 @@ class ListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          constraints: BoxConstraints(
-                              maxWidth:
-                                  (MediaQuery.of(context).size.width / 2) - 40),
+                          constraints: BoxConstraints(maxWidth: (MediaQuery.of(context).size.width / 2) - 40),
                           child: Text(
                             '@${profile?.username}',
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                           ),
                         ),
                         SizedBox(height: 5.0),
                         Text(
-                          profile?.percentShare.toStringAsFixed(2) ?? '',
+                          '${profile?.percentShare.toStringAsFixed(1)}%',
                           textAlign: TextAlign.left,
                           style: TextStyle(color: Colors.grey, fontSize: 12.0),
                         ),
@@ -142,7 +132,7 @@ class ListItem extends StatelessWidget {
                   children: [
                     Container(
                       child: Text(
-                        '\$$coinPrice',
+                        '\$${numberFormat(profile?.marketValue)}',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,

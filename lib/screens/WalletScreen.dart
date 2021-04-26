@@ -9,6 +9,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 
+import '../common/utils.dart';
 import '../config/palette.dart';
 
 final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
@@ -66,32 +67,30 @@ SliverAppBar createSilverAppBar1() {
                       color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(6, 10, 6, 6),
-                margin: EdgeInsets.only(right: 6),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-                  constraints: BoxConstraints(minWidth: 100),
-                  decoration: BoxDecoration(
-                    color: Palette.foreground.withAlpha(180),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Observer(builder: (_) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                            '\$${_exchangeStore.getCoinPrice(_exploreStore.balance)}',
-                            style: TextStyle(fontWeight: FontWeight.w600)),
-                        SizedBox(height: 2),
-                        Text('Balance',
-                            style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      ],
-                    );
-                  }),
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.fromLTRB(6, 10, 6, 6),
+              //   margin: EdgeInsets.only(right: 6),
+              //   child: Container(
+              //     padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+              //     constraints: BoxConstraints(minWidth: 100),
+              //     decoration: BoxDecoration(
+              //       color: Palette.foreground.withAlpha(180),
+              //       borderRadius: BorderRadius.circular(25),
+              //     ),
+              //     child: Observer(builder: (_) {
+              //       return Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           Text('\$${_exchangeStore.getCoinPrice(_exploreStore.balance)}',
+              //               style: TextStyle(fontWeight: FontWeight.w600)),
+              //           SizedBox(height: 2),
+              //           Text('Balance', style: TextStyle(fontSize: 12, color: Colors.grey)),
+              //         ],
+              //       );
+              //     }),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -101,6 +100,8 @@ SliverAppBar createSilverAppBar1() {
 }
 
 SliverAppBar createSilverAppBar2() {
+  final marketValue = numberFormat(_exploreStore.marketValue);
+  final marketCap = numberFormat(_exploreStore.marketCap);
   return SliverAppBar(
     backgroundColor: Palette.background,
     pinned: true,
@@ -117,31 +118,35 @@ SliverAppBar createSilverAppBar2() {
             SizedBox(
               width: 14,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Observer(builder: (_) {
-                  return Text(
-                    '\$' + _exploreStore.marketValue.toStringAsFixed(2),
+            Observer(builder: (_) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _exploreStore.didSelectHoldings
+                        ? '\$' + marketValue
+                        : '\$' + marketCap,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
                     ),
-                  );
-                }),
-                SizedBox(height: 6),
-                Text(
-                  'Market Value',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
                   ),
-                ),
-                SizedBox(height: 20),
-                SizedBox(child: WalletTabs())
-              ],
-            ),
+                  SizedBox(height: 6),
+                  Text(
+                    _exploreStore.didSelectHoldings
+                        ? 'Market Value'
+                        : 'Market Cap',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  SizedBox(child: WalletTabs())
+                ],
+              );
+            }),
           ],
         ),
       ],
