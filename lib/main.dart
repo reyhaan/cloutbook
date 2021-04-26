@@ -11,6 +11,7 @@ import 'package:cloutbook/repository/ProfileRepository.dart';
 import 'package:cloutbook/routes/router.gr.dart';
 import 'package:cloutbook/stores/AuthStore.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
+import 'package:cloutbook/stores/ExploreProfileStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
@@ -37,14 +38,12 @@ void main() async {
   // stuff needed for flutter inapp_webview
   if (Platform.isAndroid) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-    var swAvailable = await AndroidWebViewFeature.isFeatureSupported(
-        AndroidWebViewFeature.SERVICE_WORKER_BASIC_USAGE);
-    var swInterceptAvailable = await AndroidWebViewFeature.isFeatureSupported(
-        AndroidWebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST);
+    var swAvailable = await AndroidWebViewFeature.isFeatureSupported(AndroidWebViewFeature.SERVICE_WORKER_BASIC_USAGE);
+    var swInterceptAvailable =
+        await AndroidWebViewFeature.isFeatureSupported(AndroidWebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST);
 
     if (swAvailable && swInterceptAvailable) {
-      AndroidServiceWorkerController serviceWorkerController =
-          AndroidServiceWorkerController.instance();
+      AndroidServiceWorkerController serviceWorkerController = AndroidServiceWorkerController.instance();
 
       serviceWorkerController.serviceWorkerClient = AndroidServiceWorkerClient(
         shouldInterceptRequest: (request) async {
@@ -74,6 +73,7 @@ void main() async {
   GetIt.I.registerSingleton<ExchangeStore>(ExchangeStore(exchangeRepository));
   GetIt.I.registerSingleton<ExploreStore>(ExploreStore(exploreRepository));
   GetIt.I.registerSingleton<AuthStore>(AuthStore(authRepository));
+  GetIt.I.registerSingleton<ExploreProfileStore>(ExploreProfileStore(profileRepository));
 
   // Finally, running our app
   runApp(MyApp());
@@ -98,10 +98,8 @@ class MyApp extends StatelessWidget {
           iconTheme: const IconThemeData(color: Colors.white),
           fontFamily: 'SFProDisplay',
           textTheme: TextTheme(
-            bodyText1:
-                TextStyle(color: Colors.white, fontFamily: 'SFProDisplay'),
-            bodyText2:
-                TextStyle(color: Colors.white, fontFamily: 'SFProDisplay'),
+            bodyText1: TextStyle(color: Colors.white, fontFamily: 'SFProDisplay'),
+            bodyText2: TextStyle(color: Colors.white, fontFamily: 'SFProDisplay'),
           ),
         ),
       ),
