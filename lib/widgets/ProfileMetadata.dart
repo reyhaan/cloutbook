@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class ProfileMetadata extends HookWidget {
@@ -15,16 +14,11 @@ class ProfileMetadata extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
+      // reset store when unmounted
+      _exchangeStore.disposeWebViews();
+
       // get latest exchange rates first
       _exchangeStore.updateExchange();
-
-      // reset store when unmounted
-      return _profileStore.reset;
-    }, []);
-
-    useEffect(() {
-      // reset store when unmounted
-      return _exchangeStore.disposeWebViews;
     }, []);
 
     return Container(
@@ -47,7 +41,8 @@ class ProfileMetadata extends HookWidget {
                       children: [
                         Observer(builder: (_) {
                           final formatter = new NumberFormat("#,###");
-                          String followers = formatter.format(int.parse(_profileStore.userProfile.followers!));
+                          String followers = formatter.format(
+                              int.parse(_profileStore.userProfile.followers!));
                           return Text(
                             followers,
                             style: TextStyle(
@@ -77,7 +72,8 @@ class ProfileMetadata extends HookWidget {
                       children: [
                         Observer(builder: (_) {
                           final formatter = new NumberFormat("#,###.##");
-                          final coinPrice = formatter.format(double.parse(_profileStore.coinPrice));
+                          final coinPrice = formatter
+                              .format(double.parse(_profileStore.coinPrice));
                           return Text(
                             '\$$coinPrice',
                             textAlign: TextAlign.end,

@@ -25,9 +25,11 @@ class ProfileScreen extends HookWidget {
         return;
       }
       if (username != null) {
-        _profileStore.getUserProfile(
-            username:
-                username!.isEmpty ? _profileStore.loggedInProfile : username);
+        if (_profileStore.userProfile.username == null) {
+          _profileStore.getUserProfile(
+              username:
+                  username!.isEmpty ? _profileStore.loggedInProfile : username);
+        }
       }
     }, []);
 
