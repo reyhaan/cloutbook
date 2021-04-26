@@ -50,7 +50,8 @@ SliverAppBar createSilverAppBar1() {
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -62,34 +63,34 @@ SliverAppBar createSilverAppBar1() {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Wallet',
-                  style:
-                      Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(6, 10, 6, 6),
-                margin: EdgeInsets.only(right: 6),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-                  constraints: BoxConstraints(minWidth: 100),
-                  decoration: BoxDecoration(
-                    color: Palette.foreground.withAlpha(180),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Observer(builder: (_) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('\$${_exchangeStore.getCoinPrice(_exploreStore.balance)}',
-                            style: TextStyle(fontWeight: FontWeight.w600)),
-                        SizedBox(height: 2),
-                        Text('Balance', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      ],
-                    );
-                  }),
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.fromLTRB(6, 10, 6, 6),
+              //   margin: EdgeInsets.only(right: 6),
+              //   child: Container(
+              //     padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+              //     constraints: BoxConstraints(minWidth: 100),
+              //     decoration: BoxDecoration(
+              //       color: Palette.foreground.withAlpha(180),
+              //       borderRadius: BorderRadius.circular(25),
+              //     ),
+              //     child: Observer(builder: (_) {
+              //       return Column(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           Text('\$${_exchangeStore.getCoinPrice(_exploreStore.balance)}',
+              //               style: TextStyle(fontWeight: FontWeight.w600)),
+              //           SizedBox(height: 2),
+              //           Text('Balance', style: TextStyle(fontSize: 12, color: Colors.grey)),
+              //         ],
+              //       );
+              //     }),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -122,7 +123,9 @@ SliverAppBar createSilverAppBar2() {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _exploreStore.didSelectHoldings ? '\$' + marketValue : '\$' + marketCap,
+                    _exploreStore.didSelectHoldings
+                        ? '\$' + marketValue
+                        : '\$' + marketCap,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
@@ -130,7 +133,9 @@ SliverAppBar createSilverAppBar2() {
                   ),
                   SizedBox(height: 6),
                   Text(
-                    _exploreStore.didSelectHoldings ? 'Market Value' : 'Market Cap',
+                    _exploreStore.didSelectHoldings
+                        ? 'Market Value'
+                        : 'Market Cap',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 12,

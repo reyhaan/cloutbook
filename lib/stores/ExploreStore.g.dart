@@ -99,6 +99,21 @@ mixin _$ExploreStore on _ExploreStore, Store {
     });
   }
 
+  final _$marketCapAtom = Atom(name: '_ExploreStore.marketCap');
+
+  @override
+  double get marketCap {
+    _$marketCapAtom.reportRead();
+    return super.marketCap;
+  }
+
+  @override
+  set marketCap(double value) {
+    _$marketCapAtom.reportWrite(value, super.marketCap, () {
+      super.marketCap = value;
+    });
+  }
+
   final _$balanceAtom = Atom(name: '_ExploreStore.balance');
 
   @override
@@ -294,6 +309,7 @@ wallet: ${wallet},
 holdings: ${holdings},
 hodlers: ${hodlers},
 marketValue: ${marketValue},
+marketCap: ${marketCap},
 balance: ${balance},
 didSelectHoldings: ${didSelectHoldings},
 savedProfiles: ${savedProfiles}
