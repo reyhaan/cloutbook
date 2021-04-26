@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/assets.dart';
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/models/LoggedInUserModel.dart';
 import 'package:cloutbook/routes/router.dart';
+import 'package:cloutbook/stores/AuthStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -10,12 +12,22 @@ import 'package:get_it/get_it.dart';
 import '../stores/ProfileStore.dart';
 
 final TextEditingController? _usernameController = TextEditingController();
+final ProfileStore _profileStore = GetIt.I<ProfileStore>();
+final AuthStore _authStore = GetIt.I<AuthStore>();
 
 class LoginScreen extends HookWidget {
-  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
-
   @override
   Widget build(BuildContext context) {
+    useEffect(() {}, []);
+    // check if there's a user who is already loggedIn and set it to store
+    LoggedInUser? loggedInUser = _authStore.getLoggedInUser();
+
+    if (loggedInUser != null) {
+      _profileStore.loggedInProfile = loggedInUser!.username;
+      _authStore.setLoggedInUser(loggedInUser);
+      AutoRouter.of(context).replace(NavRoute());
+    }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -76,9 +88,39 @@ class LoginScreen extends HookWidget {
                   GestureDetector(
                     onTap: () {
                       if (_usernameController!.text.isNotEmpty) {
-                        _profileStore.loggedInProfile =
-                            _usernameController!.text;
-                        AutoRouter.of(context).replace(NavRoute());
+                        String username = _usernameController!.text;
+
+                        // check if already added
+                        bool isUserAlreadyAdded =
+                            _authStore.isUserAlreadyAdded(username);
+
+                        if (isUserAlreadyAdded) {
+                          // user already added, just mark it logged in and Nav to Home page
+                          LoggedInUser user =
+                              _authStore.getUserByName(username);
+                          user.isLoggedIn = true;
+                          _authStore.updateUser(user);
+                          _authStore.setLoggedInUser(user);
+                          _profileStore.loggedInProfile = user.username;
+                          AutoRouter.of(context).replace(NavRoute());
+                        } else {
+                          // make a request to fetch this user from bitclout
+                          _profileStore.getUserProfile(username: username);
+
+                          // create a new LoggedInUser object
+                          LoggedInUser newUser = LoggedInUser(
+                            username: username,
+                            publicKey:
+                                _profileStore.userProfile.publicKeyBase58Check!,
+                            profilePic: _profileStore.userProfile.profilePic!,
+                            isLoggedIn: true,
+                          );
+
+                          // save to hive database
+                          _authStore.addUser(newUser);
+                          _profileStore.loggedInProfile = newUser.username;
+                          AutoRouter.of(context).replace(NavRoute());
+                        }
                       }
                     },
                     child: Container(

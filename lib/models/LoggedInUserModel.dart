@@ -5,16 +5,16 @@ part 'LoggedInUserModel.g.dart';
 @HiveType(typeId: 1)
 class LoggedInUser extends HiveObject {
   @HiveField(0)
-  final String username;
+  String username;
 
   @HiveField(1)
-  final String publicKey;
+  String publicKey;
 
   @HiveField(2)
-  final String profilePic;
+  String profilePic;
 
   @HiveField(3)
-  final bool isLoggedIn;
+  bool isLoggedIn;
 
   LoggedInUser({
     required this.username,
@@ -32,10 +32,10 @@ class LoggedInUser extends HiveObject {
 
   factory LoggedInUser.fromMap(Map<String, dynamic> map) {
     return LoggedInUser(
-      username: map['Username'],
-      publicKey: map['PublicKey'],
-      profilePic: map['ProfilePic'],
-      isLoggedIn: map['IsLoggedIn'],
+      username: map['Username'] ?? '',
+      publicKey: map['PublicKey'] ?? '',
+      profilePic: map['ProfilePic'] ?? '',
+      isLoggedIn: map['IsLoggedIn'] ?? false,
     );
   }
 

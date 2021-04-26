@@ -2,16 +2,21 @@ import 'package:cloutbook/common/boxes.dart';
 import 'package:cloutbook/models/LoggedInUserModel.dart';
 import 'package:injectable/injectable.dart';
 
-abstract class BaseExploreRepository {
+abstract class BaseAuthRepository {
   Future<List<LoggedInUser>> getUsers();
-  Future<String> addUser({
+  LoggedInUser getUserByName({required String username});
+  LoggedInUser addUser({
     required LoggedInUser payload,
   });
+  LoggedInUser updateUser({
+    required LoggedInUser payload,
+  });
+  LoggedInUser? getLoggedInUser();
   Future<String> removeUser({
     required LoggedInUser payload,
   });
   bool isUserAlreadyAdded({
-    required LoggedInUser payload,
+    required String username,
   });
   bool isUserAlreadyLoggedIn({
     required LoggedInUser payload,
@@ -19,7 +24,7 @@ abstract class BaseExploreRepository {
 }
 
 @lazySingleton
-class ExploreRepository extends BaseExploreRepository {
+class AuthRepository extends BaseAuthRepository {
   @override
   Future<List<LoggedInUser>> getUsers() async {
     try {
@@ -38,14 +43,70 @@ class ExploreRepository extends BaseExploreRepository {
   }
 
   @override
-  Future<String> addUser({
+  LoggedInUser getUserByName({required username}) {
+    try {
+      final box = Boxes.getUserBox();
+      // box.clear();
+      LoggedInUser user = LoggedInUser.fromMap({});
+      final list = box.values.toList();
+      for (var i = 0; i < list.length; i++) {
+        final data = list[i];
+        if (data.username == username) {
+          user = data;
+        }
+      }
+      return user;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @override
+  LoggedInUser? getLoggedInUser() {
+    try {
+      final box = Boxes.getUserBox();
+      // box.clear();
+      List<LoggedInUser> savedUsers = [];
+      final list = box.values.toList();
+      for (var i = 0; i < list.length; i++) {
+        final data = list[i];
+        savedUsers.add(data);
+      }
+      LoggedInUser? loggedInUser;
+      savedUsers.forEach((user) {
+        if (user.isLoggedIn) {
+          loggedInUser = user;
+        }
+      });
+      return loggedInUser;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @override
+  LoggedInUser addUser({
     required LoggedInUser payload,
   }) {
     try {
       final box = Boxes.getUserBox();
       LoggedInUser newUser = payload;
       box.put(payload.username, newUser);
-      return Future.value(payload.username);
+      return payload;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @override
+  LoggedInUser updateUser({
+    required LoggedInUser payload,
+  }) {
+    try {
+      final box = Boxes.getUserBox();
+      LoggedInUser newUser = payload;
+      box.put(payload.username, newUser);
+      return payload;
     } catch (e) {
       throw e;
     }
@@ -66,11 +127,11 @@ class ExploreRepository extends BaseExploreRepository {
 
   @override
   bool isUserAlreadyAdded({
-    required LoggedInUser payload,
+    required String username,
   }) {
     try {
       final box = Boxes.getUserBox();
-      LoggedInUser? response = box.get(payload.username);
+      LoggedInUser? response = box.get(username);
       if (response != null) {
         return true;
       }

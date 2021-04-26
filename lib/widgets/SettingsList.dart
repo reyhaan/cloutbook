@@ -1,9 +1,9 @@
-import 'dart:math';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
+import 'package:cloutbook/models/LoggedInUserModel.dart';
 import 'package:cloutbook/routes/router.dart';
+import 'package:cloutbook/stores/AuthStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ import '../config/palette.dart';
 
 class SettingsList extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
+  final AuthStore _authStore = GetIt.I<AuthStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +119,12 @@ class SettingsList extends HookWidget {
                   children: [
                     GestureDetector(
                       onTap: Feedback.wrapForTap(() {
+                        final currentUser = _authStore.loggedInUser;
+                        currentUser.isLoggedIn = false;
+                        _authStore.updateUser(currentUser);
+                        _authStore.loggedInUser = LoggedInUser.fromMap({});
                         _profileStore.loggedInProfile = '';
+                        Future.delayed(const Duration(seconds: 2));
                         AutoRouter.of(context).replace(LoginRoute());
                       }, context),
                       child: Container(

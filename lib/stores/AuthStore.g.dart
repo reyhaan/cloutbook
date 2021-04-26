@@ -9,18 +9,18 @@ part of 'AuthStore.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AuthStore on _AuthStore, Store {
-  final _$globalFeedAtom = Atom(name: '_AuthStore.globalFeed');
+  final _$loggedInUserAtom = Atom(name: '_AuthStore.loggedInUser');
 
   @override
-  List<Post> get globalFeed {
-    _$globalFeedAtom.reportRead();
-    return super.globalFeed;
+  LoggedInUser get loggedInUser {
+    _$loggedInUserAtom.reportRead();
+    return super.loggedInUser;
   }
 
   @override
-  set globalFeed(List<Post> value) {
-    _$globalFeedAtom.reportWrite(value, super.globalFeed, () {
-      super.globalFeed = value;
+  set loggedInUser(LoggedInUser value) {
+    _$loggedInUserAtom.reportWrite(value, super.loggedInUser, () {
+      super.loggedInUser = value;
     });
   }
 
@@ -39,13 +39,6 @@ mixin _$AuthStore on _AuthStore, Store {
     });
   }
 
-  final _$getGlobalFeedAsyncAction = AsyncAction('_AuthStore.getGlobalFeed');
-
-  @override
-  Future<void> getGlobalFeed() {
-    return _$getGlobalFeedAsyncAction.run(() => super.getGlobalFeed());
-  }
-
   final _$_AuthStoreActionController = ActionController(name: '_AuthStore');
 
   @override
@@ -60,11 +53,66 @@ mixin _$AuthStore on _AuthStore, Store {
   }
 
   @override
-  void setGlobalFeed(dynamic posts) {
+  void setLoggedInUser(dynamic user) {
     final _$actionInfo = _$_AuthStoreActionController.startAction(
-        name: '_AuthStore.setGlobalFeed');
+        name: '_AuthStore.setLoggedInUser');
     try {
-      return super.setGlobalFeed(posts);
+      return super.setLoggedInUser(user);
+    } finally {
+      _$_AuthStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  LoggedInUser? getLoggedInUser() {
+    final _$actionInfo = _$_AuthStoreActionController.startAction(
+        name: '_AuthStore.getLoggedInUser');
+    try {
+      return super.getLoggedInUser();
+    } finally {
+      _$_AuthStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool isUserAlreadyAdded(dynamic username) {
+    final _$actionInfo = _$_AuthStoreActionController.startAction(
+        name: '_AuthStore.isUserAlreadyAdded');
+    try {
+      return super.isUserAlreadyAdded(username);
+    } finally {
+      _$_AuthStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  LoggedInUser getUserByName(dynamic username) {
+    final _$actionInfo = _$_AuthStoreActionController.startAction(
+        name: '_AuthStore.getUserByName');
+    try {
+      return super.getUserByName(username);
+    } finally {
+      _$_AuthStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  LoggedInUser updateUser(LoggedInUser user) {
+    final _$actionInfo =
+        _$_AuthStoreActionController.startAction(name: '_AuthStore.updateUser');
+    try {
+      return super.updateUser(user);
+    } finally {
+      _$_AuthStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  LoggedInUser addUser(LoggedInUser user) {
+    final _$actionInfo =
+        _$_AuthStoreActionController.startAction(name: '_AuthStore.addUser');
+    try {
+      return super.addUser(user);
     } finally {
       _$_AuthStoreActionController.endAction(_$actionInfo);
     }
@@ -73,7 +121,7 @@ mixin _$AuthStore on _AuthStore, Store {
   @override
   String toString() {
     return '''
-globalFeed: ${globalFeed},
+loggedInUser: ${loggedInUser},
 isLoading: ${isLoading}
     ''';
   }

@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:cloutbook/common/api_client/api_client.dart';
 import 'package:cloutbook/models/HiveWatchlistModel.dart';
+import 'package:cloutbook/models/LoggedInUserModel.dart';
+import 'package:cloutbook/repository/AuthRepository.dart';
 import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:cloutbook/repository/HomeRepository.dart';
 import 'package:cloutbook/repository/ProfileRepository.dart';
 import 'package:cloutbook/routes/router.gr.dart';
+import 'package:cloutbook/stores/AuthStore.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
@@ -26,8 +29,9 @@ void main() async {
   // setup Hive database
   await Hive.initFlutter();
   Hive.registerAdapter(WatchProfileAdapter());
+  Hive.registerAdapter(LoggedInUserAdapter());
   await Hive.openBox<WatchProfile>('watchProfile');
-  await Hive.openBox<WatchProfile>('users');
+  await Hive.openBox<LoggedInUser>('users');
   // await Hive.box<WatchProfile>('watchProfile').clear();
 
   // stuff needed for flutter inapp_webview
@@ -57,16 +61,19 @@ void main() async {
   GetIt.I.registerSingleton<ProfileRepository>(ProfileRepository());
   GetIt.I.registerSingleton<ExchangeRepository>(ExchangeRepository());
   GetIt.I.registerSingleton<ExploreRepository>(ExploreRepository());
+  GetIt.I.registerSingleton<AuthRepository>(AuthRepository());
 
   final homeRepository = GetIt.I<HomeRepository>();
   final profileRepository = GetIt.I<ProfileRepository>();
   final exchangeRepository = GetIt.I<ExchangeRepository>();
   final exploreRepository = GetIt.I<ExploreRepository>();
+  final authRepository = GetIt.I<AuthRepository>();
 
   GetIt.I.registerSingleton<GlobalFeedStore>(GlobalFeedStore(homeRepository));
   GetIt.I.registerSingleton<ProfileStore>(ProfileStore(profileRepository));
   GetIt.I.registerSingleton<ExchangeStore>(ExchangeStore(exchangeRepository));
   GetIt.I.registerSingleton<ExploreStore>(ExploreStore(exploreRepository));
+  GetIt.I.registerSingleton<AuthStore>(AuthStore(authRepository));
 
   // Finally, running our app
   runApp(MyApp());

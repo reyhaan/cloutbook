@@ -1,73 +1,61 @@
+import 'package:cloutbook/models/LoggedInUserModel.dart';
 import 'package:cloutbook/models/PostModel.dart';
-import 'package:cloutbook/repository/HomeRepository.dart';
-import 'package:flutter/material.dart';
+import 'package:cloutbook/repository/AuthRepository.dart';
 import 'package:mobx/mobx.dart';
 
 part 'AuthStore.g.dart';
 
 class AuthStore extends _AuthStore with _$AuthStore {
-  AuthStore(HomeRepository homeRepository) : super(homeRepository);
+  AuthStore(AuthRepository authRepository) : super(authRepository);
 }
 
 abstract class _AuthStore with Store {
-  final HomeRepository _homeRepository;
+  final AuthRepository _authRepository;
 
-  _AuthStore(this._homeRepository);
+  _AuthStore(this._authRepository);
 
   @observable
-  List<Post> globalFeed = [];
+  LoggedInUser loggedInUser = LoggedInUser.fromMap({});
 
   @observable
   bool isLoading = true;
 
   @action
   void reset() {
-    globalFeed = [];
+    loggedInUser = LoggedInUser.fromMap({});
     isLoading = false;
   }
 
   @action
-  void setGlobalFeed(posts) {
-    if (globalFeed.isNotEmpty) {
-      if (globalFeed.isNotEmpty) {
-        globalFeed.insertAll(globalFeed.length, posts);
-      }
-    } else {
-      globalFeed = posts;
-    }
+  void setLoggedInUser(user) {
+    loggedInUser = user;
   }
 
   @action
-  Future<void> getGlobalFeed() async {
-    try {
-      isLoading = true;
+  LoggedInUser? getLoggedInUser() {
+    LoggedInUser? loggedInUser = _authRepository.getLoggedInUser();
+    return loggedInUser;
+  }
 
-      String? postHashHex;
+  @action
+  bool isUserAlreadyAdded(username) {
+    return _authRepository.isUserAlreadyAdded(username: username);
+  }
 
-      if (globalFeed.isNotEmpty) {
-        if (globalFeed.isNotEmpty) {
-          postHashHex = globalFeed.last.postHashHex;
-        }
-      }
+  @action
+  LoggedInUser getUserByName(username) {
+    return _authRepository.getUserByName(username: username);
+  }
 
-      debugPrint('----------------- $postHashHex');
+  @action
+  LoggedInUser updateUser(LoggedInUser user) {
+    return _authRepository.updateUser(payload: user);
+  }
 
-      final response = await _homeRepository.getGlobalFeed(payload: {
-        "PostHashHex": postHashHex ?? "",
-        "ReaderPublicKeyBase58Check": "BC1YLgz2GMeUN28XtZQtXgYCT8Jhh9YSW2knS8r8L8EFuhdotVvLb17",
-        "OrderBy": "",
-        "StartTstampSecs": 0,
-        "PostContent": "",
-        "NumToFetch": 50,
-        "FetchSubcomments": false,
-        "GetPostsForFollowFeed": false,
-        "GetPostsForGlobalWhitelist": true,
-        "GetPostsByClout": false,
-        "PostsByCloutMinutesLookback": 0,
-        "AddGlobalFeedBool": false
-      });
-      isLoading = false;
-      setGlobalFeed(response);
-    } catch (e) {}
+  @action
+  LoggedInUser addUser(LoggedInUser user) {
+    final newUser = _authRepository.addUser(payload: user);
+    loggedInUser = newUser;
+    return newUser;
   }
 }
