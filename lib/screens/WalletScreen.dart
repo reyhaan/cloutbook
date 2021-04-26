@@ -16,9 +16,12 @@ class WalletScreen extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   @override
   Widget build(BuildContext context) {
+    final isMounted = useIsMounted();
     useEffect(() {
-      _exploreStore.getWallet(_profileStore.userProfile.publicKeyBase58Check);
-      return _exploreStore.reset;
+      if (isMounted()) {
+        _exploreStore.reset();
+        _exploreStore.getWallet(_profileStore.userProfile.publicKeyBase58Check);
+      }
     }, []);
 
     return Scaffold(
@@ -41,7 +44,8 @@ SliverAppBar createSilverAppBar1() {
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -53,8 +57,8 @@ SliverAppBar createSilverAppBar1() {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Wallet',
-                  style:
-                      Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               // Container(
@@ -116,7 +120,9 @@ SliverAppBar createSilverAppBar2() {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _exploreStore.didSelectHoldings ? '\$' + marketValue : '\$' + marketCap,
+                      _exploreStore.didSelectHoldings
+                          ? '\$' + marketValue
+                          : '\$' + marketCap,
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
@@ -124,7 +130,9 @@ SliverAppBar createSilverAppBar2() {
                     ),
                     SizedBox(height: 6),
                     Text(
-                      _exploreStore.didSelectHoldings ? 'Market Value' : 'Market Cap',
+                      _exploreStore.didSelectHoldings
+                          ? 'Market Value'
+                          : 'Market Cap',
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 12,

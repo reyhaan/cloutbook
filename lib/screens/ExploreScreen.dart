@@ -14,9 +14,12 @@ class ExploreScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMounted = useIsMounted();
     useEffect(() {
-      _exploreStore.getWatchlist();
-      return _exploreStore.reset;
+      if (isMounted()) {
+        _exploreStore.reset();
+        _exploreStore.getWatchlist();
+      }
     }, []);
 
     return Scaffold(
@@ -29,8 +32,9 @@ class ExploreScreen extends HookWidget {
                 // createSilverAppBar2(),
               ];
             },
-            body:
-                (_exploreStore.savedProfiles.length > 0) ? FavoriteList() : Center(child: Text('Nothing to show here')),
+            body: (_exploreStore.savedProfiles.length > 0)
+                ? FavoriteList()
+                : Center(child: Text('Nothing to show here')),
           );
         },
       ),
@@ -44,7 +48,8 @@ SliverAppBar createSilverAppBar1() {
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -56,8 +61,8 @@ SliverAppBar createSilverAppBar1() {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Explore',
-                  style:
-                      Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
@@ -112,7 +117,10 @@ SliverAppBar createSilverAppBar2() {
               children: [
                 Observer(builder: (_) {
                   return Text(
-                    '\$' + _exchangeStore.getCoinPrice(_exploreStore.balance).toString(),
+                    '\$' +
+                        _exchangeStore
+                            .getCoinPrice(_exploreStore.balance)
+                            .toString(),
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
