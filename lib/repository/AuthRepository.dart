@@ -3,7 +3,7 @@ import 'package:cloutbook/models/LoggedInUserModel.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class BaseAuthRepository {
-  Future<List<LoggedInUser>> getUsers();
+  List<LoggedInUser> getUsers();
   LoggedInUser getUserByName({required String username});
   LoggedInUser addUser({
     required LoggedInUser payload,
@@ -26,7 +26,7 @@ abstract class BaseAuthRepository {
 @lazySingleton
 class AuthRepository extends BaseAuthRepository {
   @override
-  Future<List<LoggedInUser>> getUsers() async {
+  List<LoggedInUser> getUsers() {
     try {
       final box = Boxes.getUserBox();
       // box.clear();
@@ -36,7 +36,7 @@ class AuthRepository extends BaseAuthRepository {
         final data = list[i];
         savedUsers.add(data);
       }
-      return Future.value(savedUsers);
+      return savedUsers;
     } catch (e) {
       throw e;
     }

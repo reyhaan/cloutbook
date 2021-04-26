@@ -53,6 +53,11 @@ abstract class _AuthStore with Store {
   }
 
   @action
+  List<LoggedInUser> getAllUsers() {
+    return _authRepository.getUsers();
+  }
+
+  @action
   LoggedInUser addUser(LoggedInUser user) {
     final newUser = _authRepository.addUser(payload: user);
     loggedInUser = newUser;
