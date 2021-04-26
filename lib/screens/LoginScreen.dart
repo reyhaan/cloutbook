@@ -24,7 +24,7 @@ class LoginScreen extends HookWidget {
     LoggedInUser? loggedInUser = _authStore.getLoggedInUser();
 
     if (loggedInUser != null) {
-      _profileStore.loggedInProfile = loggedInUser!.username;
+      _profileStore.loggedInProfile = loggedInUser.username;
       _authStore.setLoggedInUser(loggedInUser);
       AutoRouter.of(context).replace(NavRoute());
     }
