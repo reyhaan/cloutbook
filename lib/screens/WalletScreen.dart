@@ -1,5 +1,4 @@
 import 'package:cloutbook/config/palette.dart';
-import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:cloutbook/widgets/HoldingList.dart';
@@ -12,17 +11,13 @@ import 'package:get_it/get_it.dart';
 import '../common/utils.dart';
 import '../config/palette.dart';
 
-final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
-final ProfileStore _profileStore = GetIt.I<ProfileStore>();
-final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
-
 class WalletScreen extends HookWidget {
+  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   @override
   Widget build(BuildContext context) {
     useEffect(() {
       _exploreStore.getWallet(_profileStore.userProfile.publicKeyBase58Check);
-      _exploreStore.getHoldings();
-      _exploreStore.getHodlers();
       return _exploreStore.reset;
     }, []);
 
@@ -50,8 +45,7 @@ SliverAppBar createSilverAppBar1() {
     expandedHeight: 65,
     floating: false,
     elevation: 0,
-    flexibleSpace: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
+    flexibleSpace: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         background: Container(
@@ -63,8 +57,8 @@ SliverAppBar createSilverAppBar1() {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'Wallet',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+                  style:
+                      Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
               // Container(
@@ -100,8 +94,8 @@ SliverAppBar createSilverAppBar1() {
 }
 
 SliverAppBar createSilverAppBar2() {
-  final marketValue = numberFormat(_exploreStore.marketValue);
-  final marketCap = numberFormat(_exploreStore.marketCap);
+  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+
   return SliverAppBar(
     backgroundColor: Palette.background,
     pinned: true,
@@ -119,13 +113,13 @@ SliverAppBar createSilverAppBar2() {
               width: 14,
             ),
             Observer(builder: (_) {
+              final marketValue = numberFormat(_exploreStore.marketValue);
+              final marketCap = numberFormat(_exploreStore.marketCap);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _exploreStore.didSelectHoldings
-                        ? '\$' + marketValue
-                        : '\$' + marketCap,
+                    _exploreStore.didSelectHoldings ? '\$' + marketValue : '\$' + marketCap,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
@@ -133,9 +127,7 @@ SliverAppBar createSilverAppBar2() {
                   ),
                   SizedBox(height: 6),
                   Text(
-                    _exploreStore.didSelectHoldings
-                        ? 'Market Value'
-                        : 'Market Cap',
+                    _exploreStore.didSelectHoldings ? 'Market Value' : 'Market Cap',
                     textAlign: TextAlign.start,
                     style: TextStyle(
                       fontSize: 12,
@@ -155,7 +147,8 @@ SliverAppBar createSilverAppBar2() {
 }
 
 class WalletTabs extends HookWidget {
-  const WalletTabs({Key? key}) : super(key: key);
+  final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
+  WalletTabs({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

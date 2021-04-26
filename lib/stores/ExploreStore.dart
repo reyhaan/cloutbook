@@ -243,6 +243,8 @@ abstract class _ExploreStore with Store {
       };
       final wallet = await _exploreRepository.getWallet(payload: userList);
       setWallet(wallet);
+      getHoldings();
+      getHodlers();
     } catch (e) {}
   }
 }
