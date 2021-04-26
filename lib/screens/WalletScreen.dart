@@ -22,18 +22,14 @@ class WalletScreen extends HookWidget {
     }, []);
 
     return Scaffold(
-      body: Observer(
-        builder: (_) {
-          return NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
-              return <Widget>[
-                createSilverAppBar1(),
-                createSilverAppBar2(),
-              ];
-            },
-            body: HoldingList(),
-          );
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
+          return <Widget>[
+            createSilverAppBar1(),
+            createSilverAppBar2(),
+          ];
         },
+        body: HoldingList(),
       ),
     );
   }
@@ -112,33 +108,35 @@ SliverAppBar createSilverAppBar2() {
             SizedBox(
               width: 14,
             ),
-            Observer(builder: (_) {
-              final marketValue = numberFormat(_exploreStore.marketValue);
-              final marketCap = numberFormat(_exploreStore.marketCap);
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _exploreStore.didSelectHoldings ? '\$' + marketValue : '\$' + marketCap,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
+            Observer(
+              builder: (_) {
+                final marketValue = numberFormat(_exploreStore.marketValue);
+                final marketCap = numberFormat(_exploreStore.marketCap);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _exploreStore.didSelectHoldings ? '\$' + marketValue : '\$' + marketCap,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 6),
-                  Text(
-                    _exploreStore.didSelectHoldings ? 'Market Value' : 'Market Cap',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
+                    SizedBox(height: 6),
+                    Text(
+                      _exploreStore.didSelectHoldings ? 'Market Value' : 'Market Cap',
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  SizedBox(child: WalletTabs())
-                ],
-              );
-            }),
+                    SizedBox(height: 20),
+                    SizedBox(child: WalletTabs())
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ],

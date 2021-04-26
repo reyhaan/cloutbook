@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ExploreStore.dart';
-import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:cloutbook/widgets/FavoriteList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +11,11 @@ import 'package:get_it/get_it.dart';
 
 class ExploreScreen extends HookWidget {
   final ExploreStore _exploreStore = GetIt.I<ExploreStore>();
-  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
       _exploreStore.getWatchlist();
-      _exploreStore.getWallet(_profileStore.userProfile.publicKeyBase58Check);
       return _exploreStore.reset;
     }, []);
 
