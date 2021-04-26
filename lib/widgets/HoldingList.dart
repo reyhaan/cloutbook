@@ -64,7 +64,7 @@ class ListItem extends StatelessWidget {
     }
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
-        AutoRouter.of(context).push(ProfileRoute(username: profile?.username));
+        AutoRouter.of(context).push(ExploreProfileRoute(username: profile?.username));
       }, context),
       child: Container(
         margin: EdgeInsets.fromLTRB(11, 0, 11, 8),

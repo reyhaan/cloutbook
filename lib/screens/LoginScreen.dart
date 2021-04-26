@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/assets.dart';
+import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/LoggedInUserModel.dart';
 import 'package:cloutbook/routes/router.dart';
@@ -23,10 +24,12 @@ class LoginScreen extends HookWidget {
     LoggedInUser? loggedInUser = _authStore.getLoggedInUser();
 
     if (loggedInUser != null) {
-      _profileStore.loggedInProfile = loggedInUser!.username;
+      _profileStore.loggedInProfile = loggedInUser.username;
       _authStore.setLoggedInUser(loggedInUser);
       AutoRouter.of(context).replace(NavRoute());
     }
+
+    List<LoggedInUser> allUsers = _authStore.getAllUsers();
 
     return Scaffold(
       body: SafeArea(
@@ -86,7 +89,7 @@ class LoginScreen extends HookWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       if (_usernameController!.text.isNotEmpty) {
                         String username = _usernameController!.text;
 
@@ -105,14 +108,14 @@ class LoginScreen extends HookWidget {
                           AutoRouter.of(context).replace(NavRoute());
                         } else {
                           // make a request to fetch this user from bitclout
-                          _profileStore.getUserProfile(username: username);
+                          final profile = await _profileStore
+                              .getProfileByUsername(username: username);
 
                           // create a new LoggedInUser object
                           LoggedInUser newUser = LoggedInUser(
                             username: username,
-                            publicKey:
-                                _profileStore.userProfile.publicKeyBase58Check!,
-                            profilePic: _profileStore.userProfile.profilePic!,
+                            publicKey: profile.publicKeyBase58Check!,
+                            profilePic: profile.profilePic!,
                             isLoggedIn: true,
                           );
 
@@ -155,7 +158,7 @@ class LoginScreen extends HookWidget {
                     padding: const EdgeInsets.only(
                         top: 30.0, left: 30.0, right: 30.0),
                     child: Text(
-                      'Start by adding your profile by username or public key, please do not enter your seed phrase!',
+                      'Start by adding a profile by username, please do not enter your seed phrase!',
                       style: TextStyle(color: Palette.hintColor),
                       textAlign: TextAlign.center,
                     ),
@@ -163,25 +166,63 @@ class LoginScreen extends HookWidget {
                 ],
               ),
               SizedBox(height: 40),
-              // Column(
-              //   children: [
-              //     Text('Recently viewed', style: TextStyle(color: Colors.grey)),
-              //     Padding(
-              //       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-              //       child: Wrap(
-              //         children: [
-              //           Padding(
-              //             padding: const EdgeInsets.all(18.0),
-              //             child: CircleAvatar(
-              //               radius: 30.0,
-              //               child: Text('UO'),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
+              Container(
+                padding: EdgeInsets.only(top: 18),
+                margin: EdgeInsets.only(left: 4, right: 4),
+                decoration: BoxDecoration(
+                  color: Palette.foreground,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: Column(
+                  children: [
+                    Text('Recently viewed',
+                        style: TextStyle(color: Colors.grey)),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      child: Wrap(
+                        children: allUsers.map(
+                          (user) {
+                            final avatar = processDataImage(user.profilePic);
+                            return GestureDetector(
+                              onTap: Feedback.wrapForTap(() {
+                                user.isLoggedIn = true;
+                                _authStore.updateUser(user);
+                                _authStore.setLoggedInUser(user);
+                                _profileStore.loggedInProfile = user.username;
+                                AutoRouter.of(context).replace(NavRoute());
+                              }, context),
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 48,
+                                      width: 48,
+                                      margin: EdgeInsets.fromLTRB(
+                                          12.0, 0.0, 14.0, 8.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: Colors.white, width: 2),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(21),
+                                        child: Image.memory(avatar),
+                                      ),
+                                    ),
+                                    Text(user.username),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

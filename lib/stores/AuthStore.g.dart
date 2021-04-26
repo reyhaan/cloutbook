@@ -108,6 +108,17 @@ mixin _$AuthStore on _AuthStore, Store {
   }
 
   @override
+  List<LoggedInUser> getAllUsers() {
+    final _$actionInfo = _$_AuthStoreActionController.startAction(
+        name: '_AuthStore.getAllUsers');
+    try {
+      return super.getAllUsers();
+    } finally {
+      _$_AuthStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   LoggedInUser addUser(LoggedInUser user) {
     final _$actionInfo =
         _$_AuthStoreActionController.startAction(name: '_AuthStore.addUser');
