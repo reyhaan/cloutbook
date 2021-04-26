@@ -219,8 +219,10 @@ class PostItem extends HookWidget {
                     Container(
                       child: GestureDetector(
                         onTap: () {
-                          String? username = _post?.profileEntryResponse?.username!;
-                          AutoRouter.of(context).push(ExploreProfileRoute(username: username!));
+                          String? username =
+                              _post?.profileEntryResponse?.username!;
+                          AutoRouter.of(context)
+                              .push(ExploreProfileRoute(username: username!));
                         },
                         child: Text(
                           '@${_post?.profileEntryResponse?.username}',
@@ -238,7 +240,10 @@ class PostItem extends HookWidget {
                       child: Text.rich(
                         TextSpan(
                           children: [
-                            TextSpan(text: '$timeElapsed', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                            TextSpan(
+                                text: '$timeElapsed',
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 12)),
                           ],
                         ),
                       ),
@@ -262,7 +267,8 @@ class PostItem extends HookWidget {
                               fontSize: 15,
                             ),
                             onTap: (String name) {
-                              AutoRouter.of(context).push(ExploreProfileRoute(username: name.substring(1)));
+                              AutoRouter.of(context).push(ExploreProfileRoute(
+                                  username: name.substring(1)));
                               print(name);
                             },
                           ),
@@ -303,7 +309,8 @@ class PostItem extends HookWidget {
                             constraints: BoxConstraints(maxHeight: 200),
                             child: GestureDetector(
                               onTap: () {
-                                AutoRouter.of(context).push(ImageViewerRoute(imageUrl: imageUrl));
+                                AutoRouter.of(context)
+                                    .push(ImageViewerRoute(imageUrl: imageUrl));
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -474,9 +481,11 @@ class ProfileHeader extends HookWidget {
                   padding: EdgeInsets.only(left: 14, right: 40),
                   margin: EdgeInsets.only(bottom: 24.0),
                   child: ParsedText(
-                    text: '${_profileStore.userProfile.description}'.trimRight(),
+                    text:
+                        '${_profileStore.userProfile.description}'.trimRight(),
                     alignment: TextAlign.start,
-                    style: TextStyle(fontSize: 13, color: Colors.white, height: 1.4),
+                    style: TextStyle(
+                        fontSize: 13, color: Colors.white, height: 1.4),
                     parse: <MatchText>[
                       MatchText(
                         type: ParsedType.URL,
@@ -529,9 +538,6 @@ class ProfileMetadata extends HookWidget {
     useEffect(() {
       // get latest exchange rates first
       _exchangeStore.updateExchange();
-
-      // reset store when unmounted
-      return _profileStore.reset;
     }, []);
 
     useEffect(() {
@@ -559,7 +565,8 @@ class ProfileMetadata extends HookWidget {
                       children: [
                         Observer(builder: (_) {
                           final formatter = new NumberFormat("#,###");
-                          String followers = formatter.format(int.parse(_profileStore.userProfile.followers!));
+                          String followers = formatter.format(
+                              int.parse(_profileStore.userProfile.followers!));
                           return Text(
                             followers,
                             style: TextStyle(
@@ -589,7 +596,8 @@ class ProfileMetadata extends HookWidget {
                       children: [
                         Observer(builder: (_) {
                           final formatter = new NumberFormat("#,###.##");
-                          final coinPrice = formatter.format(double.parse(_profileStore.coinPrice));
+                          final coinPrice = formatter
+                              .format(double.parse(_profileStore.coinPrice));
                           return Text(
                             '\$$coinPrice',
                             textAlign: TextAlign.end,

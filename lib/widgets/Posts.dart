@@ -16,6 +16,7 @@ import '../stores/ProfileStore.dart';
 
 class Posts extends HookWidget {
   final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
+  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final List<Post> posts;
   final bool isProfile;
 
@@ -36,6 +37,8 @@ class Posts extends HookWidget {
       child: RefreshIndicator(
         onRefresh: () {
           _globalFeedStore.getGlobalFeed();
+          _profileStore.getUserProfile(
+              username: _profileStore.userProfile.username);
           return Future.delayed(Duration(seconds: 0));
         },
         child: ListView.builder(
@@ -216,8 +219,10 @@ class PostItem extends HookWidget {
                     Container(
                       child: GestureDetector(
                         onTap: () {
-                          String? username = _post?.profileEntryResponse?.username!;
-                          AutoRouter.of(context).push(ExploreProfileRoute(username: username!));
+                          String? username =
+                              _post?.profileEntryResponse?.username!;
+                          AutoRouter.of(context)
+                              .push(ExploreProfileRoute(username: username!));
                         },
                         child: Text(
                           '@${_post?.profileEntryResponse?.username}',
@@ -235,7 +240,10 @@ class PostItem extends HookWidget {
                       child: Text.rich(
                         TextSpan(
                           children: [
-                            TextSpan(text: '$timeElapsed', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                            TextSpan(
+                                text: '$timeElapsed',
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 12)),
                           ],
                         ),
                       ),
@@ -259,7 +267,8 @@ class PostItem extends HookWidget {
                               fontSize: 15,
                             ),
                             onTap: (String name) {
-                              AutoRouter.of(context).push(ExploreProfileRoute(username: name.substring(1)));
+                              AutoRouter.of(context).push(ExploreProfileRoute(
+                                  username: name.substring(1)));
                               print(name);
                             },
                           ),
@@ -300,7 +309,8 @@ class PostItem extends HookWidget {
                             constraints: BoxConstraints(maxHeight: 200),
                             child: GestureDetector(
                               onTap: () {
-                                AutoRouter.of(context).push(ImageViewerRoute(imageUrl: imageUrl));
+                                AutoRouter.of(context)
+                                    .push(ImageViewerRoute(imageUrl: imageUrl));
                               },
                               child: Container(
                                 decoration: BoxDecoration(

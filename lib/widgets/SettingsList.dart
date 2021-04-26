@@ -4,6 +4,7 @@ import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/LoggedInUserModel.dart';
 import 'package:cloutbook/routes/router.dart';
 import 'package:cloutbook/stores/AuthStore.dart';
+import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import '../config/palette.dart';
 class SettingsList extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final AuthStore _authStore = GetIt.I<AuthStore>();
+  final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +126,8 @@ class SettingsList extends HookWidget {
                         _authStore.updateUser(currentUser);
                         _authStore.loggedInUser = LoggedInUser.fromMap({});
                         _profileStore.loggedInProfile = '';
+                        _profileStore.reset();
+                        _globalFeedStore.reset();
                         Future.delayed(const Duration(seconds: 2));
                         AutoRouter.of(context).replace(LoginRoute());
                       }, context),

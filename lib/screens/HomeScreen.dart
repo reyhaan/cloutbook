@@ -17,12 +17,13 @@ class HomeScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      _exchangeStore.updateExchange();
-      _globalFeedStore.getGlobalFeed();
-      _profileStore.getUserProfile(username: _profileStore.loggedInProfile);
-
-      // reset store when unmounted
-      return _globalFeedStore.reset;
+      if (_globalFeedStore.globalFeed.length == 0) {
+        // reset store when unmounted
+        _globalFeedStore.reset();
+        _exchangeStore.updateExchange();
+        _globalFeedStore.getGlobalFeed();
+        _profileStore.getUserProfile(username: _profileStore.loggedInProfile);
+      }
     }, []);
 
     return Scaffold(
