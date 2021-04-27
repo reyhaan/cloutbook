@@ -149,10 +149,10 @@ class ListItem extends StatelessWidget {
                 ),
                 SizedBox(width: 20),
                 GestureDetector(
-                  onTap: () async {
+                  onTap: Feedback.wrapForTap(() async {
                     // save item to watchlist
                     await _exploreStore.removeFromWatchlist(profile);
-                  },
+                  }, context),
                   child: Container(
                     color: Palette.foreground,
                     padding: EdgeInsets.all(4),

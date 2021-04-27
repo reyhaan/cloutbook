@@ -25,7 +25,9 @@ class ExploreProfileScreen extends HookWidget {
         return;
       }
       if (username != null) {
-        _profileStore.getUserProfile(username: username!.isEmpty ? _profileStore.loggedInProfile : username);
+        _profileStore.getUserProfile(
+            username:
+                username!.isEmpty ? _profileStore.loggedInProfile : username);
       }
     }, []);
 
@@ -57,13 +59,13 @@ class ExploreProfileScreen extends HookWidget {
                 child: Visibility(
                   visible: AutoRouter.of(context).current?.name != 'NavRoute',
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: Feedback.wrapForTap(() {
                       if (shouldGoBackToRoot == false) {
                         AutoRouter.of(context).pop();
                       } else {
                         AutoRouter.of(context).popUntilRoot();
                       }
-                    },
+                    }, context),
                     child: Container(
                       padding: EdgeInsets.all(12),
                       color: Color(0xFF0A0A0A),

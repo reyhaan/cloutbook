@@ -51,12 +51,13 @@ class SearchBar extends HookWidget {
                       restorationId: '123',
                       controller: _textInputController,
                       cursorColor: Colors.white,
-                      onChanged: (searchKey) =>
-                          handleSearchChange(searchKey, _profileStore.userProfile.publicKeyBase58Check),
+                      onChanged: (searchKey) => handleSearchChange(searchKey,
+                          _profileStore.userProfile.publicKeyBase58Check),
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration.collapsed(
                         hintText: 'Seach',
-                        hintStyle: TextStyle(color: Palette.hintColor, fontSize: 14.0),
+                        hintStyle:
+                            TextStyle(color: Palette.hintColor, fontSize: 14.0),
                       ),
                     ),
                   ),
@@ -65,13 +66,14 @@ class SearchBar extends HookWidget {
                       maintainState: true,
                       visible: _exploreStore.profiles.length > 0,
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: Feedback.wrapForTap(() {
                           FocusScope.of(context).requestFocus(FocusNode());
                           _textInputController?.clear();
                           _exploreStore.profiles = [];
-                        },
+                        }, context),
                         child: Container(
-                          padding: EdgeInsets.only(bottom: 2, left: 8, right: 0),
+                          padding:
+                              EdgeInsets.only(bottom: 2, left: 8, right: 0),
                           color: Palette.secondaryForeground,
                           child: Icon(
                             CupertinoIcons.xmark,

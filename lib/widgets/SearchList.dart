@@ -135,7 +135,7 @@ class ListItem extends HookWidget {
                 ),
                 SizedBox(width: 20),
                 GestureDetector(
-                  onTap: () async {
+                  onTap: Feedback.wrapForTap(() async {
                     // save item to watchlist
                     final bool inList = _exploreStore.isInWatchlist(profile);
 
@@ -149,7 +149,7 @@ class ListItem extends HookWidget {
                       await _exploreStore.addToWatchlist(profile!);
                     }
                     rerender.value = !rerender.value!;
-                  },
+                  }, context),
                   child: Container(
                     color: Palette.foreground,
                     padding: EdgeInsets.all(4),
