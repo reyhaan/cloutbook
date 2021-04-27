@@ -64,13 +64,11 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final avatar = processDataImage(profile?.profilePic);
     final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter.format(double.parse(
-        _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
+    final coinPrice = formatter.format(double.parse(_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
-        AutoRouter.of(context)
-            .push(ExploreProfileRoute(username: profile?.username));
+        AutoRouter.of(context).push(ExploreProfileRoute(username: profile?.username));
       }, context),
       child: Container(
         margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
@@ -107,16 +105,17 @@ class ListItem extends StatelessWidget {
                         Container(
                           child: Text(
                             '@${profile?.username}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
                           ),
                         ),
                         SizedBox(height: 5.0),
-                        Text(
-                          '243 Followers',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2.0),
+                          child: Text(
+                            '243 Followers',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                          ),
                         ),
                       ],
                     ),
