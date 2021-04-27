@@ -144,9 +144,9 @@ class ListItem extends HookWidget {
                       await _exploreStore.removeFromWatchlist(profile);
                     } else {
                       // add this item to watch list
-                      double change1d = await _exploreStore.getHistory(
-                          publicKey: profile?.publicKeyBase58Check);
-                      profile?.history?.change1d = change1d;
+                      // double change1d = await _exploreStore.getHistory(
+                      //     publicKey: profile?.publicKeyBase58Check);
+                      // profile?.history?.change1d = change1d;
                       await _exploreStore.addToWatchlist(profile!);
                     }
                     rerender.value = !rerender.value!;

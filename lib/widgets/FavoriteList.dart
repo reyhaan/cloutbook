@@ -190,13 +190,13 @@ class ListItem extends StatelessWidget {
                       child: Text(
                         '\$$coinPrice',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     SizedBox(height: 5.0),
-                    changeString,
+                    // changeString,
                   ],
                 ),
                 SizedBox(width: 20),
