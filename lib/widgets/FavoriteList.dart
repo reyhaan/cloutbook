@@ -64,11 +64,65 @@ class ListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final avatar = processDataImage(profile?.profilePic);
     final formatter = new NumberFormat("#,###");
-    final coinPrice = formatter.format(double.parse(_exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
+    final coinPrice = formatter.format(double.parse(
+        _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
+
+    Widget changeString = Text('0');
+    if (profile?.history?.change1d != null) {
+      if (profile!.history!.change1d! < 0) {
+        final value = profile?.history?.change1d
+            ?.toStringAsFixed(1)
+            .replaceFirst('-', '');
+        changeString = Row(
+          children: [
+            Icon(
+              Icons.arrow_drop_down,
+              size: 24.0,
+              color: Colors.redAccent,
+            ),
+            Text(
+              '$value%',
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),
+            ),
+          ],
+        );
+      } else if (profile!.history!.change1d! < 0) {
+        final value = profile?.history?.change1d?.toStringAsFixed(1);
+        changeString = Row(
+          children: [
+            Icon(
+              Icons.arrow_drop_up,
+              size: 24.0,
+              color: Colors.greenAccent,
+            ),
+            Text(
+              '$value%',
+              style: TextStyle(
+                color: Colors.greenAccent,
+              ),
+            ),
+          ],
+        );
+      } else {
+        changeString = Row(
+          children: [
+            Text(
+              '0%',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        );
+      }
+    }
 
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
-        AutoRouter.of(context).push(ExploreProfileRoute(username: profile?.username));
+        AutoRouter.of(context)
+            .push(ExploreProfileRoute(username: profile?.username));
       }, context),
       child: Container(
         margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
@@ -105,16 +159,19 @@ class ListItem extends StatelessWidget {
                         Container(
                           child: Text(
                             '@${profile?.username}',
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
                         SizedBox(height: 5.0),
                         Padding(
                           padding: const EdgeInsets.only(left: 2.0),
                           child: Text(
-                            '243 Followers',
+                            '${profile?.coinEntry?.numberOfHolders} holders',
                             textAlign: TextAlign.left,
-                            style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 12.0),
                           ),
                         ),
                       ],
@@ -139,11 +196,7 @@ class ListItem extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 5.0),
-                    Text(
-                      '-2.30%',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.green, fontSize: 12.0),
-                    ),
+                    changeString,
                   ],
                 ),
                 SizedBox(width: 20),

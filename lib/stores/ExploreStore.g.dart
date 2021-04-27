@@ -182,6 +182,14 @@ mixin _$ExploreStore on _ExploreStore, Store {
     return _$addToWatchlistAsyncAction.run(() => super.addToWatchlist(profile));
   }
 
+  final _$getHistoryAsyncAction = AsyncAction('_ExploreStore.getHistory');
+
+  @override
+  Future<double> getHistory({dynamic publicKey}) {
+    return _$getHistoryAsyncAction
+        .run(() => super.getHistory(publicKey: publicKey));
+  }
+
   final _$removeFromWatchlistAsyncAction =
       AsyncAction('_ExploreStore.removeFromWatchlist');
 

@@ -1,6 +1,7 @@
 import 'package:cloutbook/models/HoldingModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/models/WalletModel.dart';
+import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
@@ -211,6 +212,15 @@ abstract class _ExploreStore with Store {
       await _exploreRepository.addToWatchlist(payload: profile);
       isLoading = false;
       updateSavedProfiles([profile]);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Future<double> getHistory({publicKey}) async {
+    try {
+      return await _exploreRepository.getHistory(publicKey: publicKey);
     } catch (e) {
       throw e;
     }
