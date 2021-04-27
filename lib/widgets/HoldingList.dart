@@ -24,7 +24,9 @@ class HoldingList extends HookWidget {
 
     return Container(
       child: Observer(builder: (_) {
-        final watchlist = _exploreStore.didSelectHoldings ? _exploreStore.holdings : _exploreStore.hodlers;
+        final watchlist = _exploreStore.didSelectHoldings
+            ? _exploreStore.holdings
+            : _exploreStore.hodlers;
         return ListView.builder(
           itemCount: watchlist.length,
           itemBuilder: (context, index) {
@@ -64,7 +66,8 @@ class ListItem extends StatelessWidget {
     }
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
-        AutoRouter.of(context).push(ExploreProfileRoute(username: profile?.username));
+        AutoRouter.of(context)
+            .push(ExploreProfileRoute(username: profile?.username));
       }, context),
       child: Container(
         margin: EdgeInsets.fromLTRB(11, 0, 11, 8),
@@ -84,14 +87,13 @@ class ListItem extends StatelessWidget {
                     Container(
                       height: 46,
                       width: 46,
-                      margin: EdgeInsets.only(right: 8),
+                      margin: EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
                         color: Colors.grey,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(21),
+                        borderRadius: BorderRadius.circular(23),
                         child: avatar == null
                             ? CircleAvatar(
                                 backgroundColor: Colors.white,
@@ -105,18 +107,26 @@ class ListItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          constraints: BoxConstraints(maxWidth: (MediaQuery.of(context).size.width / 2) - 40),
+                          constraints: BoxConstraints(
+                              maxWidth:
+                                  (MediaQuery.of(context).size.width / 2) - 40),
                           child: Text(
                             '@${profile?.username}',
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
-                        SizedBox(height: 5.0),
-                        Text(
-                          '${profile?.percentShare.toStringAsFixed(1)}%',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                        SizedBox(height: 7.0),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2.0),
+                          child: Text(
+                            '${profile?.amount.toStringAsFixed(1)} coins held',
+                            textAlign: TextAlign.left,
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 13.0),
+                          ),
                         ),
                       ],
                     ),
@@ -139,12 +149,12 @@ class ListItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5.0),
-                    // Text(
-                    //   '-2.30%',
-                    //   textAlign: TextAlign.left,
-                    //   style: TextStyle(color: Colors.green, fontSize: 12.0),
-                    // ),
+                    SizedBox(height: 7.0),
+                    Text(
+                      '${profile?.percentShare.toStringAsFixed(1)}%',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                    ),
                   ],
                 ),
                 SizedBox(width: 12.0),

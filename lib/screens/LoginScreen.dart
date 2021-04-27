@@ -80,7 +80,7 @@ class LoginScreen extends HookWidget {
                             controller: _usernameController,
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration.collapsed(
-                                hintText: 'username or public key',
+                                hintText: 'Enter username',
                                 hintStyle: TextStyle(
                                     color: Palette.hintColor, fontSize: 14.0)),
                           ),
@@ -154,73 +154,83 @@ class LoginScreen extends HookWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 30.0, left: 30.0, right: 30.0),
-                    child: Text(
-                      'Start by adding a profile by username, please do not enter your seed phrase!',
-                      style: TextStyle(color: Palette.hintColor),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(
+                  //       top: 30.0, left: 30.0, right: 30.0),
+                  //   child: Text(
+                  //     'Start by adding a profile by username, please do not enter your seed phrase!',
+                  //     style: TextStyle(color: Palette.hintColor),
+                  //     textAlign: TextAlign.center,
+                  //   ),
+                  // ),
                 ],
               ),
               SizedBox(height: 40),
-              Container(
-                padding: EdgeInsets.only(top: 18),
-                margin: EdgeInsets.only(left: 4, right: 4),
-                decoration: BoxDecoration(
-                  color: Palette.foreground,
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: Column(
-                  children: [
-                    Text('Recently viewed',
-                        style: TextStyle(color: Colors.grey)),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      child: Wrap(
-                        children: allUsers.map(
-                          (user) {
-                            final avatar = processDataImage(user.profilePic);
-                            return GestureDetector(
-                              onTap: Feedback.wrapForTap(() {
-                                user.isLoggedIn = true;
-                                _authStore.updateUser(user);
-                                _authStore.setLoggedInUser(user);
-                                _profileStore.loggedInProfile = user.username;
-                                AutoRouter.of(context).replace(NavRoute());
-                              }, context),
-                              child: Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 48,
-                                      width: 48,
-                                      margin: EdgeInsets.fromLTRB(
-                                          12.0, 0.0, 14.0, 8.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: Colors.white, width: 2),
+              Visibility(
+                visible: allUsers.length > 0,
+                child: Container(
+                  padding: EdgeInsets.only(top: 18),
+                  margin: EdgeInsets.only(left: 8, right: 8),
+                  decoration: BoxDecoration(
+                    color: Palette.foreground,
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width - 60,
+                    maxWidth: MediaQuery.of(context).size.width - 60,
+                  ),
+                  child: Column(
+                    children: [
+                      Text('Recently viewed',
+                          style: TextStyle(color: Colors.grey)),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          children: allUsers.map(
+                            (user) {
+                              final avatar = processDataImage(user.profilePic);
+                              return GestureDetector(
+                                onTap: Feedback.wrapForTap(() {
+                                  user.isLoggedIn = true;
+                                  _authStore.updateUser(user);
+                                  _authStore.setLoggedInUser(user);
+                                  _profileStore.loggedInProfile = user.username;
+                                  AutoRouter.of(context).replace(NavRoute());
+                                }, context),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        height: 48,
+                                        width: 48,
+                                        margin: EdgeInsets.fromLTRB(
+                                            12.0, 0.0, 14.0, 8.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                              color: Colors.white, width: 2),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(21),
+                                          child: Image.memory(avatar),
+                                        ),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(21),
-                                        child: Image.memory(avatar),
-                                      ),
-                                    ),
-                                    Text(user.username),
-                                  ],
+                                      Text(user.username),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ).toList(),
+                              );
+                            },
+                          ).toList(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

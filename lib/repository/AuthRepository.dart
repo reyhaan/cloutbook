@@ -65,7 +65,7 @@ class AuthRepository extends BaseAuthRepository {
   LoggedInUser? getLoggedInUser() {
     try {
       final box = Boxes.getUserBox();
-      // box.clear();
+      box.clear();
       List<LoggedInUser> savedUsers = [];
       final list = box.values.toList();
       for (var i = 0; i < list.length; i++) {
