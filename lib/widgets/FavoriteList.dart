@@ -67,6 +67,58 @@ class ListItem extends StatelessWidget {
     final coinPrice = formatter.format(double.parse(
         _exchangeStore.getCoinPrice(profile?.coinPriceBitCloutNanos)));
 
+    Widget changeString = Text('0');
+    if (profile?.history?.change1d != null) {
+      if (profile!.history!.change1d! < 0) {
+        final value = profile?.history?.change1d
+            ?.toStringAsFixed(1)
+            .replaceFirst('-', '');
+        changeString = Row(
+          children: [
+            Icon(
+              Icons.arrow_drop_down,
+              size: 24.0,
+              color: Colors.redAccent,
+            ),
+            Text(
+              '$value%',
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),
+            ),
+          ],
+        );
+      } else if (profile!.history!.change1d! < 0) {
+        final value = profile?.history?.change1d?.toStringAsFixed(1);
+        changeString = Row(
+          children: [
+            Icon(
+              Icons.arrow_drop_up,
+              size: 24.0,
+              color: Colors.greenAccent,
+            ),
+            Text(
+              '$value%',
+              style: TextStyle(
+                color: Colors.greenAccent,
+              ),
+            ),
+          ],
+        );
+      } else {
+        changeString = Row(
+          children: [
+            Text(
+              '0%',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        );
+      }
+    }
+
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
         AutoRouter.of(context)
@@ -113,10 +165,14 @@ class ListItem extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 5.0),
-                        Text(
-                          '243 Followers',
-                          textAlign: TextAlign.left,
-                          style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2.0),
+                          child: Text(
+                            '${profile?.coinEntry?.numberOfHolders} holders',
+                            textAlign: TextAlign.left,
+                            style:
+                                TextStyle(color: Colors.grey, fontSize: 12.0),
+                          ),
                         ),
                       ],
                     ),
@@ -134,25 +190,21 @@ class ListItem extends StatelessWidget {
                       child: Text(
                         '\$$coinPrice',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 15,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     SizedBox(height: 5.0),
-                    Text(
-                      '-2.30%',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.green, fontSize: 12.0),
-                    ),
+                    // changeString,
                   ],
                 ),
                 SizedBox(width: 20),
                 GestureDetector(
-                  onTap: () async {
+                  onTap: Feedback.wrapForTap(() async {
                     // save item to watchlist
                     await _exploreStore.removeFromWatchlist(profile);
-                  },
+                  }, context),
                   child: Container(
                     color: Palette.foreground,
                     padding: EdgeInsets.all(4),

@@ -89,7 +89,7 @@ class LoginScreen extends HookWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async {
+                    onTap: Feedback.wrapForTap(() async {
                       if (_usernameController!.text.isNotEmpty) {
                         String username = _usernameController!.text;
 
@@ -125,7 +125,7 @@ class LoginScreen extends HookWidget {
                           AutoRouter.of(context).replace(NavRoute());
                         }
                       }
-                    },
+                    }, context),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(12),

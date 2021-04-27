@@ -1,6 +1,7 @@
 import 'package:cloutbook/models/HoldingModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/models/WalletModel.dart';
+import 'package:cloutbook/repository/ExchangeRepository.dart';
 import 'package:cloutbook/repository/ExploreRepository.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
@@ -77,7 +78,8 @@ abstract class _ExploreStore with Store {
     wallet.first.usersYouHODL?.forEach((user) {
       // set amount of coins
       _holding['Amount'] = user.balanceNanos! / 1000000000;
-      _holding['Price'] = double.parse(_exchangeStore.getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
+      _holding['Price'] = double.parse(_exchangeStore
+          .getCoinPrice(user.profileEntryResponse?.coinPriceBitCloutNanos));
       _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
       _holding['Username'] = user.profileEntryResponse?.username;
       _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
@@ -93,7 +95,8 @@ abstract class _ExploreStore with Store {
       if (tempHoldings[i].marketValue == 0) {
         tempHoldings[i].percentShare = 0;
       } else {
-        tempHoldings[i].percentShare = (tempHoldings[i].marketValue / marketValue) * 100;
+        tempHoldings[i].percentShare =
+            (tempHoldings[i].marketValue / marketValue) * 100;
       }
     }
 
@@ -112,9 +115,11 @@ abstract class _ExploreStore with Store {
     wallet.first.usersWhoHODLYou?.forEach((user) {
       // set amount of coins
       _holding['Amount'] = user.balanceNanos! / 1000000000;
-      _holding['Price'] = double.parse(_exchangeStore.getCoinPrice(_profileStore.userProfile.coinPriceBitCloutNanos));
+      _holding['Price'] = double.parse(_exchangeStore
+          .getCoinPrice(_profileStore.userProfile.coinPriceBitCloutNanos));
       _holding['MarketValue'] = _holding['Price'] * _holding['Amount'];
-      _holding['Username'] = user.profileEntryResponse?.username ?? user.hodlerPublicKeyBase58Check;
+      _holding['Username'] = user.profileEntryResponse?.username ??
+          user.hodlerPublicKeyBase58Check;
       _holding['PublicKey'] = user.profileEntryResponse?.publicKeyBase58Check;
       _holding['ProfilePic'] = user.profileEntryResponse?.profilePic ?? '';
       tempHoldings.add(Holding.fromMap(_holding));
@@ -128,7 +133,8 @@ abstract class _ExploreStore with Store {
       if (tempHoldings[i].marketValue == 0) {
         tempHoldings[i].percentShare = 0;
       } else {
-        tempHoldings[i].percentShare = (tempHoldings[i].marketValue / marketCap) * 100;
+        tempHoldings[i].percentShare =
+            (tempHoldings[i].marketValue / marketCap) * 100;
       }
     }
 
@@ -206,6 +212,15 @@ abstract class _ExploreStore with Store {
       await _exploreRepository.addToWatchlist(payload: profile);
       isLoading = false;
       updateSavedProfiles([profile]);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Future<double> getHistory({publicKey}) async {
+    try {
+      return await _exploreRepository.getHistory(publicKey: publicKey);
     } catch (e) {
       throw e;
     }

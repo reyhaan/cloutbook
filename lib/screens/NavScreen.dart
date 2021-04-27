@@ -35,6 +35,8 @@ class NavScreen extends HookWidget {
             unselectedIconTheme: const IconThemeData(color: Colors.white30),
             unselectedItemColor: Colors.white30,
             unselectedFontSize: 11.0,
+            elevation: 2,
+            // enableFeedback: true,
             onTap: (index) => _currentIndex.value = index,
             items: [
               BottomNavigationBarItem(

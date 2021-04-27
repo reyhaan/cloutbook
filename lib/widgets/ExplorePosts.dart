@@ -217,12 +217,12 @@ class PostItem extends HookWidget {
                   children: [
                     Container(
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: Feedback.wrapForTap(() {
                           String? username =
                               _post?.profileEntryResponse?.username!;
                           AutoRouter.of(context)
                               .push(ExploreProfileRoute(username: username!));
-                        },
+                        }, context),
                         child: Text(
                           '@${_post?.profileEntryResponse?.username}',
                           style: TextStyle(
@@ -307,10 +307,10 @@ class PostItem extends HookWidget {
                           child: ConstrainedBox(
                             constraints: BoxConstraints(maxHeight: 200),
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: Feedback.wrapForTap(() {
                                 AutoRouter.of(context)
                                     .push(ImageViewerRoute(imageUrl: imageUrl));
-                              },
+                              }, context),
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(14),

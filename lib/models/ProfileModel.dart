@@ -149,7 +149,7 @@ class ProfileEntryResponse extends Equatable {
 
 class History extends Equatable {
   final String? change1h;
-  final String? change1d;
+  double? change1d;
   final String? change1w;
 
   History({
