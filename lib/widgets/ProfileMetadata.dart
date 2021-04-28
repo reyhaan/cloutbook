@@ -174,7 +174,7 @@ class ProfileMetadata extends HookWidget {
             }),
           ),
           Container(
-            padding: const EdgeInsets.fromLTRB(18, 14, 10, 16),
+            padding: const EdgeInsets.fromLTRB(0, 14, 10, 0),
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               border: Border(
@@ -190,13 +190,23 @@ class ProfileMetadata extends HookWidget {
             ),
             child: Row(
               children: [
-                Text(
-                  'Posts',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Column(
+                  children: [
+                    Text(
+                      'Posts',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 14),
+                    Container(
+                      height: 2,
+                      width: 70,
+                      color: Palette.primary3,
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:get_it/get_it.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../config/palette.dart';
 
@@ -15,7 +16,6 @@ class ProfileHeader extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final avatar = processDataImage(_profileStore.userProfile.profilePic ?? '');
-    // print(AutoRouter.of(context).routeData);
 
     return Container(
       child: Stack(

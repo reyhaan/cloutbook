@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ExploreProfileStore.dart';
 import 'package:cloutbook/widgets/ExplorePosts.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,9 @@ class ExploreProfileScreen extends HookWidget {
         return;
       }
       if (username != null) {
-        _profileStore.getUserProfile(username: username!.isEmpty ? _profileStore.loggedInProfile : username);
+        _profileStore.getUserProfile(
+            username:
+                username!.isEmpty ? _profileStore.loggedInProfile : username);
       }
     }, []);
 
@@ -66,8 +69,11 @@ class ExploreProfileScreen extends HookWidget {
                         }
                       }, context),
                       child: Container(
-                        padding: EdgeInsets.all(12),
-                        color: Color(0xFF0A0A0A),
+                        padding: EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Palette.foreground.withAlpha(180),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
                         child: Icon(
                           Icons.arrow_back,
                           color: Colors.white,
