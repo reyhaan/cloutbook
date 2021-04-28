@@ -8,8 +8,10 @@ import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 
 import '../config/palette.dart';
@@ -36,12 +38,11 @@ class SettingsList extends HookWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: 60,
+                        width: 60,
                         decoration: BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(50),
-                          border: Border.all(color: Colors.white, width: 1),
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(50),
@@ -53,43 +54,58 @@ class SettingsList extends HookWidget {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 0, top: 8.0, bottom: 6.0),
+                        margin: EdgeInsets.only(left: 0, top: 8.0, bottom: 8.0),
                         child: Text(
                           '@${_profileStore.userProfile.username}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            fontSize: 20,
+                            fontSize: 16,
                             color: Colors.white,
                             letterSpacing: 0.3,
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Transform.rotate(
-                            angle: 90,
-                            child: Icon(
-                              Icons.vpn_key_rounded,
-                              size: 16.0,
-                              color: Colors.white60,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 180.0,
-                            child: Text(
-                              '${_profileStore.userProfile.publicKeyBase58Check}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: Colors.grey,
+                      GestureDetector(
+                        onTap: Feedback.wrapForTap(() {
+                          Clipboard.setData(ClipboardData(
+                                  text: _profileStore
+                                      .userProfile.publicKeyBase58Check))
+                              .then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content:
+                                    Text("Public key copied to clipboard")));
+                          });
+                        }, context),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Transform.rotate(
+                              angle: 0,
+                              child: FaIcon(
+                                FontAwesomeIcons.key,
+                                color: Colors.white60,
+                                size: 12,
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              width: 4,
+                            ),
+                            SizedBox(
+                              width: 180.0,
+                              child: Text(
+                                '${_profileStore.userProfile.publicKeyBase58Check}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

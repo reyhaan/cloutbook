@@ -1,6 +1,7 @@
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/screens/WalletScreen.dart';
 import 'package:cloutbook/screens/screens.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_it/get_it.dart';
@@ -40,16 +41,16 @@ class NavScreen extends HookWidget {
             onTap: (index) => _currentIndex.value = index,
             items: [
               BottomNavigationBarItem(
-                icon: new Icon(Icons.home),
-                label: 'Home',
+                icon: new Icon(CupertinoIcons.bolt_fill),
+                label: 'Feed',
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.person),
                 label: 'Profile',
               ),
               BottomNavigationBarItem(
-                icon: new Icon(Icons.trending_up),
-                label: 'Explore',
+                icon: new Icon(CupertinoIcons.star_fill),
+                label: 'Watchlist',
               ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.account_balance_wallet_rounded),
