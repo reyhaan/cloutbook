@@ -6,9 +6,10 @@
 
 import 'package:auto_route/auto_route.dart' as _i1;
 import 'package:cloutbook/screens/ExploreProfileScreen.dart' as _i3;
+import 'package:cloutbook/screens/PostViewerScreen.dart' as _i5;
 import 'package:cloutbook/screens/screens.dart' as _i2;
 import 'package:cloutbook/screens/SearchScreen.dart' as _i4;
-import 'package:flutter/material.dart' as _i5;
+import 'package:flutter/material.dart' as _i6;
 
 class FlutterRouter extends _i1.RootStackRouter {
   FlutterRouter();
@@ -53,6 +54,10 @@ class FlutterRouter extends _i1.RootStackRouter {
           .argsAs<SearchRouteArgs>(orElse: () => SearchRouteArgs());
       return _i1.AdaptivePage(
           entry: entry, child: _i4.SearchScreen(key: args.key));
+    },
+    PostViewerRoute.name: (entry) {
+      return _i1.AdaptivePage(
+          entry: entry, child: const _i5.PostViewerScreen());
     }
   };
 
@@ -64,7 +69,8 @@ class FlutterRouter extends _i1.RootStackRouter {
         _i1.RouteConfig(ExploreProfileRoute.name,
             path: '/explore-profile-screen'),
         _i1.RouteConfig(ImageViewerRoute.name, path: '/image-viewer-screen'),
-        _i1.RouteConfig(SearchRoute.name, path: '/search-screen')
+        _i1.RouteConfig(SearchRoute.name, path: '/search-screen'),
+        _i1.RouteConfig(PostViewerRoute.name, path: '/post-viewer-screen')
       ];
 }
 
@@ -81,7 +87,7 @@ class NavRoute extends _i1.PageRouteInfo {
 }
 
 class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
-  ProfileRoute({_i5.Key? key, String? username, bool? shouldGoBackToRoot})
+  ProfileRoute({_i6.Key? key, String? username, bool? shouldGoBackToRoot})
       : super(name,
             path: '/profile-screen',
             args: ProfileRouteArgs(
@@ -95,7 +101,7 @@ class ProfileRoute extends _i1.PageRouteInfo<ProfileRouteArgs> {
 class ProfileRouteArgs {
   const ProfileRouteArgs({this.key, this.username, this.shouldGoBackToRoot});
 
-  final _i5.Key? key;
+  final _i6.Key? key;
 
   final String? username;
 
@@ -104,7 +110,7 @@ class ProfileRouteArgs {
 
 class ExploreProfileRoute extends _i1.PageRouteInfo<ExploreProfileRouteArgs> {
   ExploreProfileRoute(
-      {_i5.Key? key, String? username, bool? shouldGoBackToRoot})
+      {_i6.Key? key, String? username, bool? shouldGoBackToRoot})
       : super(name,
             path: '/explore-profile-screen',
             args: ExploreProfileRouteArgs(
@@ -119,7 +125,7 @@ class ExploreProfileRouteArgs {
   const ExploreProfileRouteArgs(
       {this.key, this.username, this.shouldGoBackToRoot});
 
-  final _i5.Key? key;
+  final _i6.Key? key;
 
   final String? username;
 
@@ -127,7 +133,7 @@ class ExploreProfileRouteArgs {
 }
 
 class ImageViewerRoute extends _i1.PageRouteInfo<ImageViewerRouteArgs> {
-  ImageViewerRoute({_i5.Key? key, dynamic imageUrl})
+  ImageViewerRoute({_i6.Key? key, dynamic imageUrl})
       : super(name,
             path: '/image-viewer-screen',
             args: ImageViewerRouteArgs(key: key, imageUrl: imageUrl));
@@ -138,13 +144,13 @@ class ImageViewerRoute extends _i1.PageRouteInfo<ImageViewerRouteArgs> {
 class ImageViewerRouteArgs {
   const ImageViewerRouteArgs({this.key, this.imageUrl});
 
-  final _i5.Key? key;
+  final _i6.Key? key;
 
   final dynamic imageUrl;
 }
 
 class SearchRoute extends _i1.PageRouteInfo<SearchRouteArgs> {
-  SearchRoute({_i5.Key? key})
+  SearchRoute({_i6.Key? key})
       : super(name, path: '/search-screen', args: SearchRouteArgs(key: key));
 
   static const String name = 'SearchRoute';
@@ -153,5 +159,11 @@ class SearchRoute extends _i1.PageRouteInfo<SearchRouteArgs> {
 class SearchRouteArgs {
   const SearchRouteArgs({this.key});
 
-  final _i5.Key? key;
+  final _i6.Key? key;
+}
+
+class PostViewerRoute extends _i1.PageRouteInfo {
+  const PostViewerRoute() : super(name, path: '/post-viewer-screen');
+
+  static const String name = 'PostViewerRoute';
 }

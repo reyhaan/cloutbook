@@ -268,7 +268,6 @@ class PostItem extends HookWidget {
                             onTap: (String name) {
                               AutoRouter.of(context).push(ExploreProfileRoute(
                                   username: name.substring(1)));
-                              print(name);
                             },
                           ),
                           MatchText(

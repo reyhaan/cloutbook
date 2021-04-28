@@ -14,13 +14,13 @@ import 'package:get_it/get_it.dart';
 import 'package:jiffy/jiffy.dart';
 import '../stores/ProfileStore.dart';
 
-class Posts extends HookWidget {
+class Replies extends HookWidget {
   final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final List<Post> posts;
   final bool isProfile;
 
-  Posts({
+  Replies({
     Key? key,
     this.posts = const [],
     this.isProfile = false,
@@ -125,19 +125,8 @@ class PostItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     Post? _post = post;
-    bool isReclouted = false;
     String? posterName = _profileStore.userProfile.username;
-
-    useEffect(() {
-      // check if the post is a reclouted post
-      if (post?.recloutedPostEntryResponse != null) {
-        _post = post?.recloutedPostEntryResponse;
-        isReclouted = true;
-
-        // get profile of the person who reclouted this post
-        posterName = post?.profileEntryResponse?.username;
-      }
-    }, []);
+    bool isReply = true;
 
     // get avatar
     final avatar = processDataImage(_post?.profileEntryResponse?.profilePic);
@@ -175,7 +164,7 @@ class PostItem extends HookWidget {
         child: Column(
           children: [
             Visibility(
-              visible: isReclouted,
+              visible: isReply,
               child: Row(
                 children: [
                   Padding(
@@ -191,7 +180,7 @@ class PostItem extends HookWidget {
                               color: Colors.white60,
                             ),
                           ),
-                          TextSpan(text: '  @$posterName reclouted'),
+                          TextSpan(text: ' replying to @$posterName'),
                         ],
                       ),
                     ),
