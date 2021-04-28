@@ -203,11 +203,11 @@ class PostItem extends HookWidget {
                 width: 48,
                 margin: EdgeInsets.fromLTRB(12.0, 0.0, 14.0, 8.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey,
-                  shape: BoxShape.circle,
+                  color: Palette.background,
+                  borderRadius: BorderRadius.circular(7),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(7),
                   child: Image.memory(avatar),
                 ),
               ),
@@ -431,7 +431,7 @@ class ProfileHeader extends HookWidget {
           ),
           Positioned(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   children: [
@@ -449,6 +449,7 @@ class ProfileHeader extends HookWidget {
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       height: 100,
@@ -470,19 +471,19 @@ class ProfileHeader extends HookWidget {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 14, top: 0.0, bottom: 16.0),
+                  margin: EdgeInsets.only(left: 0, top: 0.0, bottom: 16.0),
                   child: Text(
                     '@ ${_profileStore.userProfile.username}',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 14, right: 40),
+                  padding: EdgeInsets.only(left: 0, right: 0),
                   margin: EdgeInsets.only(bottom: 24.0),
                   child: ParsedText(
                     text:
                         '${_profileStore.userProfile.description}'.trimRight(),
-                    alignment: TextAlign.start,
+                    alignment: TextAlign.center,
                     style: TextStyle(
                         fontSize: 13, color: Colors.white, height: 1.4),
                     parse: <MatchText>[
@@ -620,77 +621,82 @@ class ProfileMetadata extends HookWidget {
               ],
             ),
           ),
-          // Container(
-          //   margin: EdgeInsets.only(bottom: 16, left: 12, right: 12),
-          //   padding: EdgeInsets.only(top: 22, bottom: 22),
-          //   decoration: BoxDecoration(
-          //     color: Palette.foreground,
-          //     borderRadius: BorderRadius.circular(14),
-          //   ),
-          //   child: Observer(builder: (coontext) {
-          //     var totalUSDLocked = NumberFormat.compact()
-          //         .format(double.parse(_profileStore.totalUSDLocked));
-          //     var totalUSDMarketCap = NumberFormat.compact()
-          //         .format(double.parse(_profileStore.totalUSDMarketCap));
-          //     return Row(
-          //       crossAxisAlignment: CrossAxisAlignment.center,
-          //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //       children: [
-          //         Container(
-          //           constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
-          //           child: Column(
-          //             children: [
-          //               Text('${_profileStore.inCirculation}'),
-          //               SizedBox(height: 8),
-          //               Text(
-          //                 'In Circulation',
-          //                 textAlign: TextAlign.center,
-          //                 style: TextStyle(
-          //                     fontSize: 12,
-          //                     // fontFamily: GoogleFonts.robotoMono().fontFamily,
-          //                     color: Colors.grey),
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //         Container(
-          //           constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
-          //           child: Column(
-          //             children: [
-          //               Text('\$$totalUSDLocked'),
-          //               SizedBox(height: 8),
-          //               Text(
-          //                 'Total Locked',
-          //                 textAlign: TextAlign.center,
-          //                 style: TextStyle(
-          //                     fontSize: 12,
-          //                     // fontFamily: GoogleFonts.robotoMono().fontFamily,
-          //                     color: Colors.grey),
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //         Container(
-          //           constraints: BoxConstraints(minWidth: 90, maxWidth: 90),
-          //           child: Column(
-          //             children: [
-          //               Text('\$$totalUSDMarketCap'),
-          //               SizedBox(height: 8),
-          //               Text(
-          //                 'Market Cap',
-          //                 textAlign: TextAlign.center,
-          //                 style: TextStyle(
-          //                     fontSize: 12,
-          //                     // fontFamily: GoogleFonts.robotoMono().fontFamily,
-          //                     color: Colors.grey),
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       ],
-          //     );
-          //   }),
-          // ),
+          Container(
+            margin: EdgeInsets.only(bottom: 0, left: 0, right: 0),
+            padding: EdgeInsets.only(top: 16, bottom: 18),
+            decoration: BoxDecoration(
+              color: Palette.background,
+              border: Border(
+                top: BorderSide(
+                  width: 1.0,
+                  color: Palette.foreground,
+                ),
+              ),
+            ),
+            child: Observer(builder: (coontext) {
+              var totalUSDLocked = NumberFormat.compact()
+                  .format(double.parse(_profileStore.totalUSDLocked));
+              var totalUSDMarketCap = NumberFormat.compact()
+                  .format(double.parse(_profileStore.totalUSDMarketCap));
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
+                    child: Column(
+                      children: [
+                        Text('${_profileStore.inCirculation}'),
+                        SizedBox(height: 8),
+                        Text(
+                          'In Circulation',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 100),
+                    child: Column(
+                      children: [
+                        Text('\$$totalUSDLocked'),
+                        SizedBox(height: 8),
+                        Text(
+                          'Total Locked',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    constraints: BoxConstraints(minWidth: 90, maxWidth: 90),
+                    child: Column(
+                      children: [
+                        Text('\$$totalUSDMarketCap'),
+                        SizedBox(height: 8),
+                        Text(
+                          'Market Cap',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 12,
+                              // fontFamily: GoogleFonts.robotoMono().fontFamily,
+                              color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }),
+          ),
           Container(
             padding: const EdgeInsets.fromLTRB(18, 14, 10, 16),
             margin: EdgeInsets.only(bottom: 10),

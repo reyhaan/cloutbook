@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:cloutbook/common/utils.dart';
 import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/stores/ProfileStore.dart';
@@ -40,7 +39,7 @@ class ProfileHeader extends HookWidget {
           ),
           Positioned(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   children: [
@@ -58,6 +57,7 @@ class ProfileHeader extends HookWidget {
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       height: 100,
@@ -79,19 +79,19 @@ class ProfileHeader extends HookWidget {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 14, top: 0.0, bottom: 16.0),
+                  margin: EdgeInsets.only(left: 0, top: 0.0, bottom: 16.0),
                   child: Text(
                     '@ ${_profileStore.userProfile.username}',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 14, right: 40),
+                  padding: EdgeInsets.only(left: 0, right: 0),
                   margin: EdgeInsets.only(bottom: 24.0),
                   child: ParsedText(
                     text:
                         '${_profileStore.userProfile.description}'.trimRight(),
-                    alignment: TextAlign.start,
+                    alignment: TextAlign.center,
                     style: TextStyle(
                         fontSize: 13, color: Colors.white, height: 1.4),
                     parse: <MatchText>[

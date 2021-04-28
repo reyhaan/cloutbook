@@ -203,11 +203,11 @@ class PostItem extends HookWidget {
                 width: 48,
                 margin: EdgeInsets.fromLTRB(12.0, 0.0, 14.0, 8.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey,
-                  shape: BoxShape.circle,
+                  color: Palette.background,
+                  borderRadius: BorderRadius.circular(7),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(7),
                   child: Image.memory(avatar),
                 ),
               ),
