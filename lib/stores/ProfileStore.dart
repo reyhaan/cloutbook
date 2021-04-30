@@ -1,3 +1,4 @@
+import 'package:cloutbook/models/PostModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/repository/ProfileRepository.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
@@ -25,6 +26,9 @@ abstract class _ProfileStore with Store {
 
   @observable
   String loggedInProfile = '';
+
+  @observable
+  Post postOpenedByUser = Post(timestampNanos: 0);
 
   @computed
   String get inCirculation {
@@ -163,6 +167,27 @@ abstract class _ProfileStore with Store {
       });
       isLoading = false;
       return profile;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Future<void> getSinglePost({postHash}) async {
+    try {
+      isLoading = true;
+      final post = await _profileRepository.getSinglePost(
+        payload: {
+          "PostHashHex": postHash,
+          "ReaderPublicKeyBase58Check": userProfile.publicKeyBase58Check,
+          "FetchParents": true,
+          "CommentOffset": 0,
+          "CommentLimit": 20,
+          "AddGlobalFeedBool": false,
+        },
+      );
+      isLoading = false;
+      postOpenedByUser = post;
     } catch (e) {
       throw e;
     }

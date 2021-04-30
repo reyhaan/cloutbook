@@ -90,6 +90,21 @@ mixin _$ProfileStore on _ProfileStore, Store {
     });
   }
 
+  final _$postOpenedByUserAtom = Atom(name: '_ProfileStore.postOpenedByUser');
+
+  @override
+  Post get postOpenedByUser {
+    _$postOpenedByUserAtom.reportRead();
+    return super.postOpenedByUser;
+  }
+
+  @override
+  set postOpenedByUser(Post value) {
+    _$postOpenedByUserAtom.reportWrite(value, super.postOpenedByUser, () {
+      super.postOpenedByUser = value;
+    });
+  }
+
   final _$isLoadingAtom = Atom(name: '_ProfileStore.isLoading');
 
   @override
@@ -121,6 +136,14 @@ mixin _$ProfileStore on _ProfileStore, Store {
   Future<ProfileEntryResponse> getPosterProfile({dynamic publicKey}) {
     return _$getPosterProfileAsyncAction
         .run(() => super.getPosterProfile(publicKey: publicKey));
+  }
+
+  final _$getSinglePostAsyncAction = AsyncAction('_ProfileStore.getSinglePost');
+
+  @override
+  Future<void> getSinglePost({dynamic postHash}) {
+    return _$getSinglePostAsyncAction
+        .run(() => super.getSinglePost(postHash: postHash));
   }
 
   final _$getProfileByUsernameAsyncAction =
@@ -192,6 +215,7 @@ mixin _$ProfileStore on _ProfileStore, Store {
 userProfile: ${userProfile},
 userFollowers: ${userFollowers},
 loggedInProfile: ${loggedInProfile},
+postOpenedByUser: ${postOpenedByUser},
 isLoading: ${isLoading},
 inCirculation: ${inCirculation},
 coinPrice: ${coinPrice},

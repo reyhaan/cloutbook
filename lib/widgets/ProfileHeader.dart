@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:get_it/get_it.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 import '../config/palette.dart';
 
@@ -86,7 +85,7 @@ class ProfileHeader extends HookWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 0, right: 0),
+                  padding: EdgeInsets.only(left: 20, right: 20),
                   margin: EdgeInsets.only(bottom: 24.0),
                   child: ParsedText(
                     text:

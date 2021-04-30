@@ -5,6 +5,7 @@
 // **************************************************************************
 
 import 'package:auto_route/auto_route.dart' as _i1;
+import 'package:cloutbook/models/PostModel.dart' as _i7;
 import 'package:cloutbook/screens/ExploreProfileScreen.dart' as _i3;
 import 'package:cloutbook/screens/PostViewerScreen.dart' as _i5;
 import 'package:cloutbook/screens/screens.dart' as _i2;
@@ -56,8 +57,11 @@ class FlutterRouter extends _i1.RootStackRouter {
           entry: entry, child: _i4.SearchScreen(key: args.key));
     },
     PostViewerRoute.name: (entry) {
+      var args = entry.routeData
+          .argsAs<PostViewerRouteArgs>(orElse: () => PostViewerRouteArgs());
       return _i1.AdaptivePage(
-          entry: entry, child: const _i5.PostViewerScreen());
+          entry: entry,
+          child: _i5.PostViewerScreen(key: args.key, post: args.post));
     }
   };
 
@@ -162,8 +166,19 @@ class SearchRouteArgs {
   final _i6.Key? key;
 }
 
-class PostViewerRoute extends _i1.PageRouteInfo {
-  const PostViewerRoute() : super(name, path: '/post-viewer-screen');
+class PostViewerRoute extends _i1.PageRouteInfo<PostViewerRouteArgs> {
+  PostViewerRoute({_i6.Key? key, _i7.Post? post})
+      : super(name,
+            path: '/post-viewer-screen',
+            args: PostViewerRouteArgs(key: key, post: post));
 
   static const String name = 'PostViewerRoute';
+}
+
+class PostViewerRouteArgs {
+  const PostViewerRouteArgs({this.key, this.post});
+
+  final _i6.Key? key;
+
+  final _i7.Post? post;
 }
