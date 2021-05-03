@@ -53,7 +53,10 @@ class Posts extends HookWidget {
                     ProfileMetadata(),
                     Visibility(
                       visible: posts.length > 0,
-                      child: PostItem(post: posts[index]),
+                      child: PostItem(
+                        post: posts[index],
+                        isProfilePost: isProfile,
+                      ),
                     ),
                   ],
                 );
@@ -83,7 +86,10 @@ class Posts extends HookWidget {
             if (posts.length - 1 > 0 && index == posts.length - 1) {
               return Column(
                 children: [
-                  PostItem(post: posts[index]),
+                  PostItem(
+                    post: posts[index],
+                    isProfilePost: isProfile,
+                  ),
                   GestureDetector(
                     onTap: Feedback.wrapForTap(() {
                       // call global feed again
@@ -105,7 +111,10 @@ class Posts extends HookWidget {
               );
             }
 
-            return PostItem(post: posts[index]);
+            return PostItem(
+              post: posts[index],
+              isProfilePost: isProfile,
+            );
           },
         ),
       ),

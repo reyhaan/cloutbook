@@ -36,14 +36,6 @@ class PostViewerScreen extends HookWidget {
       body: SafeArea(
         child: Observer(
           builder: (_) {
-            // if (isProfilePost) {
-            //   // get post by hash
-            //   replies = _profileStore.userProfile.posts;
-            // } else {
-            //   final _post = _globalFeedStore.globalFeed.firstWhere(
-            //       (element) => element.postHashHex == post?.postHashHex);
-            //   replies = _post.comments!;
-            // }
             _globalFeedStore.globalFeed;
             final _post = _profileStore.getPostByHash(
                 postHash: post?.postHashHex, isProfile: isProfilePost);

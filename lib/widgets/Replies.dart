@@ -51,7 +51,11 @@ class Replies extends HookWidget {
             if (index == 0 && posts.length > 0) {
               return Column(
                 children: [
-                  PostItem(post: parentPost, isParent: true),
+                  PostItem(
+                    post: parentPost,
+                    isParent: true,
+                    isProfilePost: isProfile,
+                  ),
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -65,7 +69,10 @@ class Replies extends HookWidget {
                   ),
                   Visibility(
                     visible: posts.length > 0,
-                    child: PostItem(post: posts[index]),
+                    child: PostItem(
+                      post: posts[index],
+                      isProfilePost: isProfile,
+                    ),
                   ),
                 ],
               );
@@ -87,7 +94,11 @@ class Replies extends HookWidget {
             if (posts.length - 1 > 0 && index == posts.length - 1) {
               return Column(
                 children: [
-                  PostItem(post: posts[index], parentPost: parentPost),
+                  PostItem(
+                    post: posts[index],
+                    parentPost: parentPost,
+                    isProfilePost: isProfile,
+                  ),
                   GestureDetector(
                     onTap: Feedback.wrapForTap(() {
                       // call global feed again
@@ -109,7 +120,11 @@ class Replies extends HookWidget {
               );
             }
 
-            return PostItem(post: posts[index], parentPost: parentPost);
+            return PostItem(
+              post: posts[index],
+              parentPost: parentPost,
+              isProfilePost: isProfile,
+            );
           },
         ),
       ),

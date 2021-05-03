@@ -243,6 +243,9 @@ abstract class _ProfileStore with Store {
     // for rerender UI
     final oldGlobalStore = _globalFeedStore.globalFeed;
     _globalFeedStore.globalFeed = oldGlobalStore;
+
+    final oldProfile = userProfile;
+    userProfile = oldProfile;
   }
 
   @action
