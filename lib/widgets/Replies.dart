@@ -4,19 +4,15 @@ import 'package:cloutbook/config/palette.dart';
 import 'package:cloutbook/models/PostModel.dart';
 import 'package:cloutbook/routes/router.dart';
 import 'package:cloutbook/stores/GlobalFeedStore.dart';
-import 'package:cloutbook/widgets/ProfileHeader.dart';
-import 'package:cloutbook/widgets/ProfileMetadata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_parsed_text/flutter_parsed_text.dart';
 import 'package:get_it/get_it.dart';
 import 'package:jiffy/jiffy.dart';
-import '../stores/ProfileStore.dart';
 
 class Replies extends HookWidget {
   final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
-  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final List<Post> posts;
   final bool isProfile;
   final String? postHash;
@@ -56,6 +52,17 @@ class Replies extends HookWidget {
               return Column(
                 children: [
                   PostItem(post: parentPost, isParent: true),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: Palette.foreground,
+                        padding: EdgeInsets.all(10),
+                        child: Text('Comments'),
+                      ),
+                    ],
+                  ),
                   Visibility(
                     visible: posts.length > 0,
                     child: PostItem(post: posts[index]),
@@ -80,7 +87,7 @@ class Replies extends HookWidget {
             if (posts.length - 1 > 0 && index == posts.length - 1) {
               return Column(
                 children: [
-                  PostItem(post: posts[index]),
+                  PostItem(post: posts[index], parentPost: parentPost),
                   GestureDetector(
                     onTap: Feedback.wrapForTap(() {
                       // call global feed again
@@ -102,7 +109,7 @@ class Replies extends HookWidget {
               );
             }
 
-            return PostItem(post: posts[index]);
+            return PostItem(post: posts[index], parentPost: parentPost);
           },
         ),
       ),
@@ -111,21 +118,22 @@ class Replies extends HookWidget {
 }
 
 class PostItem extends HookWidget {
-  final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final Post? post;
   final bool isParent;
+  final Post? parentPost;
+  final bool isProfilePost;
 
   PostItem({
     Key? key,
     this.post,
     this.isParent = false,
+    this.parentPost,
+    this.isProfilePost = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Post? _post = post;
-    String? posterName = _profileStore.userProfile.username;
-    bool isReply = true;
 
     // get avatar
     final avatar = processDataImage(_post?.profileEntryResponse?.profilePic);
@@ -147,265 +155,258 @@ class PostItem extends HookWidget {
 
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
-        AutoRouter.of(context).push(PostViewerRoute(post: post));
+        AutoRouter.of(context)
+            .push(PostViewerRoute(post: post, isProfilePost: isProfilePost));
       }, context),
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return Container(
-            margin: EdgeInsets.only(bottom: 0),
-            padding: EdgeInsets.only(bottom: 32, top: 10),
-            decoration: BoxDecoration(
-              color: isParent ? Palette.background : Colors.black,
-              border: Border(
-                bottom: BorderSide(
-                  width: 1.0,
-                  color: Palette.foreground,
-                ),
-              ),
-            ),
-            child: Column(
-              children: [
-                Visibility(
-                  visible: isReply && !isParent,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(bottom: 12.0, left: 14.0),
-                        child: Text.rich(
-                          TextSpan(
-                            style: TextStyle(color: Colors.white60),
-                            children: [
-                              WidgetSpan(
-                                child: Icon(
-                                  CupertinoIcons.arrow_2_squarepath,
-                                  size: 16.0,
-                                  color: Colors.white60,
-                                ),
-                              ),
-                              TextSpan(text: ' replying to @$posterName'),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+          return Stack(
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 0),
+                padding: EdgeInsets.only(bottom: 32, top: 10, left: 0),
+                decoration: BoxDecoration(
+                  color: Palette.background,
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 1.0,
+                      color: Palette.foreground,
+                    ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
                   children: [
-                    Visibility(
-                      visible: isParent,
-                      child: Container(
-                        width: 4,
-                        color: Palette.primary3,
-                        height: 70,
-                      ),
+                    SizedBox(
+                      height: 10,
                     ),
-                    Container(
-                      height: 48,
-                      width: 48,
-                      margin: EdgeInsets.fromLTRB(12.0, 0.0, 14.0, 8.0),
-                      decoration: BoxDecoration(
-                        color: Palette.background,
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(7),
-                        child: Image.memory(avatar),
-                      ),
-                    ),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: GestureDetector(
-                              onTap: Feedback.wrapForTap(() {
-                                String? username =
-                                    _post?.profileEntryResponse?.username!;
-                                AutoRouter.of(context).push(
-                                    ExploreProfileRoute(username: username!));
-                              }, context),
-                              child: Text(
-                                '@${_post?.profileEntryResponse?.username}',
-                                style: TextStyle(
-                                  color: Palette.primary4,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                  letterSpacing: 0.3,
-                                ),
-                              ),
-                            ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 48,
+                          width: 48,
+                          margin: EdgeInsets.fromLTRB(12.0, 0.0, 14.0, 8.0),
+                          decoration: BoxDecoration(
+                            color: Palette.background,
+                            borderRadius: BorderRadius.circular(7),
                           ),
-                          Container(
-                            padding:
-                                EdgeInsets.only(left: 2, top: 4, bottom: 6),
-                            child: Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                      text: '$timeElapsed',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 12)),
-                                ],
-                              ),
-                            ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(7),
+                            child: Image.memory(avatar),
                           ),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: ParsedText(
-                              text: _post?.body ?? '',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                                height: 1.3,
-                                wordSpacing: 0.2,
-                              ),
-                              parse: <MatchText>[
-                                MatchText(
-                                  pattern: r"(?<![A-Za-z])@[A-Za-z]\w+",
-                                  style: TextStyle(
-                                    color: Palette.primary3,
-                                    fontSize: 15,
-                                  ),
-                                  onTap: (String name) {
+                        ),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: GestureDetector(
+                                  onTap: Feedback.wrapForTap(() {
+                                    String? username =
+                                        _post?.profileEntryResponse?.username!;
                                     AutoRouter.of(context).push(
                                         ExploreProfileRoute(
-                                            username: name.substring(1)));
-                                    print(name);
-                                  },
-                                ),
-                                MatchText(
-                                  type: ParsedType.URL,
-                                  style: TextStyle(
-                                    color: Palette.primary3,
-                                    fontSize: 15,
+                                            username: username!));
+                                  }, context),
+                                  child: Text(
+                                    '@${_post?.profileEntryResponse?.username}',
+                                    style: TextStyle(
+                                      color: Palette.primary4,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      letterSpacing: 0.3,
+                                    ),
                                   ),
-                                  onTap: (url) {
-                                    launchURL(url);
-                                    // print(url);
-                                  },
                                 ),
-                                MatchText(
-                                  type: ParsedType.EMAIL,
-                                  style: TextStyle(
-                                    color: Palette.primary3,
-                                    fontSize: 15,
+                              ),
+                              Container(
+                                padding:
+                                    EdgeInsets.only(left: 2, top: 4, bottom: 6),
+                                child: Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                          text: '$timeElapsed',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12)),
+                                    ],
                                   ),
-                                  onTap: (email) {
-                                    print(email);
-                                  },
                                 ),
-                              ],
-                            ),
-                          ),
-                          Visibility(
-                            visible: _post?.body != '',
-                            child: SizedBox(height: 14),
-                          ),
-                          Visibility(
-                            visible: imageUrl != '',
-                            child: Center(
-                              child: Padding(
+                              ),
+                              SizedBox(height: 5.0),
+                              Padding(
                                 padding: const EdgeInsets.only(right: 16.0),
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(maxHeight: 200),
-                                  child: GestureDetector(
-                                    onTap: Feedback.wrapForTap(() {
-                                      AutoRouter.of(context).push(
-                                          ImageViewerRoute(imageUrl: imageUrl));
-                                    }, context),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                            imageUrl,
+                                child: ParsedText(
+                                  text: _post?.body ?? '',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    height: 1.3,
+                                    wordSpacing: 0.2,
+                                  ),
+                                  parse: <MatchText>[
+                                    MatchText(
+                                      pattern: r"(?<![A-Za-z])@[A-Za-z]\w+",
+                                      style: TextStyle(
+                                        color: Palette.primary3,
+                                        fontSize: 15,
+                                      ),
+                                      onTap: (String name) {
+                                        AutoRouter.of(context).push(
+                                            ExploreProfileRoute(
+                                                username: name.substring(1)));
+                                        print(name);
+                                      },
+                                    ),
+                                    MatchText(
+                                      type: ParsedType.URL,
+                                      style: TextStyle(
+                                        color: Palette.primary3,
+                                        fontSize: 15,
+                                      ),
+                                      onTap: (url) {
+                                        launchURL(url);
+                                        // print(url);
+                                      },
+                                    ),
+                                    MatchText(
+                                      type: ParsedType.EMAIL,
+                                      style: TextStyle(
+                                        color: Palette.primary3,
+                                        fontSize: 15,
+                                      ),
+                                      onTap: (email) {
+                                        print(email);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Visibility(
+                                visible: _post?.body != '',
+                                child: SizedBox(height: 14),
+                              ),
+                              Visibility(
+                                visible: imageUrl != '',
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 16.0),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          BoxConstraints(maxHeight: 200),
+                                      child: GestureDetector(
+                                        onTap: Feedback.wrapForTap(() {
+                                          AutoRouter.of(context).push(
+                                              ImageViewerRoute(
+                                                  imageUrl: imageUrl));
+                                        }, context),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                imageUrl,
+                                              ),
+                                              fit: BoxFit.fitWidth,
+                                            ),
                                           ),
-                                          fit: BoxFit.fitWidth,
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Visibility(
-                            visible: imageUrl != '',
-                            child: SizedBox(height: 20),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 4, right: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    style: TextStyle(color: Colors.white60),
-                                    children: [
-                                      WidgetSpan(
-                                        child: Icon(
-                                          CupertinoIcons.bubble_left,
-                                          size: 18.0,
-                                          color: Colors.white60,
-                                        ),
-                                      ),
+                              Visibility(
+                                visible: imageUrl != '',
+                                child: SizedBox(height: 20),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 4, right: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text.rich(
                                       TextSpan(
-                                          text: '  ${_post?.commentCount}'),
-                                    ],
-                                  ),
-                                ),
-                                Text.rich(
-                                  TextSpan(
-                                    style: TextStyle(color: Colors.white60),
-                                    children: [
-                                      WidgetSpan(
-                                        child: Icon(
-                                          CupertinoIcons.arrow_2_squarepath,
-                                          size: 18.0,
-                                          color: Colors.white60,
-                                        ),
+                                        style: TextStyle(color: Colors.white60),
+                                        children: [
+                                          WidgetSpan(
+                                            child: Icon(
+                                              CupertinoIcons.bubble_left,
+                                              size: 18.0,
+                                              color: Colors.white60,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                              text: '  ${_post?.commentCount}'),
+                                        ],
                                       ),
+                                    ),
+                                    Text.rich(
                                       TextSpan(
-                                          text: '  ${_post?.recloutCount}'),
-                                    ],
-                                  ),
-                                ),
-                                Text.rich(
-                                  TextSpan(
-                                    style: TextStyle(color: Colors.white60),
-                                    children: [
-                                      WidgetSpan(
-                                        child: Icon(
-                                          CupertinoIcons.heart,
-                                          size: 18.0,
-                                          color: Colors.white60,
-                                        ),
+                                        style: TextStyle(color: Colors.white60),
+                                        children: [
+                                          WidgetSpan(
+                                            child: Icon(
+                                              CupertinoIcons.arrow_2_squarepath,
+                                              size: 18.0,
+                                              color: Colors.white60,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                              text: '  ${_post?.recloutCount}'),
+                                        ],
                                       ),
-                                      TextSpan(text: '  ${_post?.likeCount}'),
-                                    ],
-                                  ),
+                                    ),
+                                    Text.rich(
+                                      TextSpan(
+                                        style: TextStyle(color: Colors.white60),
+                                        children: [
+                                          WidgetSpan(
+                                            child: Icon(
+                                              CupertinoIcons.heart,
+                                              size: 18.0,
+                                              color: Colors.white60,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                              text: '  ${_post?.likeCount}'),
+                                        ],
+                                      ),
+                                    ),
+                                    Text.rich(
+                                      TextSpan(
+                                        style: TextStyle(color: Colors.white60),
+                                        children: [],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text.rich(
-                                  TextSpan(
-                                    style: TextStyle(color: Colors.white60),
-                                    children: [],
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Positioned(
+                top: 0,
+                bottom: 0,
+                child: Visibility(
+                  visible: isParent,
+                  child: Container(
+                    width: 0,
+                    color: Palette.primary4,
+                  ),
+                ),
+              ),
+            ],
           );
         },
       ),

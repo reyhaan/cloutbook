@@ -116,10 +116,12 @@ class Posts extends HookWidget {
 class PostItem extends HookWidget {
   final ProfileStore _profileStore = GetIt.I<ProfileStore>();
   final Post? post;
+  final bool isProfilePost;
 
   PostItem({
     Key? key,
     this.post,
+    this.isProfilePost = false,
   }) : super(key: key);
 
   @override
@@ -159,7 +161,8 @@ class PostItem extends HookWidget {
 
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
-        AutoRouter.of(context).push(PostViewerRoute(post: post));
+        AutoRouter.of(context)
+            .push(PostViewerRoute(post: post, isProfilePost: isProfilePost));
       }, context),
       child: Container(
         margin: EdgeInsets.only(bottom: 10),

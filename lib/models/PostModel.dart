@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class Post extends Equatable {
   final String? body;
   final int? commentCount;
-  final List<Post>? comments;
+  List<Post>? comments;
   final List<dynamic>? imageUrls;
   final bool? isHidden;
   final bool? isPinned;

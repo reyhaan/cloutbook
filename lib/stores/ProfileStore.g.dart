@@ -141,9 +141,9 @@ mixin _$ProfileStore on _ProfileStore, Store {
   final _$getSinglePostAsyncAction = AsyncAction('_ProfileStore.getSinglePost');
 
   @override
-  Future<void> getSinglePost({dynamic postHash}) {
-    return _$getSinglePostAsyncAction
-        .run(() => super.getSinglePost(postHash: postHash));
+  Future<void> getSinglePost({dynamic postHash, dynamic isProfilePost}) {
+    return _$getSinglePostAsyncAction.run(() =>
+        super.getSinglePost(postHash: postHash, isProfilePost: isProfilePost));
   }
 
   final _$getProfileByUsernameAsyncAction =
@@ -204,6 +204,30 @@ mixin _$ProfileStore on _ProfileStore, Store {
         name: '_ProfileStore.setProfilePosts');
     try {
       return super.setProfilePosts(posts);
+    } finally {
+      _$_ProfileStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Post? getPostByHash({dynamic postHash, dynamic isProfile}) {
+    final _$actionInfo = _$_ProfileStoreActionController.startAction(
+        name: '_ProfileStore.getPostByHash');
+    try {
+      return super.getPostByHash(postHash: postHash, isProfile: isProfile);
+    } finally {
+      _$_ProfileStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addRepliesByPostHash(
+      {dynamic postHash, dynamic newPost, dynamic isProfile}) {
+    final _$actionInfo = _$_ProfileStoreActionController.startAction(
+        name: '_ProfileStore.addRepliesByPostHash');
+    try {
+      return super.addRepliesByPostHash(
+          postHash: postHash, newPost: newPost, isProfile: isProfile);
     } finally {
       _$_ProfileStoreActionController.endAction(_$actionInfo);
     }

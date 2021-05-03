@@ -61,7 +61,10 @@ class FlutterRouter extends _i1.RootStackRouter {
           .argsAs<PostViewerRouteArgs>(orElse: () => PostViewerRouteArgs());
       return _i1.AdaptivePage(
           entry: entry,
-          child: _i5.PostViewerScreen(key: args.key, post: args.post));
+          child: _i5.PostViewerScreen(
+              key: args.key,
+              post: args.post,
+              isProfilePost: args.isProfilePost));
     }
   };
 
@@ -167,18 +170,21 @@ class SearchRouteArgs {
 }
 
 class PostViewerRoute extends _i1.PageRouteInfo<PostViewerRouteArgs> {
-  PostViewerRoute({_i6.Key? key, _i7.Post? post})
+  PostViewerRoute({_i6.Key? key, _i7.Post? post, bool isProfilePost = false})
       : super(name,
             path: '/post-viewer-screen',
-            args: PostViewerRouteArgs(key: key, post: post));
+            args: PostViewerRouteArgs(
+                key: key, post: post, isProfilePost: isProfilePost));
 
   static const String name = 'PostViewerRoute';
 }
 
 class PostViewerRouteArgs {
-  const PostViewerRouteArgs({this.key, this.post});
+  const PostViewerRouteArgs({this.key, this.post, this.isProfilePost = false});
 
   final _i6.Key? key;
 
   final _i7.Post? post;
+
+  final bool isProfilePost;
 }

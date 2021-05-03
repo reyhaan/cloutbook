@@ -11,7 +11,7 @@ class ProfileEntryResponse extends Equatable {
   final bool? isHidden;
   final bool? isReserved;
   final bool? isVerified;
-  final List<Post> posts;
+  List<Post> posts;
   final String? profilePic;
   final String? publicKeyBase58Check;
   final StakeEntryStats? stakeEntryStats;
