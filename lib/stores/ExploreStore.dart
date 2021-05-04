@@ -253,6 +253,7 @@ abstract class _ExploreStore with Store {
   @action
   Future<void> getWallet(publicKey) async {
     try {
+      isLoading = true;
       final userList = {
         "PublicKeysBase58Check": [publicKey]
       };
@@ -260,6 +261,7 @@ abstract class _ExploreStore with Store {
       setWallet(wallet);
       getHoldings();
       getHodlers();
+      isLoading = false;
     } catch (e) {}
   }
 }
