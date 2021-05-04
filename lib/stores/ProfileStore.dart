@@ -1,6 +1,8 @@
+import 'package:cloutbook/models/PostModel.dart';
 import 'package:cloutbook/models/ProfileModel.dart';
 import 'package:cloutbook/repository/ProfileRepository.dart';
 import 'package:cloutbook/stores/ExchangeStore.dart';
+import 'package:cloutbook/stores/GlobalFeedStore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 
@@ -25,6 +27,9 @@ abstract class _ProfileStore with Store {
 
   @observable
   String loggedInProfile = '';
+
+  @observable
+  Post postOpenedByUser = Post(timestampNanos: 0);
 
   @computed
   String get inCirculation {
@@ -163,6 +168,125 @@ abstract class _ProfileStore with Store {
       });
       isLoading = false;
       return profile;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Post? postFound;
+
+  Post? getPostByHashHelper({required List<Post> posts, postHash}) {
+    try {
+      if (posts.length == 0) {
+        return null;
+      }
+      for (var i = 0; i < posts.length; i++) {
+        final post = posts[i];
+        if (post.postHashHex == postHash) {
+          postFound = post;
+        } else if (post.recloutedPostEntryResponse != null) {
+          if (post.recloutedPostEntryResponse?.postHashHex == postHash) {
+            postFound = post.recloutedPostEntryResponse;
+          }
+        }
+        if (post.comments != null) {
+          getPostByHashHelper(
+            posts: post.comments!,
+            postHash: postHash,
+          );
+        }
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @action
+  Post? getPostByHash({postHash, isProfile, isReclouted}) {
+    final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
+    getPostByHashHelper(
+      posts: isProfile ? userProfile.posts : _globalFeedStore.globalFeed,
+      postHash: postHash,
+    );
+    return postFound;
+  }
+
+  Post? helper({
+    required List<Post> posts,
+    postHash,
+    newPost,
+  }) {
+    if (posts.length == 0) {
+      return null;
+    }
+
+    for (var i = 0; i < posts.length; i++) {
+      final post = posts[i];
+      if (post.postHashHex == postHash) {
+        post.comments = newPost.comments;
+      } else if (post.recloutedPostEntryResponse != null) {
+        if (post.recloutedPostEntryResponse?.postHashHex == postHash) {
+          post.recloutedPostEntryResponse?.comments = newPost.comments;
+        }
+      }
+      if (post.comments != null) {
+        helper(
+          posts: post.comments!,
+          postHash: postHash,
+          newPost: newPost,
+        );
+      }
+    }
+  }
+
+  @action
+  void addRepliesByPostHash({postHash, newPost, isProfile}) {
+    final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
+    helper(
+      posts: isProfile ? userProfile.posts : _globalFeedStore.globalFeed,
+      postHash: postHash,
+      newPost: newPost,
+    );
+
+    // for rerender UI
+    final oldGlobalStore = _globalFeedStore.globalFeed;
+    _globalFeedStore.globalFeed = oldGlobalStore;
+
+    final oldProfile = userProfile;
+    userProfile = oldProfile;
+  }
+
+  @action
+  Future<void> getSinglePost({postHash, isProfilePost}) async {
+    try {
+      isLoading = true;
+      final post = await _profileRepository.getSinglePost(
+        payload: {
+          "PostHashHex": postHash,
+          "ReaderPublicKeyBase58Check": userProfile.publicKeyBase58Check,
+          "FetchParents": true,
+          "CommentOffset": 0,
+          "CommentLimit": 20,
+          "AddGlobalFeedBool": false,
+        },
+      );
+      isLoading = false;
+
+      if (isProfilePost) {
+        // update this particular post inside userprofile feed
+        addRepliesByPostHash(
+          postHash: postHash,
+          newPost: post,
+          isProfile: true,
+        );
+      } else {
+        // update this particular feed item
+        addRepliesByPostHash(
+          postHash: postHash,
+          newPost: post,
+          isProfile: false,
+        );
+      }
     } catch (e) {
       throw e;
     }

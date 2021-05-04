@@ -172,7 +172,7 @@ class LoginScreen extends HookWidget {
                   padding: EdgeInsets.only(top: 18),
                   margin: EdgeInsets.only(left: 8, right: 8),
                   decoration: BoxDecoration(
-                    color: Palette.foreground,
+                    // color: Palette.foreground,
                     borderRadius: BorderRadius.circular(7),
                   ),
                   constraints: BoxConstraints(

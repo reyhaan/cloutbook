@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 class Post extends Equatable {
   final String? body;
   final int? commentCount;
-  final List<dynamic>? comments;
+  List<Post>? comments;
   final List<dynamic>? imageUrls;
   final bool? isHidden;
   final bool? isPinned;
@@ -63,19 +63,30 @@ class Post extends Equatable {
   factory Post.fromMap(Map<String, dynamic> map) {
     ProfileEntryResponse? profileEntryResponse;
     Post? recloutedPostEntryResponse;
+    List<Post>? comments = [];
 
     if (map['ProfileEntryResponse'] != null) {
-      profileEntryResponse = ProfileEntryResponse.fromMap(map['ProfileEntryResponse']);
+      profileEntryResponse =
+          ProfileEntryResponse.fromMap(map['ProfileEntryResponse']);
     }
 
     if (map['RecloutedPostEntryResponse'] != null) {
-      recloutedPostEntryResponse = Post.fromMap(map['RecloutedPostEntryResponse']);
+      recloutedPostEntryResponse =
+          Post.fromMap(map['RecloutedPostEntryResponse']);
+    }
+
+    if (map['Comments'] != null) {
+      List<dynamic> allComments = map['Comments'];
+
+      allComments.forEach((comment) {
+        comments.add(Post.fromMap(comment.cast<String, dynamic>()));
+      });
     }
 
     return Post(
       body: map['Body'] ?? '',
       commentCount: map['CommentCount'] ?? 0,
-      comments: map['Comments'] ?? [],
+      comments: comments,
       imageUrls: map['ImageURLs'] ?? [],
       isHidden: map['IsHidden'],
       isPinned: map['IsPinned'],
@@ -93,23 +104,29 @@ class Post extends Equatable {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "Body": this.body,
-        "CommentCount": this.commentCount,
-        "Comments": this.comments,
-        "ImageUrls": this.imageUrls,
-        "IsHidden": this.isHidden,
-        "IsPinned": this.isPinned,
-        "LikeCount": this.likeCount,
-        "ParentPosts": this.parentPosts,
-        "ParentStakeId": this.parentStakeId,
-        "PostEntryReaderState": this.postEntryReaderState,
-        "PostHashHex": this.postHashHex,
-        "PosterPublicKeyBase58Check": this.posterPublicKeyBase58Check,
-        "ProfileEntryResponse": this.profileEntryResponse,
-        "RecloutCount": this.recloutCount,
-        "RecloutedPostEntryResponse": this.recloutedPostEntryResponse,
-        "StakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
-        "TimestampNanos": this.timestampNanos,
-      };
+  Map<String, dynamic> toJson() {
+    final List<Post> comments = [];
+    this.comments?.forEach((comment) {
+      comments.add(comment);
+    });
+    return {
+      "Body": this.body,
+      "CommentCount": this.commentCount,
+      "Comments": comments,
+      "ImageUrls": this.imageUrls,
+      "IsHidden": this.isHidden,
+      "IsPinned": this.isPinned,
+      "LikeCount": this.likeCount,
+      "ParentPosts": this.parentPosts,
+      "ParentStakeId": this.parentStakeId,
+      "PostEntryReaderState": this.postEntryReaderState,
+      "PostHashHex": this.postHashHex,
+      "PosterPublicKeyBase58Check": this.posterPublicKeyBase58Check,
+      "ProfileEntryResponse": this.profileEntryResponse,
+      "RecloutCount": this.recloutCount,
+      "RecloutedPostEntryResponse": this.recloutedPostEntryResponse,
+      "StakeMultipleBasisPoints": this.stakeMultipleBasisPoints,
+      "TimestampNanos": this.timestampNanos,
+    };
+  }
 }

@@ -68,29 +68,30 @@ class SettingsList extends HookWidget {
                       ),
                       GestureDetector(
                         onTap: Feedback.wrapForTap(() {
-                          Clipboard.setData(ClipboardData(
-                                  text: _profileStore
-                                      .userProfile.publicKeyBase58Check))
-                              .then((_) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text("Public key copied to clipboard")));
-                          });
+                          Clipboard.setData(
+                            ClipboardData(
+                                text: _profileStore
+                                    .userProfile.publicKeyBase58Check),
+                          ).then(
+                            (_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("Public key copied to clipboard"),
+                                ),
+                              );
+                            },
+                          );
                         }, context),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Transform.rotate(
-                              angle: 0,
-                              child: FaIcon(
-                                FontAwesomeIcons.key,
-                                color: Colors.white60,
-                                size: 12,
-                              ),
+                            FaIcon(
+                              FontAwesomeIcons.key,
+                              color: Colors.white60,
+                              size: 12,
                             ),
-                            SizedBox(
-                              width: 4,
-                            ),
+                            SizedBox(width: 4),
                             SizedBox(
                               width: 180.0,
                               child: Text(
@@ -103,6 +104,12 @@ class SettingsList extends HookWidget {
                                   color: Colors.grey,
                                 ),
                               ),
+                            ),
+                            SizedBox(width: 4),
+                            FaIcon(
+                              FontAwesomeIcons.copy,
+                              color: Colors.white60,
+                              size: 12,
                             ),
                           ],
                         ),

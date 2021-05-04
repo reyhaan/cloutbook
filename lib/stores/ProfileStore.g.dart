@@ -90,6 +90,21 @@ mixin _$ProfileStore on _ProfileStore, Store {
     });
   }
 
+  final _$postOpenedByUserAtom = Atom(name: '_ProfileStore.postOpenedByUser');
+
+  @override
+  Post get postOpenedByUser {
+    _$postOpenedByUserAtom.reportRead();
+    return super.postOpenedByUser;
+  }
+
+  @override
+  set postOpenedByUser(Post value) {
+    _$postOpenedByUserAtom.reportWrite(value, super.postOpenedByUser, () {
+      super.postOpenedByUser = value;
+    });
+  }
+
   final _$isLoadingAtom = Atom(name: '_ProfileStore.isLoading');
 
   @override
@@ -121,6 +136,14 @@ mixin _$ProfileStore on _ProfileStore, Store {
   Future<ProfileEntryResponse> getPosterProfile({dynamic publicKey}) {
     return _$getPosterProfileAsyncAction
         .run(() => super.getPosterProfile(publicKey: publicKey));
+  }
+
+  final _$getSinglePostAsyncAction = AsyncAction('_ProfileStore.getSinglePost');
+
+  @override
+  Future<void> getSinglePost({dynamic postHash, dynamic isProfilePost}) {
+    return _$getSinglePostAsyncAction.run(() =>
+        super.getSinglePost(postHash: postHash, isProfilePost: isProfilePost));
   }
 
   final _$getProfileByUsernameAsyncAction =
@@ -187,11 +210,38 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   @override
+  Post? getPostByHash(
+      {dynamic postHash, dynamic isProfile, dynamic isReclouted}) {
+    final _$actionInfo = _$_ProfileStoreActionController.startAction(
+        name: '_ProfileStore.getPostByHash');
+    try {
+      return super.getPostByHash(
+          postHash: postHash, isProfile: isProfile, isReclouted: isReclouted);
+    } finally {
+      _$_ProfileStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addRepliesByPostHash(
+      {dynamic postHash, dynamic newPost, dynamic isProfile}) {
+    final _$actionInfo = _$_ProfileStoreActionController.startAction(
+        name: '_ProfileStore.addRepliesByPostHash');
+    try {
+      return super.addRepliesByPostHash(
+          postHash: postHash, newPost: newPost, isProfile: isProfile);
+    } finally {
+      _$_ProfileStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 userProfile: ${userProfile},
 userFollowers: ${userFollowers},
 loggedInProfile: ${loggedInProfile},
+postOpenedByUser: ${postOpenedByUser},
 isLoading: ${isLoading},
 inCirculation: ${inCirculation},
 coinPrice: ${coinPrice},

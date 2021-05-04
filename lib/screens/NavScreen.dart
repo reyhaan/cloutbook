@@ -17,7 +17,7 @@ class NavScreen extends HookWidget {
       ProfileScreen(
         username: _profileStore.loggedInProfile,
       ),
-      ExploreScreen(),
+      // ExploreScreen(),
       WalletScreen(),
       SettingsScreen()
     ];
@@ -48,10 +48,10 @@ class NavScreen extends HookWidget {
                 icon: new Icon(Icons.person),
                 label: 'Profile',
               ),
-              BottomNavigationBarItem(
-                icon: new Icon(CupertinoIcons.star_fill),
-                label: 'Watchlist',
-              ),
+              // BottomNavigationBarItem(
+              //   icon: new Icon(CupertinoIcons.star_fill),
+              //   label: 'Watchlist',
+              // ),
               BottomNavigationBarItem(
                 icon: new Icon(Icons.account_balance_wallet_rounded),
                 label: 'Wallet',

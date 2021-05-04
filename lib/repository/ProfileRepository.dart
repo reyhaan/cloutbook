@@ -13,6 +13,9 @@ abstract class BaseProfileRepository {
   Future<ProfileEntryResponse> getUserProfile({
     Map<String, dynamic>? payload,
   });
+  Future<Post> getSinglePost({
+    Map<String, dynamic>? payload,
+  });
   Future<List<Post>> getPostsForPublicKey({
     required Map<String, dynamic> payload,
     required ProfileEntryResponse profile,
@@ -45,6 +48,32 @@ class ProfileRepository extends BaseProfileRepository {
         return ProfileEntryResponse.fromMap(data['Profile']);
       }
       return ProfileEntryResponse(posts: []);
+    } on DioError catch (err) {
+      print(err);
+      throw Failure(message: err.response?.statusMessage);
+    } on SocketException catch (err) {
+      print(err);
+      throw Failure(message: 'Please check your connection.');
+    }
+  }
+
+  @override
+  Future<Post> getSinglePost({
+    @required Map<String, dynamic>? payload,
+  }) async {
+    try {
+      final queryParams = payload;
+
+      final response = await api.post(
+        '/get-single-post',
+        queryParams,
+      );
+
+      if (response.statusCode == 200) {
+        final data = Map<String, dynamic>.from(response.data);
+        return Post.fromMap(data['PostFound']);
+      }
+      return Post(timestampNanos: 0);
     } on DioError catch (err) {
       print(err);
       throw Failure(message: err.response?.statusMessage);
