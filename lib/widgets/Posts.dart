@@ -171,7 +171,7 @@ class PostItem extends HookWidget {
     return GestureDetector(
       onTap: Feedback.wrapForTap(() {
         AutoRouter.of(context)
-            .push(PostViewerRoute(post: post, isProfilePost: isProfilePost));
+            .push(PostViewerRoute(post: _post, isProfilePost: isProfilePost));
       }, context),
       child: Container(
         margin: EdgeInsets.only(bottom: 10),

@@ -184,6 +184,10 @@ abstract class _ProfileStore with Store {
         final post = posts[i];
         if (post.postHashHex == postHash) {
           postFound = post;
+        } else if (post.recloutedPostEntryResponse != null) {
+          if (post.recloutedPostEntryResponse?.postHashHex == postHash) {
+            postFound = post.recloutedPostEntryResponse;
+          }
         }
         if (post.comments != null) {
           getPostByHashHelper(
@@ -198,7 +202,7 @@ abstract class _ProfileStore with Store {
   }
 
   @action
-  Post? getPostByHash({postHash, isProfile}) {
+  Post? getPostByHash({postHash, isProfile, isReclouted}) {
     final GlobalFeedStore _globalFeedStore = GetIt.I<GlobalFeedStore>();
     getPostByHashHelper(
       posts: isProfile ? userProfile.posts : _globalFeedStore.globalFeed,
@@ -220,6 +224,10 @@ abstract class _ProfileStore with Store {
       final post = posts[i];
       if (post.postHashHex == postHash) {
         post.comments = newPost.comments;
+      } else if (post.recloutedPostEntryResponse != null) {
+        if (post.recloutedPostEntryResponse?.postHashHex == postHash) {
+          post.recloutedPostEntryResponse?.comments = newPost.comments;
+        }
       }
       if (post.comments != null) {
         helper(

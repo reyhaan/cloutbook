@@ -26,19 +26,34 @@ class PostViewerScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isReclouted = false;
+
     useEffect(() {
+      // check if the post is a reclouted post
+      if (post?.recloutedPostEntryResponse != null) {
+        isReclouted = true;
+      }
       getReplies();
     }, []);
 
     List<Post> replies = [];
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Comments',
+          style: TextStyle(fontSize: 16),
+        ),
+      ),
       body: SafeArea(
         child: Observer(
           builder: (_) {
             _globalFeedStore.globalFeed;
             final _post = _profileStore.getPostByHash(
-                postHash: post?.postHashHex, isProfile: isProfilePost);
+              postHash: post?.postHashHex,
+              isProfile: isProfilePost,
+              isReclouted: isReclouted,
+            );
 
             if (_post != null) {
               replies = _post.comments!;

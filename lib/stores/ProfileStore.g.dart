@@ -210,11 +210,13 @@ mixin _$ProfileStore on _ProfileStore, Store {
   }
 
   @override
-  Post? getPostByHash({dynamic postHash, dynamic isProfile}) {
+  Post? getPostByHash(
+      {dynamic postHash, dynamic isProfile, dynamic isReclouted}) {
     final _$actionInfo = _$_ProfileStoreActionController.startAction(
         name: '_ProfileStore.getPostByHash');
     try {
-      return super.getPostByHash(postHash: postHash, isProfile: isProfile);
+      return super.getPostByHash(
+          postHash: postHash, isProfile: isProfile, isReclouted: isReclouted);
     } finally {
       _$_ProfileStoreActionController.endAction(_$actionInfo);
     }
