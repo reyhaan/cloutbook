@@ -19,7 +19,8 @@ abstract class BaseExchangeRepository {
 }
 
 final HeadlessInAppWebView? bitCloutWebView = new HeadlessInAppWebView(
-  initialUrlRequest: URLRequest(url: Uri.parse("https://api.bitclout.com/get-exchange-rate")),
+  initialUrlRequest:
+      URLRequest(url: Uri.parse("https://api.bitclout.com/get-exchange-rate")),
   initialOptions: InAppWebViewGroupOptions(
     crossPlatform: InAppWebViewOptions(),
   ),
@@ -30,19 +31,26 @@ final HeadlessInAppWebView? bitCloutWebView = new HeadlessInAppWebView(
         var x = await exchangeRate.json();
         return x;
         """;
-    var _exchangeRate = await controller.callAsyncJavaScript(functionBody: getExchangeRateFunction, arguments: {});
+    CallAsyncJavaScriptResult? _exchangeRate = await controller
+        .callAsyncJavaScript(
+            functionBody: getExchangeRateFunction, arguments: {});
 
-    Map<String, dynamic> exchangeValue = _exchangeRate!.toMap().cast<String, dynamic>();
+    if (_exchangeRate != null) {
+      Map<String, dynamic> exchangeValue =
+          _exchangeRate.toMap().cast<String, dynamic>();
 
-    ExchangeRate exchangeRate = ExchangeRate.fromMap(exchangeValue['value'].cast<String, dynamic>());
-    _exchangeStore.setExchangeRate(exchangeRate);
+      ExchangeRate exchangeRate =
+          ExchangeRate.fromMap(exchangeValue['value'].cast<String, dynamic>());
+      _exchangeStore.setExchangeRate(exchangeRate);
+    }
   },
 );
 
 final HeadlessInAppWebView? tickerWebView = new HeadlessInAppWebView(
-  initialUrlRequest: URLRequest(url: Uri.parse("https://blockchain.info/ticker")),
+  initialUrlRequest:
+      URLRequest(url: Uri.parse("https://blockchain.info/ticker")),
   initialOptions: InAppWebViewGroupOptions(
-    crossPlatform: InAppWebViewOptions(),
+    ios: IOSInAppWebViewOptions(),
   ),
   onLoadStop: (controller, url) async {
     final ExchangeStore _exchangeStore = GetIt.I<ExchangeStore>();
@@ -51,12 +59,23 @@ final HeadlessInAppWebView? tickerWebView = new HeadlessInAppWebView(
         var y = await ticker.json();
         return y;
         """;
-    var _ticker = await controller.callAsyncJavaScript(functionBody: getTickerFunction, arguments: {});
 
-    Map<String, dynamic> tickerValue = _ticker!.toMap().cast<String, dynamic>();
+    try {
+      CallAsyncJavaScriptResult? _ticker =
+          await controller.callAsyncJavaScript(functionBody: getTickerFunction);
 
-    Ticker ticker = Ticker.fromMap(tickerValue['value'].cast<String, dynamic>());
-    _exchangeStore.setTicker(ticker);
+      if (_ticker != null) {
+        Map<String, dynamic> tickerValue =
+            _ticker.toMap().cast<String, dynamic>();
+
+        Ticker ticker =
+            Ticker.fromMap(tickerValue['value'].cast<String, dynamic>());
+        _exchangeStore.setTicker(ticker);
+      }
+    } catch (e) {
+      print(e);
+      throw e;
+    }
   },
 );
 
