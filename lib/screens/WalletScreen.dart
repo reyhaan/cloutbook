@@ -32,24 +32,7 @@ class WalletScreen extends HookWidget {
             createSilverAppBar2(),
           ];
         },
-        body: Observer(
-          builder: (_) {
-            return _exploreStore.isLoading
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          color: Palette.primary,
-                        ),
-                        SizedBox(height: 30),
-                        Text('Crunching numbers'),
-                      ],
-                    ),
-                  )
-                : HoldingList();
-          },
-        ),
+        body: HoldingList(),
       ),
     );
   }

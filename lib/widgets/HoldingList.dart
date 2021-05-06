@@ -23,27 +23,52 @@ class HoldingList extends HookWidget {
     }, []);
 
     return Container(
-      child: Observer(builder: (_) {
-        final watchlist = _exploreStore.didSelectHoldings
-            ? _exploreStore.holdings
-            : _exploreStore.hodlers;
-        return ListView.builder(
-          itemCount: watchlist.length,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return Column(
-                children: [
-                  Row(
-                    children: [SizedBox(height: 10)],
+      child: Observer(
+        builder: (_) {
+          final watchlist = _exploreStore.didSelectHoldings
+              ? _exploreStore.holdings
+              : _exploreStore.hodlers;
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: ListView.builder(
+                  itemCount: watchlist.length,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Column(
+                        children: [
+                          Row(
+                            children: [SizedBox(height: 10)],
+                          ),
+                          ListItem(profile: watchlist[index])
+                        ],
+                      );
+                    }
+                    return ListItem(profile: watchlist[index]);
+                  },
+                ),
+              ),
+              Visibility(
+                visible: _exploreStore.isLoading,
+                child: Positioned(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Palette.primary,
+                        ),
+                        SizedBox(height: 30),
+                        Text('Crunching numbers'),
+                      ],
+                    ),
                   ),
-                  ListItem(profile: watchlist[index])
-                ],
-              );
-            }
-            return ListItem(profile: watchlist[index]);
-          },
-        );
-      }),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

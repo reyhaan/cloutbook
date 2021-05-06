@@ -114,7 +114,7 @@ class ExchangeRepository extends BaseExchangeRepository {
   @override
   Future<Map<String, dynamic>> getExchangeRate() async {
     try {
-      await bitCloutWebView?.dispose();
+      // await bitCloutWebView?.dispose();
       await bitCloutWebView?.run();
       return {};
     } on DioError catch (err) {
@@ -127,7 +127,7 @@ class ExchangeRepository extends BaseExchangeRepository {
   @override
   Future<Map<String, dynamic>> getTicker() async {
     try {
-      await tickerWebView?.dispose();
+      // await tickerWebView?.dispose();
       await tickerWebView?.run();
       return {};
     } on DioError catch (err) {
